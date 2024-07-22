@@ -3,31 +3,99 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+    :root {
+        --foreground-rgb: 255, 255, 255;
+        --background-start-rgb: 0, 0, 0;
+        --background-end-rgb: 0, 0, 0;
+    }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb)))
+        rgb(var(--background-start-rgb));
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
+/* Custom CSS */
+html {
+    scrollbar-width: normal;
+    scrollbar-color: #5f5f5f #2f2f2f;
+}
+
+.bbn {
+    @apply border border-neutral-400 box-border;
+}
+
+.flex-start {
+    @apply flex items-center justify-start;
+}
+
+.flex-center {
+    @apply flex items-center justify-center;
+}
+
+.flex-between {
+    @apply flex items-center justify-between;
+}
+
+.flex-around {
+    @apply flex items-center justify-around;
+}
+
+.tasks-header span,
+.tasks-content span {
+    @apply w-1/5 text-center text-nowrap p-2 border-b-0 overflow-auto;
+}
+
+.tasks-header,
+.tasks-content {
+    @apply px-2;
+}
+
+.tasks-content label {
+    @apply w-1/5 flex-center;
+}
+
+/* .options-btns button {
+    @apply bbn rounded p-1 outline-0;
+} */
+
+.contained-button {
+    @apply btn bg-violet-800 hover:bg-violet-700;
+}
+
+.circle-button {
+    @apply btn border-none opacity-40 hover:opacity-100 p-2 rounded-full hover:bg-neutral-700;
+}
+
+.rect-button {
+    @apply btn outlined-button px-2 py-1 rounded;
+}
+
+.icon-button {
+    @apply btn outlined-button p-1 rounded;
+}
+
+.outlined-button {
+    @apply btn border border-neutral-500 bg-transparent hover:border-neutral-400 hover:bg-neutral-700;
+}
+
+.btn {
+    @apply outline-0 disabled:cursor-not-allowed disabled:opacity-80 ease-in duration-100;
+}
+
+input {
+    @apply bg-transparent rounded p-1 bbn h-8;
 }
