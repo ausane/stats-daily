@@ -26,13 +26,14 @@ export async function POST(request: NextRequest) {
     await connectToDatabase();
 
     try {
-        const data: TStat = await request.json();
+        const data: any = await request.json();
         console.log(data);
 
         if (!data.area.trim() || !data.tasks.length) {
             return NextResponse.json(
                 {
-                    message: "Required fields 'area' and 'tasks' cannot be empty.",
+                    message:
+                        "Required fields 'area' and 'tasks' cannot be empty.",
                 },
                 { status: 400 }
             );
@@ -56,8 +57,11 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ _id: newTask._id, area: newTask.area });
     } catch (error) {
-        console.log("error:", error);
-        return NextResponse.json({ error: "Please enter valid stats" }, { status: 400 });
+        console.error("error:", error);
+        return NextResponse.json(
+            { error: "Please enter valid stats" },
+            { status: 400 }
+        );
     }
 }
 
@@ -95,7 +99,11 @@ export async function PATCH(request: NextRequest) {
                 );
             }
 
-            const updatedArea = await Task.findByIdAndUpdate(id, { $set: { area } }, { new: true });
+            const updatedArea = await Task.findByIdAndUpdate(
+                id,
+                { $set: { area } },
+                { new: true }
+            );
 
             if (!updatedArea) {
                 return NextResponse.json(
@@ -109,11 +117,12 @@ export async function PATCH(request: NextRequest) {
         if (id && task && taskId) {
             const updatedStats = await Task.findByIdAndUpdate(
                 id,
-                // Task's items should be empty
+                // Task's items should not be empty
                 { $set: { "tasks.$[elem]": task } },
                 {
                     new: true,
                     arrayFilters: [{ "elem._id": taskId }],
+                    runValidators: true,
                 }
             );
 
@@ -145,19 +154,20 @@ export async function PATCH(request: NextRequest) {
         }
 
         if (id && task && !taskId) {
-            const ObjectId = new mongoose.Types.ObjectId();
-            task._id = ObjectId;
+            // const ObjectId = new mongoose.Types.ObjectId();
+            // task._id = ObjectId;
             // console.log("NEWOBJID:", ObjectId, task);
             const updatedTask: TStat | null = await Task.findByIdAndUpdate(
                 id,
                 { $push: { tasks: task } },
                 { new: true }
             );
-            console.log(
-                updatedTask?.tasks?.find(
-                    (task) => (task._id as string).toString() === ObjectId.toString()
-                )
-            );
+            // console.log(
+            //     updatedTask?.tasks?.find(
+            //         (task) =>
+            //             (task._id as string).toString() === ObjectId.toString()
+            //     )
+            // );
 
             if (!updatedTask) {
                 return NextResponse.json(
@@ -169,15 +179,24 @@ export async function PATCH(request: NextRequest) {
                 //     (task) =>
                 //         (task._id as string).toString() === ObjectId.toString()
                 // );
-                return NextResponse.json({ newTasks: updatedTask.tasks }, { status: 200 });
+                return NextResponse.json(
+                    { newTasks: updatedTask.tasks },
+                    { status: 200 }
+                );
             }
         }
 
         // console.log(preStats);
-        return NextResponse.json({ id: id, message: "Data updated" }, { status: 200 });
+        return NextResponse.json(
+            { id: id, message: "Data updated" },
+            { status: 200 }
+        );
     } catch (error) {
         // return console.log(error);
-        return NextResponse.json({ message: "Some error occured" }, { status: 500 });
+        return NextResponse.json(
+            { message: "Some error occured" },
+            { status: 500 }
+        );
     }
 }
 

@@ -19,9 +19,8 @@ export type TStat = {
 // Task Schema Type
 export type TTask = {
     task: string;
-    target: number;
     achieved: number;
-    unit: string;
+    completed: boolean;
 } & Document;
 
 // TSC Type
@@ -44,24 +43,24 @@ export type TaskInputProps = InputProps & {
     submitBtn?: React.RefObject<HTMLButtonElement>;
 };
 
+// Helper type to omit Document from nested types
+export type OmitDocument<T> = Omit<T, keyof Document>;
+
 // Form Slice InitialState Type
 export type InitialState = {
     area: string;
     note: string;
-    task: Omit<TTask, keyof Document>;
-    tasks: Omit<TTask, keyof Document>[];
+    task: string;
+    tasks: OmitDocument<TTask>[];
     errMsg: string;
 };
 
-// Helper type to omit Document from nested types
-export type OmitDocument<T> = Omit<T, keyof Document>;
-
 // Apply OmitDocument to both TStat and TTask
-export type StatsWithoutDocument = OmitDocument<{
+export type StatsWithoutDocument = {
     area: string;
     note?: string;
     tasks: OmitDocument<TTask>[];
-}>;
+};
 
 // AreaRef Object Type
 export type AreaRef = {
@@ -77,3 +76,12 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 // IconButton Props Type
 export type IconButtonProps = ButtonProps & ImageProps;
+
+// API PATCH Route Type
+export type requestJsonData = {
+    id: string;
+    taskId: string;
+    task: TTask;
+    note: string;
+    area: string;
+};

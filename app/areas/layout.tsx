@@ -9,17 +9,23 @@ export const metadata: Metadata = {
     description: "your tasks",
 };
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
     const stats: TSC[] | void = await fetchAreas();
 
     return (
         <div className="w-full h-screen flex">
-            <div className="w-1/4 h-full p-2 bbn box-border overflow-auto">
+            <div className="w-1/4 h-full bbn box-border overflow-auto">
                 <Suspense fallback={<p>Loading feed...</p>}>
                     <Sidebar data={stats} />
                 </Suspense>
             </div>
-            <div className="w-3/4 h-full p-4 bbn box-border overflow-auto">{children}</div>
+            <div className="w-3/4 h-full bbn box-border overflow-auto">
+                {children}
+            </div>
         </div>
     );
 }

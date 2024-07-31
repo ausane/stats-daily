@@ -1,13 +1,13 @@
-import { TStat, TTask } from "../types";
+import { OmitDocument, TTask } from "../types";
 
-export async function updateTask(id: string, task: TTask) {
+export async function updateTask(areaId: string, task: TTask) {
     try {
         const response = await fetch("/api/stats/task", {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ id, taskId: task._id, task }),
+            body: JSON.stringify({ id: areaId, taskId: task._id, task }),
         });
 
         if (!response.ok) throw new Error("Failed to update task");

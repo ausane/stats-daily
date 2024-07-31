@@ -1,5 +1,6 @@
 import connectToDatabase from "@/lib/mongodb";
 import { Task } from "@/models/task.model";
+import mongoose from "mongoose";
 
 export const fetchTasks = async () => {
     await connectToDatabase();
@@ -34,8 +35,12 @@ export const fetchAreas = async () => {
 
 export const fetchAreaById = async (id: string) => {
     await connectToDatabase();
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(id);
 
     try {
+        // Throw an error if id is invalid
+        if (!isValidObjectId) throw new Error("Invalid id");
+
         const response = await Task.findById(id);
         if (!response) throw new Error("Task not found");
 
