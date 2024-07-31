@@ -3,7 +3,7 @@
 import { TStat, TTask } from "@/lib/types";
 import DailyNote from "./area/daily-note";
 import { useEffect, useRef, useState } from "react";
-import TaskLists from "./tasklist";
+import TaskLists from "./task-list-item";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { updateTask } from "@/lib/utils/handle-update";
 import { ArrowUpCircleIcon, ArrowUp } from "lucide-react";
@@ -21,21 +21,14 @@ export default function TaskList({ data }: { data: TStat }) {
 
     const [progress, setProgress] = useState(0);
 
-    const dispatch = useAppDispatch();
-
     const icts = tasks?.filter((task) => task.completed === false);
     const cdts = tasks?.filter((task) => task.completed === true);
-    // const status = tasks?.map((task) => task.completed);
-    // console.log(status);
-    // const [incompleteTasks, setIncompleteTasks] = useState<TTask[]>([]);
-    // const [completedTasks, setCompleteTasks] = useState<TTask[]>([]);
 
-    // console.log(incompleteTasks);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         dispatch(setCompleteTasks(cdts));
         dispatch(setIncompleteTasks(icts));
-        // dispatch(setCheckedStatus(status));
     }, [tasks]);
 
     const incompleteTasks = useAppSelector(
@@ -51,8 +44,6 @@ export default function TaskList({ data }: { data: TStat }) {
         const total = achievedArray.reduce((sum, number) => sum + number, 0);
         return parseInt((total / achievedArray.length).toFixed(), 10);
     };
-
-    // console.log(calculateProgress());
 
     useEffect(() => {
         const targetProgress = calculateProgress();
@@ -117,11 +108,9 @@ export function ShowCompletedTasks({
     _id: string;
     completedTasks: TTask[];
 }) {
-    // const divRef = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
 
     const dispatch = useAppDispatch();
-    // const completedTasks = useAppSelector((state) => state.task.completedTasks);
 
     const handleUndoTask = async (index: number) => {
         const task = {
@@ -140,7 +129,6 @@ export function ShowCompletedTasks({
             className={`border-t w-full absolute bottom-0 left-0 bg-background transition-all duration-400 ease-in-out overflow-hidden 
                 ${open ? "h-[calc(100%-0rem)]" : "h-10"}`}
         >
-            {/* <div className="relative h-8"> */}
             <div className="w-full h-10 bg-secondary sticky top-0 left-0 border-b flex-between px-4">
                 <p className="h-full flex-center font-bold">Done Tasks</p>
                 <IconButton
@@ -177,7 +165,6 @@ export function ShowCompletedTasks({
                     </div>
                 ))}
             </div>
-            {/* </div> */}
         </div>
     );
 }
