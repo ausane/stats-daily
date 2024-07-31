@@ -1,72 +1,52 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { updateNote } from "@/lib/utils/handle-update";
+import { X, Check, Pencil } from "lucide-react";
+import IconButton from "@/components/ui/icon-button";
 
 export default function DailyNote({ id, note }: { id: string; note: string }) {
-    const [noteState, setNoteState] = useState({ inputNote: false, note });
+    const [inputNote, setInputNote] = useState(false);
+    const [noteState, setNoteState] = useState(note);
 
     const handleNoteChange = async () => {
-        setNoteState((prev) => ({ ...prev, inputNote: false }));
-        await updateNote(id, noteState.note);
+        setInputNote(false);
+        await updateNote(id, noteState);
     };
 
     return (
-        <div className="w-4/12 h-full bbn rounded-md box-border p-4 max-md:hidden">
+        <div className="h-1/2 bbn rounded-md box-border p-4">
             <div className="flex-between h-1/6">
-                <h2>Note:</h2>
-                {noteState.inputNote ? (
-                    <>
-                        <button
-                            onClick={handleNoteChange}
-                            className="bbn p-1 rounded-md"
-                        >
-                            Update
-                        </button>
-                        <button
-                            className="w-8 h-8 flex-center rounded-full bbn"
-                            onClick={() =>
-                                setNoteState({
-                                    ...noteState,
-                                    inputNote: false,
-                                })
-                            }
-                        >
-                            <Image
-                                src="/cross1.svg"
-                                alt="close"
-                                height={12}
-                                width={12}
-                            />
-                        </button>
-                    </>
+                <h2 className="font-bold">Note</h2>
+                {inputNote ? (
+                    <span className="flex gap-2">
+                        <IconButton onClick={handleNoteChange}>
+                            <Check />
+                        </IconButton>
+                        <IconButton onClick={() => setInputNote(false)}>
+                            <X />
+                        </IconButton>
+                    </span>
                 ) : (
-                    <button
-                        onClick={() =>
-                            setNoteState({ ...noteState, inputNote: true })
-                        }
-                    >
-                        {noteState.note ? "Edit" : "Create"}
-                    </button>
+                    <IconButton onClick={() => setInputNote(true)}>
+                        <Pencil />
+                    </IconButton>
                 )}
             </div>
-            {noteState.inputNote ? (
+            {inputNote ? (
                 <textarea
-                    // type="text"
                     name="note"
-                    value={noteState.note}
+                    value={noteState}
                     className="w-full h-5/6 bbn p-1 rounded-md bg-transparent resize-none"
-                    onChange={(event) =>
-                        setNoteState({
-                            ...noteState,
-                            note: event.target.value,
-                        })
-                    }
+                    onChange={(e) => setNoteState(e.target.value)}
                 />
             ) : (
                 <div className="w-full h-5/6 text-ellipsis overflow-auto overflow-x-hidden">
-                    {noteState.note}
+                    <p>
+                        {noteState || (
+                            <span className="italic opacity-50">empty</span>
+                        )}
+                    </p>
                 </div>
             )}
         </div>

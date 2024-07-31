@@ -19,25 +19,19 @@ export const taskSchema = new Schema<TStat>(
             {
                 task: {
                     type: String,
-                    unique: true,
                     required: true,
                     trim: true,
                 },
-                target: {
-                    type: Number,
-                    required: true,
-                    default: 1,
-                },
+
                 achieved: {
                     type: Number,
                     required: true,
                     default: 0,
                 },
-                unit: {
-                    type: String,
+                completed: {
+                    type: Boolean,
                     required: true,
-                    trim: true,
-                    default: "unit",
+                    default: false,
                 },
             },
         ],

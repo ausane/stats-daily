@@ -2,69 +2,69 @@ import { TTask, OmitDocument, InitialState } from "./types";
 import { ImageProps } from "next/image";
 
 // Export Task Input Array
-export function taskInputsFunc(
-    inputValues: OmitDocument<TTask>,
-    label: boolean
-) {
-    const taskInputsArray = [
-        {
-            label: label ? "Task:" : "",
-            name: "task",
-            type: "text",
-            value: inputValues.task,
-        },
-        {
-            label: label ? "Target:" : "",
-            name: "target",
-            type: "number",
-            value: inputValues.target,
-        },
-        {
-            label: label ? "Achieved:" : "",
-            name: "achieved",
-            type: "number",
-            value: inputValues.achieved,
-        },
-        {
-            label: label ? "Unit:" : "",
-            name: "unit",
-            type: "text",
-            value: inputValues.unit,
-        },
-    ];
+// export function taskInputsFunc(
+//     inputValues: OmitDocument<TTask>,
+//     label: boolean
+// ) {
+//     const taskInputsArray = [
+//         {
+//             label: label ? "Task:" : "",
+//             name: "task",
+//             type: "text",
+//             value: inputValues.task,
+//         },
+//         {
+//             label: label ? "Target:" : "",
+//             name: "target",
+//             type: "number",
+//             value: inputValues.target,
+//         },
+//         {
+//             label: label ? "Achieved:" : "",
+//             name: "achieved",
+//             type: "number",
+//             value: inputValues.achieved,
+//         },
+//         {
+//             label: label ? "Unit:" : "",
+//             name: "unit",
+//             type: "text",
+//             value: inputValues.unit,
+//         },
+//     ];
 
-    return taskInputsArray;
-}
+//     return taskInputsArray;
+// }
 
 // Export Init Task Object
-export const initTask: OmitDocument<TTask> = {
-    task: "",
-    target: 1,
-    achieved: 0,
-    unit: "",
-};
+// export const initTask: OmitDocument<TTask> = {
+//     task: "",
+//     target: 1,
+//     achieved: 0,
+//     unit: "",
+// };
 
 // Export InitialState of Form Slice
 export const initialState: InitialState = {
     area: "",
     note: "",
-    task: initTask,
+    task: "",
     tasks: [],
     errMsg: "",
 };
 
 // Parse Type
-export const parseType = (name: string, value: string) => {
-    const parsedValue = parseInt(value, 10);
+// export const parseType = (name: string, value: string) => {
+//     const parsedValue = parseInt(value, 10);
 
-    if (name === "target") {
-        return isNaN(parsedValue) ? 1 : parsedValue;
-    } else if (name === "achieved") {
-        return isNaN(parsedValue) ? 0 : parsedValue;
-    }
+//     if (name === "target") {
+//         return isNaN(parsedValue) ? 1 : parsedValue;
+//     } else if (name === "achieved") {
+//         return isNaN(parsedValue) ? 0 : parsedValue;
+//     }
 
-    return value;
-};
+//     return value;
+// };
 
 // Manually list the ImageProps keys
 export const imagePropsKeys: (keyof ImageProps)[] = [

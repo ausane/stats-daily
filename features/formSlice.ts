@@ -13,21 +13,26 @@ const formSlice = createSlice({
         },
         addToTasks: (state) => {
             const newTask = state.task;
-            state.tasks.unshift(newTask);
+            state.tasks.unshift({
+                task: newTask,
+                achieved: 0,
+                completed: false,
+            });
             state.task = initialState.task;
         },
         handleTaskChange: (state, action) => {
-            const { name, value } = action.payload;
-
-            state.task = {
-                ...state.task,
-                [name]: value,
-            };
+            // const { name, value } = action.payload;
+            // console.log(action.payload);
+            state.task = action.payload;
+            // state.task = {
+            //     ...state.task,
+            //     [name]: value,
+            // };
         },
         handleErrMsg: (state, action) => {
             state.errMsg = action.payload;
         },
-        deleteTask: (state, action) => {
+        removeTask: (state, action) => {
             const index = action.payload;
             state.tasks = state.tasks.filter((_, i) => i !== index);
         },
@@ -51,7 +56,7 @@ export const {
     handleTaskChange,
     addToTasks,
     handleErrMsg,
-    deleteTask,
+    removeTask,
     resetForm,
     // setInitialState,
 } = formSlice.actions;

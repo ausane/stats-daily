@@ -1,193 +1,183 @@
 "use client";
 
 import { TStat, TTask } from "@/lib/types";
-import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
-import TaskInput from "./task-input";
 import DailyNote from "./area/daily-note";
-import { deleteTask } from "@/lib/utils/handle-delete";
-import { updateTask, createNewTask } from "@/lib/utils/handle-update";
-import { taskInputsFunc, initTask, parseType } from "@/lib/constants";
-import TasksHeader from "./area/tasks-header";
-import IconButton from "../icon-button";
-import Button from "../ui/button";
+import { useEffect, useRef, useState } from "react";
+import TaskLists from "./tasklist";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { updateTask } from "@/lib/utils/handle-update";
+import { ArrowUpCircleIcon, ArrowUp } from "lucide-react";
+import CircularProgress from "../ui/circular-progress";
+import {
+    setIncompleteTasks,
+    setCompleteTasks,
+    undoTaskCompletion,
+    // setCheckedStatus,
+} from "@/features/taskSlice";
+import IconButton from "../ui/icon-button";
 
 export default function TaskList({ data }: { data: TStat }) {
     const { _id, tasks, note } = data;
 
-    const [input, setInput] = useState(Array(tasks?.length).fill(true));
-    const [fields, setFields] = useState<TTask[]>([]);
-    const [newTask, setNewTask] = useState(initTask);
-    const [inputNewTask, setInputNewTask] = useState(false);
-    const [shouldFocus, setShouldFocus] = useState(false);
+    const [progress, setProgress] = useState(0);
 
-    const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-    const btnRef = useRef<HTMLButtonElement>(null);
+    const dispatch = useAppDispatch();
+
+    const icts = tasks?.filter((task) => task.completed === false);
+    const cdts = tasks?.filter((task) => task.completed === true);
+    // const status = tasks?.map((task) => task.completed);
+    // console.log(status);
+    // const [incompleteTasks, setIncompleteTasks] = useState<TTask[]>([]);
+    // const [completedTasks, setCompleteTasks] = useState<TTask[]>([]);
+
+    // console.log(incompleteTasks);
 
     useEffect(() => {
-        tasks && setFields([...tasks].reverse());
+        dispatch(setCompleteTasks(cdts));
+        dispatch(setIncompleteTasks(icts));
+        // dispatch(setCheckedStatus(status));
     }, [tasks]);
 
+    const incompleteTasks = useAppSelector(
+        (state) => state.task.incompleteTasks
+    );
+
+    const completedTasks = useAppSelector((state) => state.task.completedTasks);
+
+    const calculateProgress = () => {
+        if (!completedTasks.length) return 0;
+        const achievedArray = completedTasks.map((item) => item.achieved);
+
+        const total = achievedArray.reduce((sum, number) => sum + number, 0);
+        return parseInt((total / achievedArray.length).toFixed(), 10);
+    };
+
+    // console.log(calculateProgress());
+
     useEffect(() => {
-        if (shouldFocus) {
-            inputRefs.current[0]?.focus();
-            setShouldFocus(false); // Reset shouldFocus after focusing
-        }
-    }, [inputNewTask, shouldFocus]);
+        const targetProgress = calculateProgress();
 
-    const editTask = (index: number) => {
-        setInputNewTask(false);
-        setInput((prev) => {
-            return prev.map((_, i) => (i === index ? !prev[index] : true));
-        });
+        // Animate the progress from 0 to the target value
+        let currentProgress = 0;
+        const increment = targetProgress / 100; // Adjust this to control the speed
+        const interval = setInterval(() => {
+            currentProgress += increment;
+            if (currentProgress >= targetProgress) {
+                currentProgress = targetProgress;
+                clearInterval(interval);
+            }
+            setProgress(parseInt(currentProgress.toFixed(), 10));
+        }, 10); // Adjust the interval timing to control the speed of animation
 
-        setNewTask({ ...fields[index] });
-        setShouldFocus(true);
-    };
+        return () => clearInterval(interval);
+    }, [completedTasks]);
 
-    const handleUpdateTask = async (index: number) => {
-        editTask(index);
+    return (
+        <div className="size-full grow overflow-auto box-border flex-between gap-4">
+            <div className="w-8/12 h-full overflow-auto box-border bbn rounded-md max-md:w-full relative">
+                <div className="w-full h-10 flex-between sticky top-0 font-bold border-b p-2 box-border bg-secondary">
+                    <span className="w-1/6 flex-center">Status</span>
+                    <span className="w-4/6 flex-start">Task</span>
+                    <span className="w-1/6 flex-start mr-2">
+                        <button>AddNew</button>
+                    </span>
+                </div>
 
-        setFields((prev) => {
-            const newFields = [...prev];
-            newFields[index] = newTask as TTask;
-            return newFields;
-        });
+                <div className="w-full h-[calc(100%-5rem)] overflow-auto">
+                    {incompleteTasks?.map((item, index) => (
+                        <div
+                            key={index}
+                            className="w-full flex flex-col bbn p-2"
+                        >
+                            <TaskLists
+                                areaId={_id as string}
+                                taskItem={item}
+                                index={index}
+                            />
+                        </div>
+                    ))}
+                </div>
+                <ShowCompletedTasks
+                    _id={_id as string}
+                    completedTasks={completedTasks}
+                />
+            </div>
+            <div className="w-4/12 h-full max-md:hidden">
+                <CircularProgress progress={progress} />
+                <DailyNote id={_id as string} note={note as string} />
+            </div>
+        </div>
+    );
+}
 
-        await updateTask(_id as string, newTask as TTask);
-    };
+export function ShowCompletedTasks({
+    _id,
+    completedTasks,
+}: {
+    _id: string;
+    completedTasks: TTask[];
+}) {
+    // const divRef = useRef<HTMLDivElement>(null);
+    const [open, setOpen] = useState(false);
 
-    const handleDeleteTask = async (taskId: string, index: number) => {
-        setFields((prev) => prev.filter((_, i) => i !== index));
-        await deleteTask(_id as string, taskId);
-    };
+    const dispatch = useAppDispatch();
+    // const completedTasks = useAppSelector((state) => state.task.completedTasks);
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        const parsedValue = parseType(name, value);
+    const handleUndoTask = async (index: number) => {
+        const task = {
+            ...completedTasks[index],
+            completed: false,
+            achieved: 0,
+        };
 
-        setNewTask((prev) => ({ ...prev, [name]: parsedValue }));
-    };
+        dispatch(undoTaskCompletion(index));
 
-    const addNewTask = async () => {
-        console.log(_id);
-
-        if (!newTask.task || !newTask.unit) {
-            console.log("task could not be empty");
-        } else {
-            setInput((prev) => [true, ...prev]);
-            setFields([newTask as TTask, ...fields]);
-            setInputNewTask(false);
-            setNewTask(initTask);
-
-            await createNewTask(_id as string, newTask as TTask);
-        }
-    };
-
-    const handleNewTaskInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        const parsedValue = parseType(name, value);
-        setNewTask((prev) => ({ ...prev, [name]: parsedValue }));
-    };
-
-    const handleAddTaskButtonClick = () => {
-        setInput((prev) => Array(prev.length).fill(true));
-        setInputNewTask(inputNewTask ? false : true);
-        setNewTask(initTask);
-        setShouldFocus(true);
+        await updateTask(_id, task as TTask);
     };
 
     return (
-        <div className="w-full h-full grow overflow-auto box-border flex-between gap-4">
-            <div className="w-8/12 h-full overflow-auto box-border bbn rounded-md max-md:w-full">
-                <TasksHeader handleAddTaskButtonClick={handleAddTaskButtonClick}>
-                    {inputNewTask && (
-                        <div className="flex-between tasks-content">
-                            <TaskInput
-                                ref={inputRefs}
-                                className="w-5/6"
-                                inputAttributes={taskInputsFunc(newTask, false)}
-                                onChange={handleNewTaskInputChange}
-                                submitBtn={btnRef}
-                            />
-                            <span className="flex-around">
-                                <IconButton
-                                    variant="icon"
-                                    ref={btnRef}
-                                    onClick={addNewTask}
-                                    src="/plus.svg"
-                                    alt="edit"
-                                />
-                                <IconButton
-                                    variant="icon"
-                                    onClick={() => setInputNewTask(false)}
-                                    src="/cross.svg"
-                                    alt="edit"
-                                />
-                            </span>
-                        </div>
-                    )}
-                </TasksHeader>
-                {fields?.map((task, index) => (
-                    <div
-                        key={index}
-                        className={`flex-between tasks-content ${
-                            index % 2 === 0 ? "bg-neutral-800" : "bg-neutral-900"
-                        }`}
-                    >
-                        {input[index] ? (
-                            <>
-                                <span className="flex-start">{task.task}</span>
-                                <span>{task.target}</span>
-                                <span>{task.achieved}</span>
-                                <span>{task.unit}</span>
-                                <span className="flex-around">
-                                    <IconButton
-                                        variant="icon"
-                                        onClick={() => editTask(index)}
-                                        src="/pencil.svg"
-                                        alt="edit"
-                                    />
-                                    <IconButton
-                                        variant="icon"
-                                        onClick={() => handleDeleteTask(task._id as string, index)}
-                                        src="/trash.svg"
-                                        alt="delete"
-                                    />
-                                </span>
-                            </>
-                        ) : (
-                            <>
-                                <TaskInput
-                                    ref={inputRefs}
-                                    className="w-5/6"
-                                    inputAttributes={taskInputsFunc(newTask, false)}
-                                    onChange={handleInputChange}
-                                    submitBtn={btnRef}
-                                />
-                                <span className="flex-around">
-                                    <IconButton
-                                        variant="icon"
-                                        ref={btnRef}
-                                        onClick={() => handleUpdateTask(index)}
-                                        src="/check.svg"
-                                        alt="Update"
-                                    />
-                                    <IconButton
-                                        variant="icon"
-                                        onClick={() =>
-                                            setInput((prev) => Array(prev.length).fill(true))
-                                        }
-                                        src="/cross.svg"
-                                        alt="Update"
-                                    />
-                                </span>
-                            </>
-                        )}
+        <div
+            className={`border-t w-full absolute bottom-0 left-0 bg-background transition-all duration-400 ease-in-out overflow-hidden 
+                ${open ? "h-[calc(100%-0rem)]" : "h-10"}`}
+        >
+            {/* <div className="relative h-8"> */}
+            <div className="w-full h-10 bg-secondary sticky top-0 left-0 border-b flex-between px-4">
+                <p className="h-full flex-center font-bold">Done Tasks</p>
+                <IconButton
+                    variant="ghost"
+                    circle={true}
+                    className={`transition-transform duration-400 ease-in-out hover:bg-background ${
+                        open ? "rotate-180" : "rotate-0"
+                    }`}
+                    // className="transition-all duration-400 ease-in-out rotate-180"
+                    onClick={() => setOpen(!open)}
+                >
+                    <ArrowUp />
+                </IconButton>
+            </div>
+            <div
+                className={`h-[calc(100%-2.5rem)] flex-col overflow-auto 
+                    ${open ? "flex" : "hidden"} `}
+            >
+                {completedTasks?.map((item, index) => (
+                    <div key={index} className="w-full flex-between bbn p-2">
+                        <span className="w-1/6 flex-center">
+                            <button
+                                onClick={() => handleUndoTask(index)}
+                                className="w-4 h-4 bbn rounded-full p-0 bg-red-700 hover:bg-red-800"
+                            ></button>
+                            {/* <button onClick={() => click(index)}>click</button> */}
+                        </span>
+                        <span className="w-4/6 flex-start">
+                            <p className="truncate">{item.task}</p>
+                        </span>
+                        <span className="w-1/6 flex-center">
+                            <p>{item.achieved.toString()}%</p>
+                        </span>
                     </div>
                 ))}
             </div>
-            <DailyNote id={_id as string} note={note as string} />
+            {/* </div> */}
         </div>
     );
 }
