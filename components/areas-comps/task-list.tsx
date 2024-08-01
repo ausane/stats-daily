@@ -2,11 +2,11 @@
 
 import { TStat, TTask } from "@/lib/types";
 import DailyNote from "./area/daily-note";
-import { useEffect, useRef, useState } from "react";
-import TaskLists from "./task-list-item";
+import { useEffect, useMemo, useState } from "react";
+import TaskListItem from "./task-list-item";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { updateTask } from "@/lib/utils/handle-update";
-import { ArrowUpCircleIcon, ArrowUp } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import CircularProgress from "../ui/circular-progress";
 import {
     setIncompleteTasks,
@@ -20,16 +20,24 @@ export default function TaskList({ data }: { data: TStat }) {
     const { _id, tasks, note } = data;
 
     const [progress, setProgress] = useState(0);
+    const cdts = useMemo(
+        () => tasks?.filter((task) => task.completed === true),
+        [tasks]
+    );
+    const icts = useMemo(
+        () => tasks?.filter((task) => task.completed === false),
+        [tasks]
+    );
 
-    const icts = tasks?.filter((task) => task.completed === false);
-    const cdts = tasks?.filter((task) => task.completed === true);
+    // const icts = tasks?.filter((task) => task.completed === false);
+    // const cdts = tasks?.filter((task) => task.completed === true);
 
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         dispatch(setCompleteTasks(cdts));
         dispatch(setIncompleteTasks(icts));
-    }, [tasks, dispatch]);
+    }, [cdts, icts, dispatch]);
 
     // Tasks States
     const completedTasks = useAppSelector((state) => state.task.completedTasks);
@@ -84,7 +92,7 @@ export default function TaskList({ data }: { data: TStat }) {
                             key={index}
                             className="w-full flex flex-col bbn p-2"
                         >
-                            <TaskLists
+                            <TaskListItem
                                 areaId={_id as string}
                                 taskItem={item}
                                 index={index}

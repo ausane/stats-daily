@@ -18,7 +18,7 @@ import {
     setEditedTask,
 } from "@/features/taskSlice";
 
-export default function TaskLists({
+export default function TaskListItem({
     // checkedStatus,
     taskItem,
     index,
