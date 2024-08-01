@@ -2,7 +2,7 @@ import { TStat } from "@/lib/types";
 import { fetchAreaById } from "@/lib/stats";
 import TaskList from "../task-list";
 import AreaHeader from "./area-header";
-import TaskLists from "../tasklist";
+import TaskLists from "../task-list-item";
 
 export default async function ShowTasks({ id }: { id: string }) {
     type TSearchedData = TStat | void | null | undefined;

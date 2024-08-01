@@ -29,23 +29,27 @@ export default function TaskList({ data }: { data: TStat }) {
     useEffect(() => {
         dispatch(setCompleteTasks(cdts));
         dispatch(setIncompleteTasks(icts));
-    }, [tasks]);
+    }, [tasks, dispatch]);
 
+    // Tasks States
+    const completedTasks = useAppSelector((state) => state.task.completedTasks);
     const incompleteTasks = useAppSelector(
         (state) => state.task.incompleteTasks
     );
 
-    const completedTasks = useAppSelector((state) => state.task.completedTasks);
-
-    const calculateProgress = () => {
-        if (!completedTasks.length) return 0;
-        const achievedArray = completedTasks.map((item) => item.achieved);
-
-        const total = achievedArray.reduce((sum, number) => sum + number, 0);
-        return parseInt((total / achievedArray.length).toFixed(), 10);
-    };
-
+    // Progress Animation
     useEffect(() => {
+        const calculateProgress = () => {
+            if (!completedTasks.length) return 0;
+            const achievedArray = completedTasks.map((item) => item.achieved);
+
+            const total = achievedArray.reduce(
+                (sum, number) => sum + number,
+                0
+            );
+            return parseInt((total / achievedArray.length).toFixed(), 10);
+        };
+
         const targetProgress = calculateProgress();
 
         // Animate the progress from 0 to the target value

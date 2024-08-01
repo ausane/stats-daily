@@ -20,7 +20,7 @@ export default function Sidebar({ data }: { data: TSC[] | void }) {
 
     useEffect(() => {
         dispatch(insertAllAreas(data));
-    }, [data]);
+    }, [data, dispatch]);
 
     return (
         <div className="w-full h-full bbn box-border px-2">
