@@ -19,12 +19,10 @@ import {
 } from "@/features/taskSlice";
 
 export default function TaskListItem({
-    // checkedStatus,
     taskItem,
     index,
     areaId,
 }: {
-    // checkedStatus: boolean[];
     taskItem: TTask;
     index: number;
     areaId: string;
@@ -76,12 +74,10 @@ export default function TaskListItem({
                 <>
                     <span className="w-1/6 flex-center">
                         <TaskStatus
-                            // task={task}
                             index={index}
                             areaId={areaId}
                             openInputTask={openInputTask}
                             taskItem={taskItem}
-                            // setOpenInputTask={setOpenInputTask}
                         />
                     </span>
 
@@ -93,7 +89,6 @@ export default function TaskListItem({
                                     type="text"
                                     name="task"
                                     value={inputTask}
-                                    // placeholder={placeholder}
                                     onKeyDown={handleKeyDown}
                                     onChange={(e) => {
                                         const value = e.target.value;
@@ -134,14 +129,12 @@ export default function TaskListItem({
 }
 
 export function TaskStatus({
-    // task,
     areaId,
     index,
     openInputTask,
     taskItem,
 }: // setOpenInputTask,
 {
-    // task: string;
     areaId: string;
     index: number;
     openInputTask: boolean;
@@ -150,6 +143,7 @@ export function TaskStatus({
 }) {
     const [openDialog, setOpenDialog] = useState(false);
     const dispatch = useAppDispatch();
+
     // Ensure the state is typed as number[]
     const [value, setValue] = useState<number[]>([50]);
 

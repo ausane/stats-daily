@@ -12,7 +12,6 @@ import {
     setIncompleteTasks,
     setCompleteTasks,
     undoTaskCompletion,
-    // setCheckedStatus,
 } from "@/features/taskSlice";
 import IconButton from "../ui/icon-button";
 
@@ -20,6 +19,7 @@ export default function TaskList({ data }: { data: TStat }) {
     const { _id, tasks, note } = data;
 
     const [progress, setProgress] = useState(0);
+
     const cdts = useMemo(
         () => tasks?.filter((task) => task.completed === true),
         [tasks]
@@ -28,9 +28,6 @@ export default function TaskList({ data }: { data: TStat }) {
         () => tasks?.filter((task) => task.completed === false),
         [tasks]
     );
-
-    // const icts = tasks?.filter((task) => task.completed === false);
-    // const cdts = tasks?.filter((task) => task.completed === true);
 
     const dispatch = useAppDispatch();
 
