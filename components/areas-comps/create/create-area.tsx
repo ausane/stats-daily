@@ -37,7 +37,7 @@ export default function CreateArea() {
     useEffect(() => {
         dispatch(resetForm());
         areaRef.current?.focus();
-    }, []);
+    }, [dispatch]);
 
     // Handle form submission and subsequent actions
     const submitForm = async (event: FormEvent) => {
