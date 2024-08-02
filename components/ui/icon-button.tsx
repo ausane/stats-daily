@@ -6,9 +6,9 @@ import { Button } from "./button";
 import clsx from "clsx";
 import { ButtonProps } from "./button";
 
-type IconButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+type IconButtonProps = ButtonProps & {
     children: React.ReactNode;
-    variant?: "outline" | "ghost";
+    // variant?: "outline" | "ghost";
     circle?: boolean;
 };
 

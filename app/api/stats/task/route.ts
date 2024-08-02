@@ -74,8 +74,6 @@ export async function PATCH(request: NextRequest) {
         const isValidObjectId = mongoose.Types.ObjectId.isValid(id);
 
         console.log(id, isValidObjectId);
-        // const ObjectId = mongoose.Types.ObjectId;
-        // console.log("NEWOBJID:", new ObjectId());
 
         if (!isValidObjectId) {
             return NextResponse.json(
@@ -154,20 +152,11 @@ export async function PATCH(request: NextRequest) {
         }
 
         if (id && task && !taskId) {
-            // const ObjectId = new mongoose.Types.ObjectId();
-            // task._id = ObjectId;
-            // console.log("NEWOBJID:", ObjectId, task);
             const updatedTask: TStat | null = await Task.findByIdAndUpdate(
                 id,
                 { $push: { tasks: task } },
                 { new: true }
             );
-            // console.log(
-            //     updatedTask?.tasks?.find(
-            //         (task) =>
-            //             (task._id as string).toString() === ObjectId.toString()
-            //     )
-            // );
 
             if (!updatedTask) {
                 return NextResponse.json(
@@ -175,12 +164,12 @@ export async function PATCH(request: NextRequest) {
                     { status: 400 }
                 );
             } else {
-                // const newTask = updatedTask?.tasks?.find(
-                //     (task) =>
-                //         (task._id as string).toString() === ObjectId.toString()
-                // );
+                const newIncompleteTasks = updatedTask.tasks?.filter(
+                    (task) => task.completed === false
+                );
+
                 return NextResponse.json(
-                    { newTasks: updatedTask.tasks },
+                    { newIncompleteTasks },
                     { status: 200 }
                 );
             }
@@ -203,9 +192,7 @@ export async function PATCH(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
     try {
         const { id, taskId } = await request.json();
-        console.log(id);
-        // const area = await Task.findByIdAndDelete(id);
-        // console.log(area);
+        // console.log(id);
 
         if (id && taskId) {
             const result = await Task.findByIdAndUpdate(

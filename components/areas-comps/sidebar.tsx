@@ -23,9 +23,8 @@ export default function Sidebar({ data }: { data: TSC[] | void }) {
     }, [data, dispatch]);
 
     return (
-        <div className="w-full h-full bbn box-border px-2">
+        <div className="w-1/4 h-full bbn box-border overflow-auto px-2 max-md:hidden">
             <div className="w-full h-16 flex-between p-2 bbn box-border sticky top-0 bg-background">
-                {/* <span>Toolbar</span> */}
                 <IconButton className="w-10 h-10">
                     <PanelLeft />
                 </IconButton>

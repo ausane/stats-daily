@@ -6,7 +6,7 @@ export const fetchTasks = async () => {
     await connectToDatabase();
 
     try {
-        const response = await Task.find({}).sort({ createdAt: -1 });
+        const response = await Task.find({}).sort({ updatedAt: -1 });
         if (!response) throw new Error("Task not found");
 
         return response;

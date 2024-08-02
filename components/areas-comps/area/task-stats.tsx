@@ -13,7 +13,7 @@ export default async function ShowTasks({ id }: { id: string }) {
         const { _id, area } = serializableData;
 
         return (
-            <div className="w-full h-full overflow-auto flex flex-col gap-4 p-4">
+            <div className="w-3/4 h-full bbn box-border overflow-auto max-md:w-full flex flex-col gap-4 p-4">
                 <AreaHeader _id={_id as string} area={area} />
                 <TaskList data={serializableData} />
             </div>
