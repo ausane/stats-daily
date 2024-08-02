@@ -12,6 +12,7 @@ import { Button } from "../ui/button";
 import IconButton from "../ui/icon-button";
 import { deleteTask } from "@/lib/utils/handle-delete";
 import Input from "../ui/input";
+import { handleKeyDownEnter } from "@/lib/constants";
 import {
     setTaskCompletion,
     removeTaskById,
@@ -47,7 +48,11 @@ export default function TaskListItem({
     };
 
     const handleEditTask = async () => {
-        if (!inputTask) return;
+        if (!inputTask.trim()) {
+            setInputTask("");
+            setPlaceholder("Task could not be empty!");
+            return;
+        }
 
         // console.log("task!");
         dispatch(setEditedTask({ index, task: inputTask }));
@@ -61,11 +66,12 @@ export default function TaskListItem({
         await updateTask(areaId, taskObj as TTask);
     };
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            handleEditTask();
-        }
+    const handleEditInputChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const value = event.target.value;
+        setInputTask(value);
+        setPlaceholder(value ? "" : "Task could not be empty!");
     };
 
     return (
@@ -89,16 +95,10 @@ export default function TaskListItem({
                                     type="text"
                                     name="task"
                                     value={inputTask}
-                                    onKeyDown={handleKeyDown}
-                                    onChange={(e) => {
-                                        const value = e.target.value;
-                                        setInputTask(value);
-                                        setPlaceholder(
-                                            value
-                                                ? ""
-                                                : "Task could not be empty!"
-                                        );
-                                    }}
+                                    onChange={handleEditInputChange}
+                                    onKeyDown={(e) =>
+                                        handleKeyDownEnter(e, handleEditTask)
+                                    }
                                 />
                                 {placeholder && (
                                     <span className="absolute ml-2 flex-start text-sm gap-1 opacity-50 text-red-500 -z-10">

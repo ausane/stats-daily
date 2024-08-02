@@ -1,6 +1,26 @@
 import { TTask, OmitDocument, InitialState } from "./types";
 import { ImageProps } from "next/image";
 
+export const handleKeyDownEnter: (
+    event: React.KeyboardEvent<HTMLInputElement>,
+    keyDownAction: () => void
+) => void = (event, keyDownAction) => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        keyDownAction();
+    }
+};
+
+// export const emptyInputAlert: (
+//     event: React.ChangeEvent<HTMLInputElement>,
+//     setInputTask: React.Dispatch<React.SetStateAction<string>>,
+//     setPlaceholder: React.Dispatch<React.SetStateAction<string>>
+// ) => void = (event, setInputTask, setPlaceholder) => {
+//     const value = event.target.value;
+//     setInputTask(value);
+//     setPlaceholder(value ? "" : "Task could not be empty!");
+// };
+
 // Export Task Input Array
 // export function taskInputsFunc(
 //     inputValues: OmitDocument<TTask>,

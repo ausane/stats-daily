@@ -6,7 +6,6 @@ const taskSlice = createSlice({
     initialState: {
         incompleteTasks: <TTask[]>[],
         completedTasks: <TTask[]>[],
-        // checkedStatus: <boolean[]>[],
     },
     reducers: {
         setIncompleteTasks: (state, action) => {
@@ -15,17 +14,12 @@ const taskSlice = createSlice({
         setCompleteTasks: (state, action) => {
             state.completedTasks = action.payload;
         },
-        // setCheckedStatus: (state, action) => {
-        //     state.checkedStatus = action.payload;
-        // },
+
         setTaskCompletion: (state, action) => {
             console.log(action.payload);
             const { index, achieved } = action.payload;
             const taskItem = state.incompleteTasks[index];
 
-            // Set checked status true
-            // state.checkedStatus[index] = true;
-            // state.incompleteTasks[index].completed = true;
             taskItem.completed = true;
             taskItem.achieved = achieved;
 
@@ -41,8 +35,6 @@ const taskSlice = createSlice({
             const index = action.payload;
             const taskItem = state.completedTasks[index];
 
-            // state.checkedStatus[index] = true;
-            // state.incompleteTasks[index].completed = true;
             taskItem.completed = false;
             taskItem.achieved = 0;
 
@@ -68,7 +60,6 @@ const taskSlice = createSlice({
 });
 
 export const {
-    // setCheckedStatus,
     setCompleteTasks,
     setIncompleteTasks,
     setTaskCompletion,

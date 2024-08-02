@@ -36,7 +36,7 @@ export async function updateNote(id: string, note: string) {
     }
 }
 
-export async function createNewTask(id: string, task: TTask) {
+export async function createNewTask(id: string, task: OmitDocument<TTask>) {
     try {
         console.log(task);
         const response = await fetch("/api/stats/task", {

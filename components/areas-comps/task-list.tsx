@@ -2,23 +2,28 @@
 
 import { TStat, TTask } from "@/lib/types";
 import DailyNote from "./area/daily-note";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import TaskListItem from "./task-list-item";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { updateTask } from "@/lib/utils/handle-update";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, X, Check, Plus, CircleAlert } from "lucide-react";
 import CircularProgress from "../ui/circular-progress";
+import { createNewTask } from "@/lib/utils/handle-update";
+import IconButton from "../ui/icon-button";
+import { Button } from "../ui/button";
 import {
     setIncompleteTasks,
     setCompleteTasks,
     undoTaskCompletion,
 } from "@/features/taskSlice";
-import IconButton from "../ui/icon-button";
+import Input from "../ui/input";
+import { handleKeyDownEnter } from "@/lib/constants";
 
 export default function TaskList({ data }: { data: TStat }) {
     const { _id, tasks, note } = data;
 
     const [progress, setProgress] = useState(0);
+    const [addTaskInput, setAddTaskInput] = useState(false);
 
     const cdts = useMemo(
         () => tasks?.filter((task) => task.completed === true),
@@ -79,11 +84,18 @@ export default function TaskList({ data }: { data: TStat }) {
                     <span className="w-1/6 flex-center">Status</span>
                     <span className="w-4/6 flex-start">Task</span>
                     <span className="w-1/6 flex-start mr-2">
-                        <button>AddNew</button>
+                        <button onClick={() => setAddTaskInput(!addTaskInput)}>
+                            <Plus />
+                        </button>
                     </span>
                 </div>
 
-                <div className="w-full h-[calc(100%-5rem)] overflow-auto">
+                <div className="w-full h-[calc(100%-5rem)] overflow-auto overflow-x-hidden">
+                    <AddNewTask
+                        areaId={_id as string}
+                        addTaskInput={addTaskInput}
+                        setAddTaskInput={setAddTaskInput}
+                    />
                     {incompleteTasks?.map((item, index) => (
                         <div
                             key={index}
@@ -98,11 +110,11 @@ export default function TaskList({ data }: { data: TStat }) {
                     ))}
                 </div>
                 <ShowCompletedTasks
-                    _id={_id as string}
+                    areaId={_id as string}
                     completedTasks={completedTasks}
                 />
             </div>
-            <div className="w-4/12 h-full max-md:hidden">
+            <div className="w-4/12 h-full max-sm:hidden">
                 <CircularProgress progress={progress} />
                 <DailyNote id={_id as string} note={note as string} />
             </div>
@@ -111,10 +123,10 @@ export default function TaskList({ data }: { data: TStat }) {
 }
 
 export function ShowCompletedTasks({
-    _id,
+    areaId,
     completedTasks,
 }: {
-    _id: string;
+    areaId: string;
     completedTasks: TTask[];
 }) {
     const [open, setOpen] = useState(false);
@@ -130,7 +142,7 @@ export function ShowCompletedTasks({
 
         dispatch(undoTaskCompletion(index));
 
-        await updateTask(_id, task as TTask);
+        await updateTask(areaId, task as TTask);
     };
 
     return (
@@ -175,5 +187,98 @@ export function ShowCompletedTasks({
                 ))}
             </div>
         </div>
+    );
+}
+
+export function AddNewTask({
+    areaId,
+    addTaskInput,
+    setAddTaskInput,
+}: {
+    areaId: string;
+    addTaskInput: boolean;
+    setAddTaskInput: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    const [newTaskValue, setNewTaskValue] = useState("");
+    const [placeholder, setPlaceholder] = useState("");
+
+    useEffect(() => {
+        if (addTaskInput) inputRef.current?.focus();
+    }, [addTaskInput]);
+
+    const dispatch = useAppDispatch();
+
+    const addNewTask = async () => {
+        if (!newTaskValue.trim()) {
+            setNewTaskValue("");
+            setPlaceholder("Task could not be empty!");
+            return;
+        }
+
+        setAddTaskInput(false);
+        setNewTaskValue("");
+
+        const newTask = {
+            task: newTaskValue,
+            completed: false,
+            achieved: 0,
+        };
+        const { newIncompleteTasks } = await createNewTask(
+            areaId as string,
+            newTask
+        );
+        // console.log(newIncompleteTasks);
+        dispatch(setIncompleteTasks(newIncompleteTasks));
+    };
+
+    const handleNewTaskInputChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const value = event.target.value;
+        setNewTaskValue(value);
+        setPlaceholder(value ? "" : "Task could not be empty!");
+    };
+    return (
+        <>
+            {addTaskInput && (
+                <div className="flex p-2">
+                    <span className="w-1/6 flex-center">
+                        <button className="w-4 h-4 bbn rounded-full p-0 bg-green-400 hover:bg-green-500"></button>
+                    </span>
+                    <span className="w-4/6 flex-start">
+                        <Input
+                            ref={inputRef}
+                            type="text"
+                            name="task"
+                            value={newTaskValue}
+                            onChange={handleNewTaskInputChange}
+                            onKeyDown={(e) => handleKeyDownEnter(e, addNewTask)}
+                        />
+                        {placeholder && (
+                            <span className="absolute ml-2 flex-start text-sm gap-1 opacity-50 text-red-500 -z-10">
+                                <CircleAlert size={15} />
+                                <span>Task could not be empty!</span>
+                            </span>
+                        )}
+                    </span>
+                    <span className="w-1/6 flex-around">
+                        {/* <Button className="h-8" onClick={addNewTask}>
+                            Add
+                        </Button> */}
+                        <IconButton variant="default" onClick={addNewTask}>
+                            <Check />
+                        </IconButton>
+                        <IconButton
+                            variant="default"
+                            onClick={() => setAddTaskInput(false)}
+                        >
+                            <X />
+                        </IconButton>
+                    </span>
+                </div>
+            )}
+        </>
     );
 }
