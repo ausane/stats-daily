@@ -1,18 +1,16 @@
 "use client";
 
-import { TStat, TTask } from "@/lib/types";
+import { TTask } from "@/lib/types";
 import { useEffect, useRef, useState } from "react";
-// import Button, { IconButton } from "../ui/icon-button";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import ConfirmDialog, { DialogDemo } from "../confirm-dialog";
+import { useAppDispatch } from "@/store/hooks";
+import { CompletionDialog } from "../confirm-dialog";
 import { Slider } from "../ui/slider";
 import { updateTask } from "@/lib/utils/handle-update";
-import { Check, Cable, CircleAlert, Pencil, Trash, X } from "lucide-react";
-import { Button } from "../ui/button";
 import IconButton from "../ui/icon-button";
 import { deleteTask } from "@/lib/utils/handle-delete";
 import Input from "../ui/input";
 import { handleKeyDownEnter } from "@/lib/constants";
+import { Check, CircleAlert, Pencil, Trash, X } from "lucide-react";
 import {
     setTaskCompletion,
     removeTaskById,
@@ -20,20 +18,20 @@ import {
 } from "@/features/taskSlice";
 
 export default function TaskListItem({
-    taskItem,
     index,
     areaId,
+    taskItem,
 }: {
-    taskItem: TTask;
     index: number;
     areaId: string;
+    taskItem: TTask;
 }) {
     const task = taskItem.task;
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [inputTask, setInputTask] = useState(task);
     const [placeholder, setPlaceholder] = useState("");
-    const [openInputTask, setOpenInputTask] = useState<boolean>(false);
+    const [openInputTask, setOpenInputTask] = useState(false);
 
     const dispatch = useAppDispatch();
 
@@ -50,7 +48,7 @@ export default function TaskListItem({
     const handleEditTask = async () => {
         if (!inputTask.trim()) {
             setInputTask("");
-            setPlaceholder("Task could not be empty!");
+            setPlaceholder("Task cannot be empty!");
             return;
         }
 
@@ -71,7 +69,12 @@ export default function TaskListItem({
     ) => {
         const value = event.target.value;
         setInputTask(value);
-        setPlaceholder(value ? "" : "Task could not be empty!");
+        setPlaceholder(value ? "" : "Task cannot be empty!");
+    };
+
+    const handleDeleteTask = async () => {
+        dispatch(removeTaskById(taskItem._id as string));
+        await deleteTask(areaId, taskItem._id as string);
     };
 
     return (
@@ -101,9 +104,9 @@ export default function TaskListItem({
                                     }
                                 />
                                 {placeholder && (
-                                    <span className="absolute ml-2 flex-start text-sm gap-1 opacity-50 text-red-500 -z-10">
+                                    <span className="empty-alert">
                                         <CircleAlert size={15} />
-                                        <span>Task could not be empty!</span>
+                                        <span>{placeholder}</span>
                                     </span>
                                 )}
                             </>
@@ -113,14 +116,27 @@ export default function TaskListItem({
                     </span>
 
                     <span className="flex-around w-1/6">
-                        <TaskOptions
-                            areaId={areaId}
-                            handleEditClick={handleEditClick}
-                            handleEditTask={handleEditTask}
-                            taskId={taskItem._id as string}
-                            openInputTask={openInputTask}
-                            setOpenInputTask={setOpenInputTask}
-                        />
+                        {openInputTask ? (
+                            <>
+                                <IconButton onClick={handleEditTask}>
+                                    <Check />
+                                </IconButton>
+                                <IconButton
+                                    onClick={() => setOpenInputTask(false)}
+                                >
+                                    <X />
+                                </IconButton>
+                            </>
+                        ) : (
+                            <>
+                                <IconButton onClick={handleEditClick}>
+                                    <Pencil />
+                                </IconButton>
+                                <IconButton onClick={handleDeleteTask}>
+                                    <Trash />
+                                </IconButton>
+                            </>
+                        )}
                     </span>
                 </>
             </div>
@@ -169,12 +185,10 @@ export function TaskStatus({
     };
 
     if (openInputTask) {
-        return (
-            <button className="w-4 h-4 bbn rounded-full p-0 bg-blue-400 hover:bg-blue-500"></button>
-        );
+        return <span className="status-button bg-blue-400"></span>;
     } else {
         return (
-            <DialogDemo
+            <CompletionDialog
                 onClick={handleClick}
                 task={taskItem.task}
                 openDialog={openDialog}
@@ -193,54 +207,7 @@ export function TaskStatus({
                     />
                     <span>{value}%</span>
                 </div>
-            </DialogDemo>
-        );
-    }
-}
-
-export function TaskOptions({
-    areaId,
-    taskId,
-    openInputTask,
-    handleEditClick,
-    handleEditTask,
-    setOpenInputTask,
-}: {
-    areaId: string;
-    taskId: string;
-    openInputTask: boolean;
-    handleEditClick: () => void;
-    handleEditTask: () => void;
-    setOpenInputTask: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
-    const dispatch = useAppDispatch();
-    const handleDeleteTask = async () => {
-        // console.log(1);
-        dispatch(removeTaskById(taskId));
-        await deleteTask(areaId, taskId);
-    };
-
-    if (openInputTask) {
-        return (
-            <>
-                <IconButton onClick={handleEditTask}>
-                    <Check />
-                </IconButton>
-                <IconButton onClick={() => setOpenInputTask(false)}>
-                    <X />
-                </IconButton>
-            </>
-        );
-    } else {
-        return (
-            <>
-                <IconButton onClick={handleEditClick}>
-                    <Pencil />
-                </IconButton>
-                <IconButton onClick={handleDeleteTask}>
-                    <Trash />
-                </IconButton>
-            </>
+            </CompletionDialog>
         );
     }
 }

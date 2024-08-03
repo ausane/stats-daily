@@ -1,6 +1,6 @@
 "use client";
 
-import { TStat, TTask } from "@/lib/types";
+import { AddNewTaskProps, TStat, TTask } from "@/lib/types";
 import DailyNote from "./area/daily-note";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import TaskListItem from "./task-list-item";
@@ -24,6 +24,7 @@ export default function TaskList({ data }: { data: TStat }) {
 
     const [progress, setProgress] = useState(0);
     const [addTaskInput, setAddTaskInput] = useState(false);
+    const [emptyInputAlert, setEmptyInputAlert] = useState(false);
 
     const cdts = useMemo(
         () => tasks?.filter((task) => task.completed === true),
@@ -83,10 +84,20 @@ export default function TaskList({ data }: { data: TStat }) {
                 <div className="w-full h-10 flex-between sticky top-0 font-bold border-b p-2 box-border bg-secondary">
                     <span className="w-1/6 flex-center">Status</span>
                     <span className="w-4/6 flex-start">Task</span>
-                    <span className="w-1/6 flex-start mr-2">
-                        <button onClick={() => setAddTaskInput(!addTaskInput)}>
+                    <span className="w-1/6 flex-end mr-2">
+                        <IconButton
+                            variant="ghost"
+                            circle={true}
+                            className={`transition-transform duration-400 ease-in-out hover:bg-background p-0 ${
+                                addTaskInput ? "rotate-45" : "rotate-0"
+                            }`}
+                            onClick={() => {
+                                setAddTaskInput(!addTaskInput);
+                                setEmptyInputAlert(false);
+                            }}
+                        >
                             <Plus />
-                        </button>
+                        </IconButton>
                     </span>
                 </div>
 
@@ -95,6 +106,8 @@ export default function TaskList({ data }: { data: TStat }) {
                         areaId={_id as string}
                         addTaskInput={addTaskInput}
                         setAddTaskInput={setAddTaskInput}
+                        emptyInputAlert={emptyInputAlert}
+                        setEmptyInputAlert={setEmptyInputAlert}
                     />
                     {incompleteTasks?.map((item, index) => (
                         <div
@@ -148,14 +161,14 @@ export function ShowCompletedTasks({
     return (
         <div
             className={`border-t w-full absolute bottom-0 left-0 bg-background transition-all duration-400 ease-in-out overflow-hidden 
-                ${open ? "h-[calc(100%-0rem)]" : "h-10"}`}
+                ${open ? "h-full" : "h-10"}`}
         >
             <div className="w-full h-10 bg-secondary sticky top-0 left-0 border-b flex-between px-4">
                 <p className="h-full flex-center font-bold">Done Tasks</p>
                 <IconButton
                     variant="ghost"
                     circle={true}
-                    className={`transition-transform duration-400 ease-in-out hover:bg-background ${
+                    className={`transition-transform duration-400 ease-in-out hover:bg-background p-0 ${
                         open ? "rotate-180" : "rotate-0"
                     }`}
                     // className="transition-all duration-400 ease-in-out rotate-180"
@@ -173,9 +186,8 @@ export function ShowCompletedTasks({
                         <span className="w-1/6 flex-center">
                             <button
                                 onClick={() => handleUndoTask(index)}
-                                className="w-4 h-4 bbn rounded-full p-0 bg-red-700 hover:bg-red-800"
+                                className="status-button bg-red-700 hover:bg-red-800"
                             ></button>
-                            {/* <button onClick={() => click(index)}>click</button> */}
                         </span>
                         <span className="w-4/6 flex-start">
                             <p className="truncate">{item.task}</p>
@@ -193,16 +205,13 @@ export function ShowCompletedTasks({
 export function AddNewTask({
     areaId,
     addTaskInput,
+    emptyInputAlert,
     setAddTaskInput,
-}: {
-    areaId: string;
-    addTaskInput: boolean;
-    setAddTaskInput: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+    setEmptyInputAlert,
+}: AddNewTaskProps) {
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [newTaskValue, setNewTaskValue] = useState("");
-    const [placeholder, setPlaceholder] = useState("");
 
     useEffect(() => {
         if (addTaskInput) inputRef.current?.focus();
@@ -213,7 +222,7 @@ export function AddNewTask({
     const addNewTask = async () => {
         if (!newTaskValue.trim()) {
             setNewTaskValue("");
-            setPlaceholder("Task could not be empty!");
+            setEmptyInputAlert(true);
             return;
         }
 
@@ -229,7 +238,6 @@ export function AddNewTask({
             areaId as string,
             newTask
         );
-        // console.log(newIncompleteTasks);
         dispatch(setIncompleteTasks(newIncompleteTasks));
     };
 
@@ -238,16 +246,16 @@ export function AddNewTask({
     ) => {
         const value = event.target.value;
         setNewTaskValue(value);
-        setPlaceholder(value ? "" : "Task could not be empty!");
+        setEmptyInputAlert(value ? false : true);
     };
     return (
         <>
             {addTaskInput && (
                 <div className="flex p-2">
                     <span className="w-1/6 flex-center">
-                        <button className="w-4 h-4 bbn rounded-full p-0 bg-green-400 hover:bg-green-500"></button>
+                        <span className="status-button bg-green-400"></span>
                     </span>
-                    <span className="w-4/6 flex-start">
+                    <span className="w-4/6 flex-start relative">
                         <Input
                             ref={inputRef}
                             type="text"
@@ -256,23 +264,23 @@ export function AddNewTask({
                             onChange={handleNewTaskInputChange}
                             onKeyDown={(e) => handleKeyDownEnter(e, addNewTask)}
                         />
-                        {placeholder && (
-                            <span className="absolute ml-2 flex-start text-sm gap-1 opacity-50 text-red-500 -z-10">
+                        {emptyInputAlert && (
+                            <span className="empty-alert">
                                 <CircleAlert size={15} />
-                                <span>Task could not be empty!</span>
+                                <span>Task cannot be empty!</span>
                             </span>
                         )}
                     </span>
                     <span className="w-1/6 flex-around">
-                        {/* <Button className="h-8" onClick={addNewTask}>
-                            Add
-                        </Button> */}
                         <IconButton variant="default" onClick={addNewTask}>
                             <Check />
                         </IconButton>
                         <IconButton
                             variant="default"
-                            onClick={() => setAddTaskInput(false)}
+                            onClick={() => {
+                                setAddTaskInput(false);
+                                setNewTaskValue("");
+                            }}
                         >
                             <X />
                         </IconButton>

@@ -117,6 +117,10 @@ body {
     @apply flex items-center justify-center;
 }
 
+.flex-end {
+    @apply flex items-center justify-end;
+}
+
 .flex-between {
     @apply flex items-center justify-between;
 }
@@ -155,4 +159,12 @@ body {
 
 input {
     @apply bg-transparent rounded p-1 bbn h-8;
+}
+
+.empty-alert {
+    @apply absolute ml-2 flex-start text-sm gap-1 opacity-80 text-red-500 -z-10;
+}
+
+.status-button {
+    @apply size-4 bbn rounded-full p-0;
 }

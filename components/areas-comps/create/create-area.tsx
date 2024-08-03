@@ -8,6 +8,7 @@ import { FormEvent, useState, useRef, useEffect } from "react";
 import { handleSubmit } from "@/lib/utils/handle-submit";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { insertArea } from "@/features/areaSlice";
+import { CircleAlert } from "lucide-react";
 import {
     handleAreaChange,
     handleNoteChange,
@@ -31,7 +32,8 @@ export default function CreateArea() {
 
     // State to manage loading status
     const [isLoading, setIsLoading] = useState(false);
-    const [inputError, setInputError] = useState({ area, message: "" });
+    const [prevAreaValue, setPrevAreaValue] = useState(area);
+    const [inputError, setInputError] = useState("");
 
     // Reset form and focus on area input
     useEffect(() => {
@@ -43,10 +45,10 @@ export default function CreateArea() {
     const submitForm = async (event: FormEvent) => {
         event.preventDefault();
 
-        if (inputError.area === area) {
+        if (prevAreaValue === area) {
             return;
         } else {
-            setInputError({ area, message: "" });
+            setInputError("");
         }
 
         setIsLoading(true); // Set loading to true when form is submitted
@@ -64,8 +66,7 @@ export default function CreateArea() {
             const response = await handleSubmit(formData); // Use the submitForm function
             isDuplicateArea(response);
         } else {
-            !area.trim() &&
-                setInputError({ area, message: "Area cannot be empty" });
+            !area.trim() && setInputError("Area cannot be empty");
             !tasks.length && dispatch(handleErrMsg("Tasks cannot be empty"));
         }
 
@@ -75,7 +76,7 @@ export default function CreateArea() {
     // Check duplicate area name
     const isDuplicateArea = (response: any) => {
         if (response?.duplicate) {
-            setInputError({ area, message: response.message });
+            setInputError(response.message);
         } else if (response?._id) {
             router.push(`/areas/${response._id}`);
             dispatch(insertArea(response));
@@ -90,17 +91,29 @@ export default function CreateArea() {
     ) => {
         if (event.key === "Enter") {
             event.preventDefault();
-            if (nextRef.current) {
-                nextRef.current.focus();
+            if (!area.trim()) {
+                setInputError("Area cannot be empty!");
+                dispatch(handleAreaChange(""));
+                return;
             }
+            if (nextRef.current) nextRef.current.focus();
         }
     };
 
+    // Handle area input onChange event
+    const handleAreaChangeFunc = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const value = event.target.value;
+        setInputError(value ? "" : "Area cannot be empty!");
+        dispatch(handleAreaChange(value));
+    };
+
     return (
-        <div className="w-full h-full overflow-auto p-4">
+        <div className="w-3/4 h-full overflow-auto p-4 max-md:w-full">
             <form
                 onSubmit={submitForm}
-                className="w-full h-full flex-between flex-col gap-4"
+                className="w-full h-full flex-between flex-col gap-4 max-sm:h-auto"
             >
                 <div className="flex-between mb-2 w-full sticky top-0 border-b-0 bg-background bbn p-4">
                     <h2 className="text-xl font-bold">Create Area</h2>
@@ -108,30 +121,30 @@ export default function CreateArea() {
                         variant="outline"
                         type="submit"
                         // onClick={submitForm}
+                        className="bg-green-700 hover:bg-green-800"
                         disabled={isLoading} // Disable button when loading
                     >
                         {isLoading ? "Creating..." : "Create"}
                     </Button>
                 </div>
-                <div className="flex h-4/5 w-full">
-                    <div className="w-1/3 flex flex-col bbn">
+                <div className="flex h-4/5 w-full max-sm:flex-col">
+                    <div className="w-2/5 flex flex-col bbn max-sm:w-full">
                         <Input
                             ref={areaRef}
                             label="Area:"
                             labelClasses="bbn p-4 w-full p-1"
                             name="area"
                             value={area}
-                            className="w-full rounded-md mt-1"
-                            onChange={(e) =>
-                                dispatch(handleAreaChange(e.target.value))
-                            }
+                            className="w-full h-10 rounded-md mt-1"
+                            onChange={handleAreaChangeFunc}
                             onKeyDown={(e) => handleKeyPress(e, noteRef)}
-                            required
+                            // required
                         >
                             {inputError && (
-                                <p className="text-red-400">
-                                    {inputError.message}
-                                </p>
+                                <span className="flex-start mt-2 text-sm gap-1 opacity-80 text-red-500 -z-10">
+                                    <CircleAlert size={15} />
+                                    <span>{inputError}</span>
+                                </span>
                             )}
                         </Input>
 
