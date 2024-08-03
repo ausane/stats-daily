@@ -1,6 +1,11 @@
 import { Document } from "mongoose";
 import { ImageProps } from "next/image";
-import React, { ButtonHTMLAttributes, InputHTMLAttributes } from "react";
+import React, {
+    Dispatch,
+    SetStateAction,
+    ButtonHTMLAttributes,
+    InputHTMLAttributes,
+} from "react";
 
 // Stats Schema Type
 export type TStats = {
@@ -78,10 +83,36 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 export type IconButtonProps = ButtonProps & ImageProps;
 
 // API PATCH Route Type
-export type requestJsonData = {
+export type RequestJsonData = {
     id: string;
     taskId: string;
     task: TTask;
     note: string;
     area: string;
+};
+
+// Dialog Props Type
+export type CompletionDialogProps = {
+    task: string;
+    children: React.ReactNode;
+    onClick: () => void;
+    openDialog: boolean;
+    setOpenDialog: Dispatch<SetStateAction<boolean>>;
+};
+
+// Confirm Dialog Props Type
+export type ConfirmDialogProps = {
+    message: string;
+    buttonText: string;
+    messageHeader: string;
+    onClick: () => void;
+};
+
+// Add New Task Props Types
+export type AddNewTaskProps = {
+    areaId: string;
+    addTaskInput: boolean;
+    emptyInputAlert: boolean;
+    setAddTaskInput: React.Dispatch<React.SetStateAction<boolean>>;
+    setEmptyInputAlert: React.Dispatch<React.SetStateAction<boolean>>;
 };

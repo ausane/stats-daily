@@ -1,12 +1,12 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import TaskInput from "../task-input";
 // import { parseType, taskInputsFunc } from "@/lib/constants";
 // import Button from "@/components/ui/icon-button";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { X, CircleAlert } from "lucide-react";
 import {
     handleTaskChange,
     addToTasks,
@@ -22,7 +22,8 @@ export default function CreateTasks() {
 
     const task = useAppSelector((state) => state.form.task);
     const tasks = useAppSelector((state) => state.form.tasks);
-    const errMsg = useAppSelector((state) => state.form.errMsg);
+    // const errMsg = useAppSelector((state) => state.form.errMsg);
+    const [placeholder, setPlaceholder] = useState("");
 
     const dispatch = useAppDispatch();
 
@@ -33,20 +34,23 @@ export default function CreateTasks() {
         // const parsedValue = parseType(name, value);
 
         // console.log(name, value);
+        setPlaceholder("");
         dispatch(handleTaskChange(value));
     };
 
     const handleTaskSubmit = () => {
         // const trueTask = task.task && task.target && task.unit;
-        if (task) {
+        if (task.trim()) {
             dispatch(addToTasks());
             dispatch(handleErrMsg(""));
 
             inputRef?.current?.focus();
         } else {
-            dispatch(handleErrMsg("Please enter task"));
+            dispatch(handleTaskChange(""));
+            setPlaceholder("Area cannot be empty!");
         }
     };
+
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
             event.preventDefault();
@@ -56,50 +60,40 @@ export default function CreateTasks() {
     };
 
     return (
-        <div className="w-2/3 h-full bbn">
-            <div className="flex-between p-4 h-20">
-                {/* <TaskInput
-                    ref={inputRefs}
-                    className="bg-transparent w-4/5 rounded p-1"
-                    labelClasses="flex flex-col gap-1"
-                    inputAttributes={taskInputsFunc(task, true)}
-                    onChange={handleChange}
-                    submitBtn={btnRef}
-                /> */}
-                <Input
-                    label="Task:"
-                    ref={inputRef}
-                    type="text"
-                    name="task"
-                    value={task}
-                    onChange={handleTaskInputChange}
-                    onKeyDown={handleKeyDown}
-                    className="w-4/5 h-10"
-                    labelClasses="flex-between w-4/5"
-                    // required
-                />
+        <div className="w-3/5 h-full bbn max-sm:w-full">
+            <div className="w-full flex-between gap-4 p-4 h-24">
+                <span className="w-full flex-start relative">
+                    <Input
+                        label="Task:"
+                        ref={inputRef}
+                        type="text"
+                        name="task"
+                        value={task}
+                        onChange={handleTaskInputChange}
+                        onKeyDown={handleKeyDown}
+                        className="w-full h-10"
+                        labelClasses="w-full gap-2"
+                        // required
+                    />
+                    {placeholder && (
+                        <span className="empty-alert w-full h-10 self-end">
+                            <CircleAlert size={15} />
+                            <span>{placeholder}</span>
+                        </span>
+                    )}
+                </span>
                 <Button
-                    // variant="outline"
-                    // ref={btnRef}
                     type="button"
-                    // className="self-end"
+                    className="self-end"
                     onClick={handleTaskSubmit}
                 >
                     Add
                 </Button>
             </div>
 
-            {errMsg && <p className="text-red-400">{errMsg}</p>}
-
-            <div className="bbn h-[calc(100%-5rem)] overflow-auto">
+            <div className="bbn h-[calc(100%-6rem)] overflow-auto">
                 {tasks.map((item, index) => (
-                    <div
-                        key={index}
-                        className="flex-between p-1 border-b"
-                        // className= {`flex-between p-1 ${
-                        //     index % 2 === 0 ? "bg-primary" : "bg-secondary"
-                        // }`}
-                    >
+                    <div key={index} className="flex-between p-1 border-b">
                         <span className="w-8 h-8 bbn flex-center">{index}</span>
                         <span className="truncate w-4/6 flex-start ml-4">
                             <p>{item.task}</p>

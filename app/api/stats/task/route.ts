@@ -22,12 +22,11 @@ export async function GET() {
 
 // POST REQUEST HANDLER
 export async function POST(request: NextRequest) {
-    // console.log(req);
     await connectToDatabase();
 
     try {
         const data: any = await request.json();
-        console.log(data);
+        // console.log(data);
 
         if (!data.area.trim() || !data.tasks.length) {
             return NextResponse.json(
@@ -53,7 +52,7 @@ export async function POST(request: NextRequest) {
         }
 
         const newTask = await Task.create(data);
-        console.log("newTask:", newTask);
+        // console.log("newTask:", newTask);
 
         return NextResponse.json({ _id: newTask._id, area: newTask.area });
     } catch (error) {
@@ -201,7 +200,7 @@ export async function DELETE(request: NextRequest) {
                 { new: true }
             );
 
-            console.log(result);
+            // console.log(result);
             return NextResponse.json(
                 // { message: `Task deleted` },
                 { status: 204 }

@@ -1,6 +1,7 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { Button } from "@/components/ui/button";
+import React from "react";
 import { CircleCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CompletionDialogProps, ConfirmDialogProps } from "@/lib/types";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -23,37 +24,15 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 
-export default function ConfirmDialog({
-    buttonText,
-    messageHeader,
-    message,
-    // children,
-    onClick,
-}: // buttonType,
-
-{
-    buttonText: string;
-    messageHeader: string;
-    message: string;
-    // children: React.ReactNode;
-    // buttonType?: string;
-    onClick: () => void;
-}) {
+export default function ConfirmDialog(props: ConfirmDialogProps) {
+    const { message, onClick, buttonText, messageHeader } = props;
     return (
         <AlertDialog>
             <AlertDialogTrigger>{buttonText}</AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>
-                        {messageHeader}
-                        {/* Are you absolutely sure? */}
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                        {message}
-                        {/* This action cannot be undone. This will permanently
-                        delete your account and remove your data from our
-                        servers. */}
-                    </AlertDialogDescription>
+                    <AlertDialogTitle>{messageHeader}</AlertDialogTitle>
+                    <AlertDialogDescription>{message}</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -69,26 +48,12 @@ export default function ConfirmDialog({
     );
 }
 
-// import { Input } from "@/components/ui/input"
-// import { Label } from "@/components/ui/label"
-
-export function DialogDemo({
-    task,
-    children,
-    onClick,
-    openDialog,
-    setOpenDialog,
-}: {
-    task: string;
-    children: React.ReactNode;
-    onClick: () => void;
-    openDialog: boolean;
-    setOpenDialog: Dispatch<SetStateAction<boolean>>;
-}) {
+export function CompletionDialog(props: CompletionDialogProps) {
+    const { task, children, onClick, openDialog, setOpenDialog } = props;
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <DialogTrigger asChild>
-                <Button className="w-4 h-4 bbn rounded-full p-0 bg-yellow-400 hover:bg-yellow-500"></Button>
+                <Button className="status-button bg-transparent bbn hover:bg-yellow-400"></Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -96,12 +61,8 @@ export function DialogDemo({
                         <CircleCheck color="#3DD68C" />
                         <p className="ml-2">Task Completed!</p>
                     </DialogTitle>
-                    <DialogDescription>
-                        {/* Make changes to your profile here. Click save when
-                        you're done. */}
-                        How much of this task have you completed?
-                        <br />
-                        <br />
+                    <DialogDescription className="flex-start flex-col gap-4">
+                        <span>How much of this task have you completed?</span>
                         <code>{task}</code>
                     </DialogDescription>
                 </DialogHeader>
