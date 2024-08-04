@@ -89,7 +89,7 @@ export default function TaskList({ data }: { data: TStat }) {
                             variant="ghost"
                             circle={true}
                             className={`transition-transform duration-400 ease-in-out hover:bg-background p-0 ${
-                                addTaskInput ? "rotate-45" : "rotate-0"
+                                addTaskInput ? "rotate-45" : "rotate-90"
                             }`}
                             onClick={() => {
                                 setAddTaskInput(!addTaskInput);
@@ -248,45 +248,44 @@ export function AddNewTask({
         setNewTaskValue(value);
         setEmptyInputAlert(value ? false : true);
     };
-    return (
-        <>
-            {addTaskInput && (
-                <div className="flex p-2">
-                    <span className="w-1/6 flex-center">
-                        <span className="status-button bg-green-400"></span>
-                    </span>
-                    <span className="w-4/6 flex-start relative">
-                        <Input
-                            ref={inputRef}
-                            type="text"
-                            name="task"
-                            value={newTaskValue}
-                            onChange={handleNewTaskInputChange}
-                            onKeyDown={(e) => handleKeyDownEnter(e, addNewTask)}
-                        />
-                        {emptyInputAlert && (
-                            <span className="empty-alert">
-                                <CircleAlert size={15} />
-                                <span>Task cannot be empty!</span>
-                            </span>
-                        )}
-                    </span>
-                    <span className="w-1/6 flex-around">
-                        <IconButton variant="default" onClick={addNewTask}>
-                            <Check />
-                        </IconButton>
-                        <IconButton
-                            variant="default"
-                            onClick={() => {
-                                setAddTaskInput(false);
-                                setNewTaskValue("");
-                            }}
-                        >
-                            <X />
-                        </IconButton>
-                    </span>
-                </div>
-            )}
-        </>
-    );
+
+    if (addTaskInput) {
+        return (
+            <div className="flex p-2">
+                <span className="w-1/6 flex-center">
+                    <span className="status-button bg-green-400"></span>
+                </span>
+                <span className="w-4/6 flex-start relative">
+                    <Input
+                        ref={inputRef}
+                        type="text"
+                        name="task"
+                        value={newTaskValue}
+                        onChange={handleNewTaskInputChange}
+                        onKeyDown={(e) => handleKeyDownEnter(e, addNewTask)}
+                    />
+                    {emptyInputAlert && (
+                        <span className="empty-alert">
+                            <CircleAlert size={15} />
+                            <span>Task cannot be empty!</span>
+                        </span>
+                    )}
+                </span>
+                <span className="w-1/6 flex-around">
+                    <IconButton variant="default" onClick={addNewTask}>
+                        <Check size={15} />
+                    </IconButton>
+                    <IconButton
+                        variant="default"
+                        onClick={() => {
+                            setAddTaskInput(false);
+                            setNewTaskValue("");
+                        }}
+                    >
+                        <X size={15} />
+                    </IconButton>
+                </span>
+            </div>
+        );
+    }
 }

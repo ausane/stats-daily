@@ -1,5 +1,5 @@
 import React from "react";
-import { CircleCheck } from "lucide-react";
+import { CircleCheck, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CompletionDialogProps, ConfirmDialogProps } from "@/lib/types";
 import {
@@ -28,7 +28,9 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
     const { message, onClick, buttonText, messageHeader } = props;
     return (
         <AlertDialog>
-            <AlertDialogTrigger>{buttonText}</AlertDialogTrigger>
+            <AlertDialogTrigger className="w-8 h-8 rounded-full flex-center opacity-0 group-hover:opacity-100 hover:bg-secondary">
+                <Trash size={18} />
+            </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>{messageHeader}</AlertDialogTitle>
@@ -40,7 +42,7 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
                         className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         onClick={onClick}
                     >
-                        Continue
+                        {buttonText}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
@@ -53,7 +55,7 @@ export function CompletionDialog(props: CompletionDialogProps) {
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <DialogTrigger asChild>
-                <Button className="status-button bg-transparent bbn hover:bg-yellow-400"></Button>
+                <Button className="status-button bg-transparent border-white hover:border-border hover:bg-yellow-400"></Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>

@@ -21,15 +21,15 @@ export default function DailyNote({ id, note }: { id: string; note: string }) {
                 {inputNote ? (
                     <span className="flex gap-2">
                         <IconButton onClick={handleNoteChange}>
-                            <Check />
+                            <Check size={15} />
                         </IconButton>
                         <IconButton onClick={() => setInputNote(false)}>
-                            <X />
+                            <X size={15} />
                         </IconButton>
                     </span>
                 ) : (
                     <IconButton onClick={() => setInputNote(true)}>
-                        <Pencil />
+                        <Pencil size={15} />
                     </IconButton>
                 )}
             </div>

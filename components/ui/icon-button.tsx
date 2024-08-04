@@ -18,7 +18,11 @@ export default function IconButton({
         <Button
             variant={variant}
             size="icon"
-            className={clsx("w-8 h-8 p-2", circle && "rounded-full", className)}
+            className={clsx(
+                "w-8 h-8 flex-center",
+                circle && "rounded-full",
+                className
+            )}
             {...btnAttr}
         >
             {children}
