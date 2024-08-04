@@ -119,21 +119,21 @@ export default function TaskListItem({
                         {openInputTask ? (
                             <>
                                 <IconButton onClick={handleEditTask}>
-                                    <Check />
+                                    <Check size={15} />
                                 </IconButton>
                                 <IconButton
                                     onClick={() => setOpenInputTask(false)}
                                 >
-                                    <X />
+                                    <X size={15} />
                                 </IconButton>
                             </>
                         ) : (
                             <>
                                 <IconButton onClick={handleEditClick}>
-                                    <Pencil />
+                                    <Pencil size={15} />
                                 </IconButton>
                                 <IconButton onClick={handleDeleteTask}>
-                                    <Trash />
+                                    <Trash size={15} />
                                 </IconButton>
                             </>
                         )}
@@ -149,13 +149,11 @@ export function TaskStatus({
     index,
     openInputTask,
     taskItem,
-}: // setOpenInputTask,
-{
+}: {
     areaId: string;
     index: number;
     openInputTask: boolean;
     taskItem: TTask;
-    // setOpenInputTask: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
     const [openDialog, setOpenDialog] = useState(false);
     const dispatch = useAppDispatch();
@@ -169,19 +167,12 @@ export function TaskStatus({
             completed: true,
             achieved: value[0],
         };
-        // const perc = value[0];
+
         dispatch(setTaskCompletion({ index, achieved: value[0] }));
 
         setOpenDialog(false);
         await updateTask(areaId, taskObj as TTask);
         // console.log("save", taskObj);
-    };
-
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            handleClick();
-        }
     };
 
     if (openInputTask) {
@@ -203,7 +194,7 @@ export function TaskStatus({
                         step={1}
                         value={value}
                         onValueChange={(newValue) => setValue(newValue)}
-                        onKeyDown={handleKeyDown}
+                        onKeyDown={(e) => handleKeyDownEnter(e, handleClick)}
                     />
                     <span>{value}%</span>
                 </div>

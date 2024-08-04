@@ -1,11 +1,6 @@
 import { Document } from "mongoose";
 import { ImageProps } from "next/image";
-import React, {
-    Dispatch,
-    SetStateAction,
-    ButtonHTMLAttributes,
-    InputHTMLAttributes,
-} from "react";
+import React, { ButtonHTMLAttributes, InputHTMLAttributes } from "react";
 
 // Stats Schema Type
 export type TStats = {
@@ -48,8 +43,9 @@ export type TaskInputProps = InputProps & {
     submitBtn?: React.RefObject<HTMLButtonElement>;
 };
 
-// Helper type to omit Document from nested types
+// Helper type to omit Document from nested type
 export type OmitDocument<T> = Omit<T, keyof Document>;
+export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
 
 // Form Slice InitialState Type
 export type InitialState = {
@@ -97,7 +93,7 @@ export type CompletionDialogProps = {
     children: React.ReactNode;
     onClick: () => void;
     openDialog: boolean;
-    setOpenDialog: Dispatch<SetStateAction<boolean>>;
+    setOpenDialog: SetState<boolean>;
 };
 
 // Confirm Dialog Props Type
@@ -108,11 +104,27 @@ export type ConfirmDialogProps = {
     onClick: () => void;
 };
 
-// Add New Task Props Types
+// Add New Task Props Type
 export type AddNewTaskProps = {
     areaId: string;
     addTaskInput: boolean;
     emptyInputAlert: boolean;
-    setAddTaskInput: React.Dispatch<React.SetStateAction<boolean>>;
-    setEmptyInputAlert: React.Dispatch<React.SetStateAction<boolean>>;
+    setAddTaskInput: SetState<boolean>;
+    setEmptyInputAlert: SetState<boolean>;
+};
+
+// Task Item Props Type
+export type TaskItemCompoProps = {
+    areaId: string;
+    areaName: string;
+    setAreaInput: SetState<string>;
+    setAreaDisplay: SetState<boolean>;
+};
+
+// Sidebar Toggler Props Type
+export type SidebarTogglerProps = {
+    tasks: TSC[];
+    areaId: string;
+    isSidebarOpen: boolean;
+    toggleSidebar: () => void;
 };
