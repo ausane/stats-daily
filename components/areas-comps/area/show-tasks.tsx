@@ -13,14 +13,14 @@ export default async function ShowTasks({ id }: { id: string }) {
         const { _id, area } = serializableData;
 
         return (
-            <div className="w-3/4 h-full bbn box-border overflow-auto max-md:w-full flex flex-col gap-4 p-4">
+            <div className="main-content bbn overflow-auto max-md:w-full flex flex-col gap-4">
                 <AreaHeader _id={_id as string} area={area} />
                 <TaskList data={serializableData} />
             </div>
         );
     } else {
         return (
-            <div className="w-full h-full flex-center">
+            <div className="main-content flex-center">
                 <h2 className="font-bold text-lg">404 | Page Not Found</h2>
             </div>
         );

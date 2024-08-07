@@ -98,9 +98,8 @@ export type CompletionDialogProps = {
 
 // Confirm Dialog Props Type
 export type ConfirmDialogProps = {
-    message: string;
-    buttonText: string;
-    messageHeader: string;
+    deleteDialog: boolean;
+    setDeleteDialog: SetState<boolean>;
     onClick: () => void;
 };
 
@@ -117,8 +116,7 @@ export type AddNewTaskProps = {
 export type TaskItemCompoProps = {
     areaId: string;
     areaName: string;
-    setAreaInput: SetState<string>;
-    setAreaDisplay: SetState<boolean>;
+    openRenameAreaDialog: () => void;
 };
 
 // Sidebar Toggler Props Type
@@ -127,4 +125,12 @@ export type SidebarTogglerProps = {
     areaId: string;
     isSidebarOpen: boolean;
     toggleSidebar: () => void;
+};
+
+// Rename Area Dialog Props Type
+export type RenameAreaDialogProps = {
+    onClick: () => void;
+    renameDialog: boolean;
+    setRenameDialog: SetState<boolean>;
+    children: React.ReactNode;
 };

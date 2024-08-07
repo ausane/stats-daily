@@ -159,13 +159,17 @@ body {
 }
 
 input {
-    @apply bg-transparent rounded p-1 bbn h-8;
+    @apply bg-transparent rounded-md p-2 bbn h-8 w-full;
 }
 
 .empty-alert {
-    @apply absolute ml-2 flex-start text-sm gap-1 opacity-80 text-red-500 -z-10;
+    @apply absolute ml-3 flex-start text-sm gap-1 opacity-80 text-[#f93a37] -z-10;
 }
 
 .status-button {
     @apply size-4 bbn rounded-full p-0;
+}
+
+.main-content {
+    @apply w-3/4 h-full p-4 box-border;
 }
