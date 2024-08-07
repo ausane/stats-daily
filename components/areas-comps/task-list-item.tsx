@@ -81,7 +81,7 @@ export default function TaskListItem({
         <>
             <div className="w-full flex-between">
                 <>
-                    <span className="w-1/6 flex-center">
+                    <span className="w-12 flex-center">
                         <TaskStatus
                             index={index}
                             areaId={areaId}
@@ -90,13 +90,14 @@ export default function TaskListItem({
                         />
                     </span>
 
-                    <span className="relative flex-start w-4/6">
+                    <span className="relative flex-start w-[calc(100%-8rem)] ml-2">
                         {openInputTask ? (
                             <>
                                 <Input
                                     ref={inputRef}
                                     type="text"
                                     name="task"
+                                    labelClasses="w-5/6"
                                     value={inputTask}
                                     onChange={handleEditInputChange}
                                     onKeyDown={(e) =>
@@ -115,7 +116,7 @@ export default function TaskListItem({
                         )}
                     </span>
 
-                    <span className="flex-around w-1/6">
+                    <span className="flex-around w-20">
                         {openInputTask ? (
                             <>
                                 <IconButton onClick={handleEditTask}>

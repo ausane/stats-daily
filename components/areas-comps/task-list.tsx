@@ -80,15 +80,14 @@ export default function TaskList({ data }: { data: TStat }) {
 
     return (
         <div className="size-full grow overflow-auto box-border flex-between gap-4">
-            <div className="w-8/12 h-full overflow-auto box-border bbn rounded-md max-md:w-full relative">
-                <div className="w-full h-10 flex-between sticky top-0 font-bold border-b p-2 box-border bg-secondary">
-                    <span className="w-1/6 flex-center">Status</span>
-                    <span className="w-4/6 flex-start">Task</span>
-                    <span className="w-1/6 flex-end mr-2">
+            <div className="w-8/12 h-full overflow-auto box-border bbn rounded-md relative max-lg:w-full">
+                <div className="w-full h-10 flex-between sticky top-0 font-bold border-b px-4 box-border bg-secondary">
+                    <span>Tasks</span>
+                    <span>
                         <IconButton
                             variant="ghost"
                             circle={true}
-                            className={`transition-transform duration-400 ease-in-out hover:bg-background p-0 ${
+                            className={`transition-transform duration-400 ease-in-out hover:bg-border p-0 ${
                                 addTaskInput ? "rotate-45" : "rotate-90"
                             }`}
                             onClick={() => {
@@ -127,7 +126,7 @@ export default function TaskList({ data }: { data: TStat }) {
                     completedTasks={completedTasks}
                 />
             </div>
-            <div className="w-4/12 h-full max-sm:hidden">
+            <div className="w-1/3 h-full max-sm:hidden max-lg:hidden max-lg:block max-md:block">
                 <CircularProgress progress={progress} />
                 <DailyNote id={_id as string} note={note as string} />
             </div>
@@ -168,7 +167,7 @@ export function ShowCompletedTasks({
                 <IconButton
                     variant="ghost"
                     circle={true}
-                    className={`transition-transform duration-400 ease-in-out hover:bg-background p-0 ${
+                    className={`transition-transform duration-400 ease-in-out hover:bg-border p-0 ${
                         open ? "rotate-180" : "rotate-0"
                     }`}
                     // className="transition-all duration-400 ease-in-out rotate-180"
@@ -252,14 +251,15 @@ export function AddNewTask({
     if (addTaskInput) {
         return (
             <div className="flex p-2">
-                <span className="w-1/6 flex-center">
+                <span className="w-12 flex-center">
                     <span className="status-button bg-green-400"></span>
                 </span>
-                <span className="w-4/6 flex-start relative">
+                <span className="w-[calc(100%-8rem)] ml-2 flex-start relative">
                     <Input
                         ref={inputRef}
                         type="text"
                         name="task"
+                        labelClasses="w-5/6"
                         value={newTaskValue}
                         onChange={handleNewTaskInputChange}
                         onKeyDown={(e) => handleKeyDownEnter(e, addNewTask)}
@@ -271,7 +271,7 @@ export function AddNewTask({
                         </span>
                     )}
                 </span>
-                <span className="w-1/6 flex-around">
+                <span className="w-20 flex-around">
                     <IconButton variant="default" onClick={addNewTask}>
                         <Check size={15} />
                     </IconButton>

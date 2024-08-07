@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json(
                 {
                     duplicate: true,
-                    message: `An area with the name '${prevArea.area}' already exists.`,
+                    message: `'${prevArea.area}' already exists.`,
                 },
                 { status: 409 }
             );
@@ -90,7 +90,7 @@ export async function PATCH(request: NextRequest) {
                 return NextResponse.json(
                     {
                         duplicate: true,
-                        message: `An area with the name '${prevArea.area}' already exists.`,
+                        message: `'${prevArea.area}' already exists.`,
                     },
                     { status: 409 }
                 );

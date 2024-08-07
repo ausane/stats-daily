@@ -118,10 +118,10 @@ export default function CreateArea() {
                 <div className="flex-between mb-2 w-full sticky top-0 border-b-0 bg-background bbn p-4">
                     <h2 className="text-xl font-bold">Create Area</h2>
                     <Button
-                        variant="outline"
+                        // variant="outline"
                         type="submit"
                         // onClick={submitForm}
-                        className="bg-green-700 hover:bg-green-800"
+                        className="text-[#fafafa] bg-green-700 hover:bg-green-800"
                         disabled={isLoading} // Disable button when loading
                     >
                         {isLoading ? "Creating..." : "Create"}
