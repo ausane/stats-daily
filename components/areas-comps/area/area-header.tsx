@@ -66,7 +66,7 @@ export default function AreaHeader({
             setError(false);
             setAreaName(areaInput);
             // setAreaDisplay(false);
-            dispatch(setCurrentArea({ _id, area: areaName }));
+            dispatch(setCurrentArea({ _id, area: areaInput }));
             setRenameDialog(false);
         }
 
@@ -142,9 +142,9 @@ export function TaskItemCompo(props: TaskItemCompoProps) {
                 <DropdownMenuTrigger asChild>
                     <Button
                         variant="ghost"
-                        className="border-0 outline-0 z-50 flex gap-1"
+                        className="border-0 outline-0 z-10 flex gap-1"
                     >
-                        <h2 className="text-2xl truncate max-w-[80%] opacity-50">
+                        <h2 className="text-xl truncate max-w-[80%] opacity-50">
                             {areaName}
                         </h2>
                         <ChevronDown className="opacity-50" />

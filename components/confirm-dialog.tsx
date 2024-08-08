@@ -68,18 +68,16 @@ export function CompletionDialog(props: CompletionDialogProps) {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle className="flex-start">
-                        <CircleCheck color="#3DD68C" />
+                    <DialogTitle className="flex-start mb-2">
+                        <CircleCheck size={24} color="#3DD68C" />
                         <p className="ml-2">Task Completed!</p>
                     </DialogTitle>
-                    <DialogDescription className="flex items-start flex-col gap-2 pl-8">
-                        <span>How much of this task have you completed?</span>
-                        <code>{task}</code>
+                    <DialogDescription className="text-inherit">
+                        How much of this task have you completed?
                     </DialogDescription>
+                    <DialogDescription>{task}</DialogDescription>
                 </DialogHeader>
-                <div className="py-4">
-                    <div className="items-center gap-4">{children}</div>
-                </div>
+                <div className="items-center gap-4 py-4">{children}</div>
                 <DialogFooter>
                     <Button type="submit" onClick={onClick}>
                         Save
@@ -101,14 +99,14 @@ export function RenameAreaDialog(props: RenameAreaDialogProps) {
                 <DialogHeader>
                     <DialogTitle>Rename Area</DialogTitle>
                     <DialogDescription>
-                        Make changes to your profile here. Click save when
-                        you're done.
+                        Edit the name of this area and then click the 'Save'
+                        button when you are done.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="w-full flex-end">{children}</div>
                 <DialogFooter>
                     <Button type="submit" onClick={onClick}>
-                        Save changes
+                        Save
                     </Button>
                 </DialogFooter>
             </DialogContent>
