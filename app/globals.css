@@ -171,5 +171,5 @@ input {
 }
 
 .main-content {
-    @apply w-3/4 h-full p-4 box-border;
+    @apply w-3/4 h-full p-4 box-border max-md:w-full;
 }
