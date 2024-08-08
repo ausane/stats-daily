@@ -2,9 +2,6 @@
 
 import { useRef, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import TaskInput from "../task-input";
-// import { parseType, taskInputsFunc } from "@/lib/constants";
-// import Button from "@/components/ui/icon-button";
 import { Button } from "@/components/ui/button";
 import { X, CircleAlert } from "lucide-react";
 import {
@@ -60,19 +57,19 @@ export default function CreateTasks() {
     };
 
     return (
-        <div className="w-3/5 h-full bbn max-sm:w-full">
-            <div className="w-full flex-between gap-4 p-4 h-24">
+        <div className="w-3/5 h-full border-l max-sm:border-0 max-sm:w-full">
+            <div className="w-full flex-between gap-4 p-4 h-24 border-b">
                 <span className="w-full flex-start relative">
                     <Input
-                        label="Task:"
+                        label="Task"
                         ref={inputRef}
                         type="text"
                         name="task"
                         value={task}
                         onChange={handleTaskInputChange}
                         onKeyDown={handleKeyDown}
-                        className="w-full h-10"
-                        labelClasses="w-full gap-2"
+                        className="w-full h-10 mt-1 rounded-md"
+                        labelClasses="w-full"
                         // required
                     />
                     {placeholder && (
@@ -91,19 +88,34 @@ export default function CreateTasks() {
                 </Button>
             </div>
 
-            <div className="bbn h-[calc(100%-6rem)] overflow-auto">
+            <div className="h-[calc(100%-6rem)] overflow-auto">
+                {!tasks.length && (
+                    <div className="w-full h-full flex-center opacity-50">
+                        <p>Your tasks will appear here</p>
+                    </div>
+                )}
                 {tasks.map((item, index) => (
-                    <div key={index} className="flex-between p-1 border-b">
-                        <span className="w-8 h-8 bbn flex-center">{index}</span>
-                        <span className="truncate w-4/6 flex-start ml-4">
-                            <p>{item.task}</p>
+                    <div
+                        key={index}
+                        className={`flex-between p-2  ${
+                            tasks.length - 1 === index
+                                ? "border-b-0"
+                                : "border-b"
+                        }`}
+                    >
+                        <span className="w-11/12 flex-start gap-4">
+                            <span className="w-8 h-8 bbn flex-center rounded">
+                                {index + 1}
+                            </span>
+                            <p className="truncate w-5/6">{item.task}</p>
                         </span>
 
                         <IconButton
                             type="button"
+                            variant="ghost"
                             onClick={() => dispatch(removeTask(index))}
                         >
-                            <X />
+                            <X size={15} />
                         </IconButton>
                     </div>
                 ))}

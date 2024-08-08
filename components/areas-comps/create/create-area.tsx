@@ -110,29 +110,29 @@ export default function CreateArea() {
     };
 
     return (
-        <div className="w-3/4 h-full overflow-auto p-4 max-md:w-full">
+        <div className="w-3/4 h-full overflow-auto p-4 pt-0 max-md:w-full">
             <form
                 onSubmit={submitForm}
                 className="w-full h-full flex-between flex-col gap-4 max-sm:h-auto"
             >
-                <div className="flex-between mb-2 w-full sticky top-0 border-b-0 bg-background bbn p-4">
-                    <h2 className="text-xl font-bold">Create Area</h2>
-                    <Button
-                        // variant="outline"
-                        type="submit"
-                        // onClick={submitForm}
-                        className="text-[#fafafa] bg-green-700 hover:bg-green-800"
-                        disabled={isLoading} // Disable button when loading
-                    >
-                        {isLoading ? "Creating..." : "Create"}
-                    </Button>
+                <div className="w-full flex-start flex-col sticky top-0 bg-background max-md:pl-16">
+                    <div className="w-full flex-between px-4 py-4">
+                        <h2 className="text-xl font-bold">Create Area</h2>
+                        <Button
+                            type="submit"
+                            className="text-[#fafafa] bg-green-700 hover:bg-green-800"
+                            disabled={isLoading} // Disable button when loading
+                        >
+                            {isLoading ? "Creating..." : "Create"}
+                        </Button>
+                    </div>
                 </div>
-                <div className="flex h-4/5 w-full max-sm:flex-col">
-                    <div className="w-2/5 flex flex-col bbn max-sm:w-full">
+                <div className="flex grow h-4/5 w-full max-sm:flex-col bbn rounded-md">
+                    <div className="w-2/5 flex flex-col max-sm:w-full">
                         <Input
                             ref={areaRef}
-                            label="Area:"
-                            labelClasses="bbn p-4 w-full p-1"
+                            label="Area"
+                            labelClasses="border-b p-4 w-full h-24"
                             name="area"
                             value={area}
                             className="w-full h-10 rounded-md mt-1"
@@ -148,8 +148,8 @@ export default function CreateArea() {
                             )}
                         </Input>
 
-                        <label className="h-full w-full bbn p-4 grow">
-                            Note:
+                        <label className="h-full w-full p-4 grow max-sm:border-b">
+                            Note
                             <textarea
                                 name="note"
                                 value={note}
@@ -157,8 +157,7 @@ export default function CreateArea() {
                                 onChange={(e) =>
                                     dispatch(handleNoteChange(e.target.value))
                                 }
-                                className="w-full h-5/6 resize-none p-1 bg-transparent bbn rounded-md min-h-20"
-                                // rows={4}
+                                className="w-full h-[calc(100%-28px)] resize-none p-1 bg-transparent bbn rounded-md min-h-20 max-sm:resize-y mt-1"
                             />
                         </label>
                     </div>
