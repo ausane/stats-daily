@@ -6,11 +6,19 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import TaskListItem from "./task-list-item";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { updateTask } from "@/lib/utils/handle-update";
-import { ArrowUp, X, Check, Plus, CircleAlert } from "lucide-react";
+import {
+    ArrowUp,
+    X,
+    Check,
+    Plus,
+    CircleAlert,
+    Circle,
+    CheckCircle2,
+} from "lucide-react";
 import CircularProgress from "../ui/circular-progress";
 import { createNewTask } from "@/lib/utils/handle-update";
 import IconButton from "../ui/icon-button";
-import { Button } from "../ui/button";
+// import { Button } from "../ui/button";
 import {
     setIncompleteTasks,
     setCompleteTasks,
@@ -81,8 +89,14 @@ export default function TaskList({ data }: { data: TStat }) {
     return (
         <div className="size-full grow overflow-auto box-border flex-between gap-4">
             <div className="w-8/12 h-full overflow-auto box-border bbn rounded-md relative max-lg:w-full">
-                <div className="w-full h-10 flex-between sticky top-0 font-bold border-b px-4 box-border bg-secondary">
-                    <span>Tasks</span>
+                <div className="w-full h-10 flex-between sticky top-0 font-bold border-b px-2 pr-4 box-border bg-secondary">
+                    <span className="w-12 flex-center opacity-50">
+                        <Circle />
+                    </span>
+                    <p className="h-full flex-center font-bold opacity-50">
+                        {incompleteTasks.length} Incomplete
+                        {incompleteTasks.length === 1 ? " Task" : " Tasks"}
+                    </p>
                     <span>
                         <IconButton
                             variant="ghost"
@@ -162,8 +176,14 @@ export function ShowCompletedTasks({
             className={`border-t w-full absolute bottom-0 left-0 bg-background transition-all duration-400 ease-in-out overflow-hidden 
                 ${open ? "h-full" : "h-10"}`}
         >
-            <div className="w-full h-10 bg-secondary sticky top-0 left-0 border-b flex-between px-4">
-                <p className="h-full flex-center font-bold">Done Tasks</p>
+            <div className="w-full h-10 bg-secondary sticky top-0 left-0 border-b flex-between px-2 pr-4">
+                <span className="w-12 flex-center opacity-50">
+                    <CheckCircle2 />
+                </span>
+                <p className="h-full flex-center font-bold opacity-50">
+                    {completedTasks.length} Completed
+                    {completedTasks.length === 1 ? " Task" : " Tasks"}
+                </p>
                 <IconButton
                     variant="ghost"
                     circle={true}
