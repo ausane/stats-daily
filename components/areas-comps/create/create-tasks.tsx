@@ -4,39 +4,32 @@ import { useRef, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { Button } from "@/components/ui/button";
 import { X, CircleAlert } from "lucide-react";
+import Input from "@/components/ui/input";
+import IconButton from "@/components/ui/icon-button";
+import { InputChangeEvent } from "@/lib/types";
 import {
     handleTaskChange,
     addToTasks,
     handleErrMsg,
     removeTask,
 } from "@/features/formSlice";
-import Input from "@/components/ui/input";
-import IconButton from "@/components/ui/icon-button";
 
 export default function CreateTasks() {
-    const btnRef = useRef<HTMLButtonElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const task = useAppSelector((state) => state.form.task);
     const tasks = useAppSelector((state) => state.form.tasks);
-    // const errMsg = useAppSelector((state) => state.form.errMsg);
+
     const [placeholder, setPlaceholder] = useState("");
 
     const dispatch = useAppDispatch();
 
-    const handleTaskInputChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const { name, value } = event.target;
-        // const parsedValue = parseType(name, value);
-
-        // console.log(name, value);
+    const handleTaskInputChange = (event: InputChangeEvent) => {
         setPlaceholder("");
-        dispatch(handleTaskChange(value));
+        dispatch(handleTaskChange(event.target.value));
     };
 
     const handleTaskSubmit = () => {
-        // const trueTask = task.task && task.target && task.unit;
         if (task.trim()) {
             dispatch(addToTasks());
             dispatch(handleErrMsg(""));
@@ -52,7 +45,6 @@ export default function CreateTasks() {
         if (event.key === "Enter") {
             event.preventDefault();
             handleTaskSubmit();
-            // btnRef.current?.click();
         }
     };
 

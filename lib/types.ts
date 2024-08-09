@@ -43,9 +43,11 @@ export type TaskInputProps = InputProps & {
     submitBtn?: React.RefObject<HTMLButtonElement>;
 };
 
-// Helper type to omit Document from nested type
+// Generic React utilities for state, events, and type handling
 export type OmitDocument<T> = Omit<T, keyof Document>;
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
+export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
+export type ChangeEvent<T> = React.ChangeEvent<T>;
 
 // Form Slice InitialState Type
 export type InitialState = {
@@ -133,4 +135,19 @@ export type RenameAreaDialogProps = {
     renameDialog: boolean;
     setRenameDialog: SetState<boolean>;
     children: React.ReactNode;
+};
+
+// Task Status Props Type
+export type TaskStatusProps = {
+    areaId: string;
+    index: number;
+    openInputTask: boolean;
+    taskItem: TTask;
+};
+
+// Task List Items Props Type
+export type TaskListItemsProps = {
+    index: number;
+    areaId: string;
+    taskItem: TTask;
 };

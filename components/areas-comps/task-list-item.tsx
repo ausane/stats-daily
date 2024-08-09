@@ -1,6 +1,5 @@
 "use client";
 
-import { TTask } from "@/lib/types";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "@/store/hooks";
 import { CompletionDialog } from "../confirm-dialog";
@@ -12,20 +11,20 @@ import Input from "../ui/input";
 import { handleKeyDownEnter } from "@/lib/constants";
 import { Check, CircleAlert, Pencil, Trash, X } from "lucide-react";
 import {
+    InputChangeEvent,
+    TaskListItemsProps,
+    TaskStatusProps,
+    TTask,
+} from "@/lib/types";
+import {
     setTaskCompletion,
     removeTaskById,
     setEditedTask,
 } from "@/features/taskSlice";
 
-export default function TaskListItem({
-    index,
-    areaId,
-    taskItem,
-}: {
-    index: number;
-    areaId: string;
-    taskItem: TTask;
-}) {
+export default function TaskListItem(props: TaskListItemsProps) {
+    const { index, areaId, taskItem } = props;
+
     const task = taskItem.task;
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -52,7 +51,6 @@ export default function TaskListItem({
             return;
         }
 
-        // console.log("task!");
         dispatch(setEditedTask({ index, task: inputTask }));
         setOpenInputTask(false);
 
@@ -64,10 +62,8 @@ export default function TaskListItem({
         await updateTask(areaId, taskObj as TTask);
     };
 
-    const handleEditInputChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const value = event.target.value;
+    const handleEditInputChange = (event: InputChangeEvent) => {
+        const { value } = event.target;
         setInputTask(value);
         setPlaceholder(value ? "" : "Task cannot be empty!");
     };
@@ -145,17 +141,9 @@ export default function TaskListItem({
     );
 }
 
-export function TaskStatus({
-    areaId,
-    index,
-    openInputTask,
-    taskItem,
-}: {
-    areaId: string;
-    index: number;
-    openInputTask: boolean;
-    taskItem: TTask;
-}) {
+export function TaskStatus(props: TaskStatusProps) {
+    const { areaId, index, openInputTask, taskItem } = props;
+
     const [openDialog, setOpenDialog] = useState(false);
     const dispatch = useAppDispatch();
 
@@ -173,7 +161,6 @@ export function TaskStatus({
 
         setOpenDialog(false);
         await updateTask(areaId, taskObj as TTask);
-        // console.log("save", taskObj);
     };
 
     if (openInputTask) {

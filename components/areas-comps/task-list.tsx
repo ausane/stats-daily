@@ -1,6 +1,6 @@
 "use client";
 
-import { AddNewTaskProps, TStat, TTask } from "@/lib/types";
+import { AddNewTaskProps, InputChangeEvent, TStat, TTask } from "@/lib/types";
 import DailyNote from "./area/daily-note";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import TaskListItem from "./task-list-item";
@@ -59,14 +59,13 @@ export default function TaskList({ data }: { data: TStat }) {
     // Progress Animation
     useEffect(() => {
         const calculateProgress = () => {
-            if (!completedTasks.length) return 0;
-            const achievedArray = completedTasks.map((item) => item.achieved);
+            if (!completedTasks.length && !incompleteTasks.length) return 0;
 
-            const total = achievedArray.reduce(
-                (sum, number) => sum + number,
-                0
-            );
-            return parseInt((total / achievedArray.length).toFixed(), 10);
+            const achievedArray = completedTasks.map((item) => item.achieved);
+            const total = achievedArray.reduce((sum, num) => sum + num, 0);
+            const target = completedTasks.length + incompleteTasks.length;
+
+            return parseInt((total / target).toFixed(), 10);
         };
 
         const targetProgress = calculateProgress();
@@ -260,10 +259,8 @@ export function AddNewTask({
         dispatch(setIncompleteTasks(newIncompleteTasks));
     };
 
-    const handleNewTaskInputChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const value = event.target.value;
+    const handleNewTaskInputChange = (event: InputChangeEvent) => {
+        const { value } = event.target;
         setNewTaskValue(value);
         setEmptyInputAlert(value ? false : true);
     };
