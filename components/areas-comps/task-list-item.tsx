@@ -1,6 +1,5 @@
 "use client";
 
-import { TaskListItemsProps, TaskStatusProps, TTask } from "@/lib/types";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "@/store/hooks";
 import { CompletionDialog } from "../confirm-dialog";
@@ -11,6 +10,12 @@ import { deleteTask } from "@/lib/utils/handle-delete";
 import Input from "../ui/input";
 import { handleKeyDownEnter } from "@/lib/constants";
 import { Check, CircleAlert, Pencil, Trash, X } from "lucide-react";
+import {
+    InputChangeEvent,
+    TaskListItemsProps,
+    TaskStatusProps,
+    TTask,
+} from "@/lib/types";
 import {
     setTaskCompletion,
     removeTaskById,
@@ -57,10 +62,8 @@ export default function TaskListItem(props: TaskListItemsProps) {
         await updateTask(areaId, taskObj as TTask);
     };
 
-    const handleEditInputChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const value = event.target.value;
+    const handleEditInputChange = (event: InputChangeEvent) => {
+        const { value } = event.target;
         setInputTask(value);
         setPlaceholder(value ? "" : "Task cannot be empty!");
     };

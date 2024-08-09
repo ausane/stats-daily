@@ -15,6 +15,7 @@ import {
     resetForm,
     handleErrMsg,
 } from "@/features/formSlice";
+import { InputChangeEvent } from "@/lib/types";
 
 export default function CreateArea() {
     // Retrieve all required states from the store
@@ -101,9 +102,7 @@ export default function CreateArea() {
     };
 
     // Handle area input onChange event
-    const handleAreaChangeFunc = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleAreaChangeFunc = (event: InputChangeEvent) => {
         const value = event.target.value;
         setInputError(value ? "" : "Area cannot be empty!");
         dispatch(handleAreaChange(value));

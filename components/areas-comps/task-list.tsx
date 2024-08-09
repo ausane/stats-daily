@@ -1,6 +1,6 @@
 "use client";
 
-import { AddNewTaskProps, TStat, TTask } from "@/lib/types";
+import { AddNewTaskProps, InputChangeEvent, TStat, TTask } from "@/lib/types";
 import DailyNote from "./area/daily-note";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import TaskListItem from "./task-list-item";
@@ -259,10 +259,8 @@ export function AddNewTask({
         dispatch(setIncompleteTasks(newIncompleteTasks));
     };
 
-    const handleNewTaskInputChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const value = event.target.value;
+    const handleNewTaskInputChange = (event: InputChangeEvent) => {
+        const { value } = event.target;
         setNewTaskValue(value);
         setEmptyInputAlert(value ? false : true);
     };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { deleteArea } from "@/lib/utils/handle-delete";
 import { useAppDispatch } from "@/store/hooks";
@@ -9,7 +9,7 @@ import IconButton from "@/components/ui/icon-button";
 import Input from "@/components/ui/input";
 import { updateAreaName } from "@/lib/utils/handle-update";
 import ConfirmDialog from "@/components/confirm-dialog";
-import { TaskItemCompoProps } from "@/lib/types";
+import { InputChangeEvent, TaskItemCompoProps } from "@/lib/types";
 import { ModeToggle } from "@/components/theme-provider";
 import { handleKeyDownEnter } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
@@ -22,24 +22,19 @@ import {
 import { CircleAlert, Pencil, User2, Trash, ChevronDown } from "lucide-react";
 import { RenameAreaDialog } from "@/components/confirm-dialog";
 
-export default function AreaHeader({
-    _id,
-    area,
-}: {
-    _id: string;
-    area: string;
-}) {
+export default function AreaHeader(props: { _id: string; area: string }) {
+    const { _id, area } = props;
+
     const areaRef = useRef<HTMLInputElement>(null);
 
     const [error, setError] = useState(false);
-    // const [updating, setUpdating] = useState(false);
     const [areaName, setAreaName] = useState(area);
     const [areaInput, setAreaInput] = useState(areaName);
     const [renameDialog, setRenameDialog] = useState(false);
 
     const dispatch = useAppDispatch();
 
-    const handleAreaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleAreaChange = (event: InputChangeEvent) => {
         setAreaInput(event.target.value);
         setError(false);
     };
@@ -57,7 +52,6 @@ export default function AreaHeader({
             return;
         }
 
-        // setUpdating(true);
         const response = await updateAreaName(_id, areaInput);
 
         if (response && response.duplicate) {
@@ -65,12 +59,9 @@ export default function AreaHeader({
         } else {
             setError(false);
             setAreaName(areaInput);
-            // setAreaDisplay(false);
             dispatch(setCurrentArea({ _id, area: areaInput }));
             setRenameDialog(false);
         }
-
-        // setUpdating(false);
     };
 
     return (
