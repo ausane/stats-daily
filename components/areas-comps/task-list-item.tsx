@@ -1,6 +1,6 @@
 "use client";
 
-import { TTask } from "@/lib/types";
+import { TaskListItemsProps, TaskStatusProps, TTask } from "@/lib/types";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "@/store/hooks";
 import { CompletionDialog } from "../confirm-dialog";
@@ -17,15 +17,9 @@ import {
     setEditedTask,
 } from "@/features/taskSlice";
 
-export default function TaskListItem({
-    index,
-    areaId,
-    taskItem,
-}: {
-    index: number;
-    areaId: string;
-    taskItem: TTask;
-}) {
+export default function TaskListItem(props: TaskListItemsProps) {
+    const { index, areaId, taskItem } = props;
+
     const task = taskItem.task;
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -52,7 +46,6 @@ export default function TaskListItem({
             return;
         }
 
-        // console.log("task!");
         dispatch(setEditedTask({ index, task: inputTask }));
         setOpenInputTask(false);
 
@@ -145,17 +138,9 @@ export default function TaskListItem({
     );
 }
 
-export function TaskStatus({
-    areaId,
-    index,
-    openInputTask,
-    taskItem,
-}: {
-    areaId: string;
-    index: number;
-    openInputTask: boolean;
-    taskItem: TTask;
-}) {
+export function TaskStatus(props: TaskStatusProps) {
+    const { areaId, index, openInputTask, taskItem } = props;
+
     const [openDialog, setOpenDialog] = useState(false);
     const dispatch = useAppDispatch();
 
@@ -173,7 +158,6 @@ export function TaskStatus({
 
         setOpenDialog(false);
         await updateTask(areaId, taskObj as TTask);
-        // console.log("save", taskObj);
     };
 
     if (openInputTask) {

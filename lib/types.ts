@@ -134,3 +134,18 @@ export type RenameAreaDialogProps = {
     setRenameDialog: SetState<boolean>;
     children: React.ReactNode;
 };
+
+// Task Status Props Type
+export type TaskStatusProps = {
+    areaId: string;
+    index: number;
+    openInputTask: boolean;
+    taskItem: TTask;
+};
+
+// Task List Items Props Type
+export type TaskListItemsProps = {
+    index: number;
+    areaId: string;
+    taskItem: TTask;
+};

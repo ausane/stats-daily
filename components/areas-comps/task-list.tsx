@@ -59,14 +59,13 @@ export default function TaskList({ data }: { data: TStat }) {
     // Progress Animation
     useEffect(() => {
         const calculateProgress = () => {
-            if (!completedTasks.length) return 0;
-            const achievedArray = completedTasks.map((item) => item.achieved);
+            if (!completedTasks.length && !incompleteTasks.length) return 0;
 
-            const total = achievedArray.reduce(
-                (sum, number) => sum + number,
-                0
-            );
-            return parseInt((total / achievedArray.length).toFixed(), 10);
+            const achievedArray = completedTasks.map((item) => item.achieved);
+            const total = achievedArray.reduce((sum, num) => sum + num, 0);
+            const target = completedTasks.length + incompleteTasks.length;
+
+            return parseInt((total / target).toFixed(), 10);
         };
 
         const targetProgress = calculateProgress();
