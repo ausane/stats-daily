@@ -6,8 +6,8 @@ import { TSC, SidebarTogglerProps } from "@/lib/types";
 import { usePathname } from "next/navigation";
 import { insertAllAreas } from "@/features/areaSlice";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { ModeToggle } from "../theme-provider";
-import { Menu, X } from "lucide-react";
+// import { ModeToggle } from "../theme-provider";
+import { Menu, X, SquarePen } from "lucide-react";
 import IconButton from "../ui/icon-button";
 
 export default function Sidebar({ data }: { data: TSC[] | void }) {
@@ -46,7 +46,7 @@ export default function Sidebar({ data }: { data: TSC[] | void }) {
                 onClick={toggleSidebar}
             >
                 <div
-                    className="w-2/4 max-sm:w-3/4 max-w-sm h-full bg-background px-2 py-4 transition-transform duration-300 transform shadow-lg"
+                    className="w-80 max-w-sm h-full bg-background px-2 py-4 transition-transform duration-300 transform shadow-lg"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="w-full h-10 flex-end mb-2 box-border sticky top-0 bg-background">
@@ -83,32 +83,36 @@ export function SidebarContent({
 }) {
     return (
         <>
-            <div className="w-full h-10 flex-between p-2 bbn box-border sticky top-4 bg-background">
-                <h2 className="font-bold py-1">StatsDaily</h2>
-                <Link onClick={toggleSidebar} href={`/areas/create`}>
-                    N
+            <div className="w-full flex-start box-border sticky top-4 bg-background">
+                <Link
+                    className="flex-between w-full h-10 opacity-80 hover:bg-accent hover:text-accent-foreground px-4 rounded-lg active:scale-95 transition-transform duration-200"
+                    onClick={toggleSidebar}
+                    href={`/areas/create`}
+                >
+                    <h2 className="text-lg">StatsDaily</h2>
+                    <SquarePen size={20} />
                 </Link>
             </div>
-            <div className="overflow-auto w-full h-[calc(100%-4rem)] sticky top-14">
+            <div className="overflow-auto w-full h-[calc(100%-6rem)] sticky top-20">
                 {tasks?.map((task, index) => (
                     <div
                         key={index}
-                        className={`w-full h-8 bbn my-2 flex-center justify-between box-border hover:bg-green-700 
+                        className={`w-full my-2 h-9 flex-start box-border rounded-md hover:bg-secondary
                                     ${
                                         task._id === areaId
-                                            ? "bg-green-600"
-                                            : "bg-transparent"
+                                            ? "bg-secondary"
+                                            : "bg-background"
                                     }`}
                     >
-                        <span className="h-full w-1/5 bbn flex-center box-border">
-                            {index}
+                        <span className="h-full w-9 flex-center bbn rounded-md">
+                            {index + 1}
                         </span>
                         <Link
                             onClick={toggleSidebar}
                             href={`/areas/${task._id}`}
-                            className="w-4/5 h-full flex-start p-2 bbn box-border truncate"
+                            className="w-4/5 h-full flex-start px-4 py-2 box-border"
                         >
-                            <span className="w-full truncate">{task.area}</span>
+                            <p className="w-full truncate">{task.area}</p>
                         </Link>
                     </div>
                 ))}

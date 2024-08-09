@@ -87,14 +87,7 @@ export default function CreateTasks() {
                     </div>
                 )}
                 {tasks.map((item, index) => (
-                    <div
-                        key={index}
-                        className={`flex-between p-2  ${
-                            tasks.length - 1 === index
-                                ? "border-b-0"
-                                : "border-b"
-                        }`}
-                    >
+                    <div key={index} className="flex-between p-2 border-b">
                         <span className="w-11/12 flex-start gap-4">
                             <span className="w-8 h-8 bbn flex-center rounded">
                                 {index + 1}
@@ -105,6 +98,7 @@ export default function CreateTasks() {
                         <IconButton
                             type="button"
                             variant="ghost"
+                            className="rounded-full"
                             onClick={() => dispatch(removeTask(index))}
                         >
                             <X size={15} />

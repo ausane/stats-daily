@@ -66,7 +66,7 @@ export default function AreaHeader(props: { _id: string; area: string }) {
 
     return (
         <div className="w-full">
-            <div className="w-full max-md:pl-16 relative flex-between gap-4 overflow-x-hidden">
+            <div className="w-full max-md:pl-16 relative flex-between gap-4 py-4 overflow-x-hidden">
                 <div className="flex-start gap-4 group">
                     <TaskItemCompo
                         areaId={_id}
@@ -135,7 +135,7 @@ export function TaskItemCompo(props: TaskItemCompoProps) {
                         variant="ghost"
                         className="border-0 outline-0 z-10 flex gap-1"
                     >
-                        <h2 className="text-xl truncate max-w-[80%] opacity-50">
+                        <h2 className="text-xl truncate max-w-[80%] opacity-80">
                             {areaName}
                         </h2>
                         <ChevronDown className="opacity-50" />

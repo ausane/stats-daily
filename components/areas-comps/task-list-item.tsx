@@ -10,6 +10,7 @@ import { deleteTask } from "@/lib/utils/handle-delete";
 import Input from "../ui/input";
 import { handleKeyDownEnter } from "@/lib/constants";
 import { Check, CircleAlert, Pencil, Trash, X } from "lucide-react";
+import { TaskState, TaskContent, TaskOptions } from "../task-items";
 import {
     InputChangeEvent,
     TaskListItemsProps,
@@ -77,16 +78,16 @@ export default function TaskListItem(props: TaskListItemsProps) {
         <>
             <div className="w-full flex-between">
                 <>
-                    <span className="w-12 flex-center">
+                    <TaskState>
                         <TaskStatus
                             index={index}
                             areaId={areaId}
                             openInputTask={openInputTask}
                             taskItem={taskItem}
                         />
-                    </span>
+                    </TaskState>
 
-                    <span className="relative flex-start w-[calc(100%-8rem)] ml-2">
+                    <TaskContent>
                         {openInputTask ? (
                             <>
                                 <Input
@@ -108,11 +109,11 @@ export default function TaskListItem(props: TaskListItemsProps) {
                                 )}
                             </>
                         ) : (
-                            <p className="truncate">{task}</p>
+                            <p className="w-11/12 truncate">{task}</p>
                         )}
-                    </span>
+                    </TaskContent>
 
-                    <span className="flex-around w-20">
+                    <TaskOptions>
                         {openInputTask ? (
                             <>
                                 <IconButton onClick={handleEditTask}>
@@ -134,7 +135,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
                                 </IconButton>
                             </>
                         )}
-                    </span>
+                    </TaskOptions>
                 </>
             </div>
         </>

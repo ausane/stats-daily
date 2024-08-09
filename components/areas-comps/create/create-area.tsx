@@ -78,6 +78,7 @@ export default function CreateArea() {
     const isDuplicateArea = (response: any) => {
         if (response?.duplicate) {
             setInputError(response.message);
+            setPrevAreaValue(area);
         } else if (response?._id) {
             router.push(`/areas/${response._id}`);
             dispatch(insertArea(response));
@@ -115,8 +116,8 @@ export default function CreateArea() {
                 className="w-full h-full flex-between flex-col gap-4 max-sm:h-auto"
             >
                 <div className="w-full flex-start flex-col sticky top-0 bg-background max-md:pl-16">
-                    <div className="w-full flex-between px-4 py-4">
-                        <h2 className="text-xl font-bold">Create Area</h2>
+                    <div className="w-full flex-between py-4">
+                        <h2 className="text-xl px-4 opacity-80">Create Area</h2>
                         <Button
                             type="submit"
                             className="text-[#fafafa] bg-green-700 hover:bg-green-800"
@@ -131,7 +132,7 @@ export default function CreateArea() {
                         <Input
                             ref={areaRef}
                             label="Area"
-                            labelClasses="border-b p-4 w-full h-24"
+                            labelClasses="border-b p-4 w-full"
                             name="area"
                             value={area}
                             className="w-full h-10 rounded-md mt-1"

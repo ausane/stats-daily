@@ -6,6 +6,11 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import TaskListItem from "./task-list-item";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { updateTask } from "@/lib/utils/handle-update";
+import { TaskState, TaskContent, TaskOptions } from "../task-items";
+import CircularProgress from "../ui/circular-progress";
+import { createNewTask } from "@/lib/utils/handle-update";
+import IconButton from "../ui/icon-button";
+// import { Button } from "../ui/button";
 import {
     ArrowUp,
     X,
@@ -15,10 +20,6 @@ import {
     Circle,
     CheckCircle2,
 } from "lucide-react";
-import CircularProgress from "../ui/circular-progress";
-import { createNewTask } from "@/lib/utils/handle-update";
-import IconButton from "../ui/icon-button";
-// import { Button } from "../ui/button";
 import {
     setIncompleteTasks,
     setCompleteTasks,
@@ -88,11 +89,11 @@ export default function TaskList({ data }: { data: TStat }) {
     return (
         <div className="size-full grow overflow-auto box-border flex-between gap-4">
             <div className="w-8/12 h-full overflow-auto box-border bbn rounded-md relative max-lg:w-full">
-                <div className="w-full h-10 flex-between sticky top-0 font-bold border-b px-2 pr-4 box-border bg-secondary">
+                <div className="w-full h-10 flex-between sticky top-0 border-b px-2 pr-4 box-border">
                     <span className="w-12 flex-center opacity-50">
                         <Circle />
                     </span>
-                    <p className="h-full flex-center font-bold opacity-50">
+                    <p className="h-full flex-center font-medium opacity-50">
                         {incompleteTasks.length} Incomplete
                         {incompleteTasks.length === 1 ? " Task" : " Tasks"}
                     </p>
@@ -100,7 +101,7 @@ export default function TaskList({ data }: { data: TStat }) {
                         <IconButton
                             variant="ghost"
                             circle={true}
-                            className={`transition-transform duration-400 ease-in-out hover:bg-border p-0 ${
+                            className={`transition-transform duration-400 ease-in-out p-0 ${
                                 addTaskInput ? "rotate-45" : "rotate-90"
                             }`}
                             onClick={() => {
@@ -122,10 +123,7 @@ export default function TaskList({ data }: { data: TStat }) {
                         setEmptyInputAlert={setEmptyInputAlert}
                     />
                     {incompleteTasks?.map((item, index) => (
-                        <div
-                            key={index}
-                            className="w-full flex flex-col bbn p-2"
-                        >
+                        <div key={index} className="w-full border-b p-2">
                             <TaskListItem
                                 areaId={_id as string}
                                 taskItem={item}
@@ -175,18 +173,18 @@ export function ShowCompletedTasks({
             className={`border-t w-full absolute bottom-0 left-0 bg-background transition-all duration-400 ease-in-out overflow-hidden 
                 ${open ? "h-full" : "h-10"}`}
         >
-            <div className="w-full h-10 bg-secondary sticky top-0 left-0 border-b flex-between px-2 pr-4">
+            <div className="w-full h-10 sticky top-0 left-0 border-b flex-between px-2 pr-4">
                 <span className="w-12 flex-center opacity-50">
                     <CheckCircle2 />
                 </span>
-                <p className="h-full flex-center font-bold opacity-50">
+                <p className="h-full flex-center font-medium opacity-50">
                     {completedTasks.length} Completed
                     {completedTasks.length === 1 ? " Task" : " Tasks"}
                 </p>
                 <IconButton
                     variant="ghost"
                     circle={true}
-                    className={`transition-transform duration-400 ease-in-out hover:bg-border p-0 ${
+                    className={`transition-transform duration-400 ease-in-out p-0 ${
                         open ? "rotate-180" : "rotate-0"
                     }`}
                     // className="transition-all duration-400 ease-in-out rotate-180"
@@ -201,18 +199,20 @@ export function ShowCompletedTasks({
             >
                 {completedTasks?.map((item, index) => (
                     <div key={index} className="w-full flex-between bbn p-2">
-                        <span className="w-1/6 flex-center">
+                        <TaskState>
                             <button
                                 onClick={() => handleUndoTask(index)}
                                 className="status-button bg-red-700 hover:bg-red-800"
                             ></button>
-                        </span>
-                        <span className="w-4/6 flex-start">
-                            <p className="truncate">{item.task}</p>
-                        </span>
-                        <span className="w-1/6 flex-center">
+                        </TaskState>
+
+                        <TaskContent>
+                            <p className="w-11/12 truncate">{item.task}</p>
+                        </TaskContent>
+
+                        <TaskOptions>
                             <p>{item.achieved.toString()}%</p>
-                        </span>
+                        </TaskOptions>
                     </div>
                 ))}
             </div>
@@ -267,11 +267,12 @@ export function AddNewTask({
 
     if (addTaskInput) {
         return (
-            <div className="flex p-2">
-                <span className="w-12 flex-center">
+            <div className="p-2 flex-between">
+                <TaskState>
                     <span className="status-button bg-green-400"></span>
-                </span>
-                <span className="w-[calc(100%-8rem)] ml-2 flex-start relative">
+                </TaskState>
+
+                <TaskContent>
                     <Input
                         ref={inputRef}
                         type="text"
@@ -287,8 +288,9 @@ export function AddNewTask({
                             <span>Task cannot be empty!</span>
                         </span>
                     )}
-                </span>
-                <span className="w-20 flex-around">
+                </TaskContent>
+
+                <TaskOptions>
                     <IconButton variant="default" onClick={addNewTask}>
                         <Check size={15} />
                     </IconButton>
@@ -301,7 +303,7 @@ export function AddNewTask({
                     >
                         <X size={15} />
                     </IconButton>
-                </span>
+                </TaskOptions>
             </div>
         );
     }

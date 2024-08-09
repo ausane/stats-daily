@@ -21,13 +21,7 @@ const formSlice = createSlice({
             state.task = initialState.task;
         },
         handleTaskChange: (state, action) => {
-            // const { name, value } = action.payload;
-            // console.log(action.payload);
             state.task = action.payload;
-            // state.task = {
-            //     ...state.task,
-            //     [name]: value,
-            // };
         },
         handleErrMsg: (state, action) => {
             state.errMsg = action.payload;
@@ -37,16 +31,6 @@ const formSlice = createSlice({
             state.tasks = state.tasks.filter((_, i) => i !== index);
         },
         resetForm: () => initialState,
-        // setInitialState: (state, action) => {
-        //     // console.log(state);
-        //     const { area, note, tasks } = action.payload;
-        //     return {
-        //         ...state,
-        //         area,
-        //         note,
-        //         tasks,
-        //     };
-        // },
     },
 });
 
@@ -58,7 +42,6 @@ export const {
     handleErrMsg,
     removeTask,
     resetForm,
-    // setInitialState,
 } = formSlice.actions;
 
 export default formSlice.reducer;
