@@ -88,11 +88,11 @@ export default function TaskList({ data }: { data: TStat }) {
     return (
         <div className="size-full grow overflow-auto box-border flex-between gap-4">
             <div className="w-8/12 h-full overflow-auto box-border bbn rounded-md relative max-lg:w-full">
-                <div className="w-full h-10 flex-between sticky top-0 font-bold border-b px-2 pr-4 box-border bg-secondary">
+                <div className="w-full h-10 flex-between sticky top-0 border-b px-2 pr-4 box-border bg-secondary">
                     <span className="w-12 flex-center opacity-50">
                         <Circle />
                     </span>
-                    <p className="h-full flex-center font-bold opacity-50">
+                    <p className="h-full flex-center font-medium opacity-50">
                         {incompleteTasks.length} Incomplete
                         {incompleteTasks.length === 1 ? " Task" : " Tasks"}
                     </p>
@@ -179,7 +179,7 @@ export function ShowCompletedTasks({
                 <span className="w-12 flex-center opacity-50">
                     <CheckCircle2 />
                 </span>
-                <p className="h-full flex-center font-bold opacity-50">
+                <p className="h-full flex-center font-medium opacity-50">
                     {completedTasks.length} Completed
                     {completedTasks.length === 1 ? " Task" : " Tasks"}
                 </p>

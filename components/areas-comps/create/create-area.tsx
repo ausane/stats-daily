@@ -78,6 +78,7 @@ export default function CreateArea() {
     const isDuplicateArea = (response: any) => {
         if (response?.duplicate) {
             setInputError(response.message);
+            setPrevAreaValue(area);
         } else if (response?._id) {
             router.push(`/areas/${response._id}`);
             dispatch(insertArea(response));
@@ -131,7 +132,7 @@ export default function CreateArea() {
                         <Input
                             ref={areaRef}
                             label="Area"
-                            labelClasses="border-b p-4 w-full h-24"
+                            labelClasses="border-b p-4 w-full"
                             name="area"
                             value={area}
                             className="w-full h-10 rounded-md mt-1"
