@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/lib/mongodb";
 import { Task } from "@/models/task.model";
-import { Stats } from "@/models/stats.model";
-import type { TStat, TTask } from "@/lib/types";
-import mongoose, { ObjectId } from "mongoose";
+import type { TStat } from "@/lib/types";
+import mongoose from "mongoose";
+import { taskSchemaZod } from "@/lib/schema-validation";
 
 // GET REQUEST HANDLER
 export async function GET() {
@@ -25,8 +25,10 @@ export async function POST(request: NextRequest) {
     await connectToDatabase();
 
     try {
-        const data: any = await request.json();
-        // console.log(data);
+        const data = await request.json();
+
+        // Validate with Zod before interacting with MongoDB
+        taskSchemaZod.parse(data);
 
         if (!data.area.trim() || !data.tasks.length) {
             return NextResponse.json(
@@ -41,7 +43,6 @@ export async function POST(request: NextRequest) {
         const prevArea = await Task.findOne({ area: data.area });
 
         if (prevArea) {
-            // console.log(area);
             return NextResponse.json(
                 {
                     duplicate: true,
@@ -52,7 +53,6 @@ export async function POST(request: NextRequest) {
         }
 
         const newTask = await Task.create(data);
-        // console.log("newTask:", newTask);
 
         return NextResponse.json({ _id: newTask._id, area: newTask.area });
     } catch (error) {
@@ -90,7 +90,7 @@ export async function PATCH(request: NextRequest) {
                 return NextResponse.json(
                     {
                         duplicate: true,
-                        message: `'${prevArea.area}' already exists.`,
+                        message: `'${prevArea.area}' already exists!`,
                     },
                     { status: 409 }
                 );
@@ -176,13 +176,13 @@ export async function PATCH(request: NextRequest) {
 
         // console.log(preStats);
         return NextResponse.json(
-            { id: id, message: "Data updated" },
+            { id, message: "Data updated!" },
             { status: 200 }
         );
     } catch (error) {
         // return console.log(error);
         return NextResponse.json(
-            { message: "Some error occured" },
+            { message: "Some error occured!" },
             { status: 500 }
         );
     }
