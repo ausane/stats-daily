@@ -18,5 +18,5 @@ export const initialState: InitialState = {
     note: "",
     task: "",
     tasks: [],
-    errMsg: "",
+    etem: "",
 };

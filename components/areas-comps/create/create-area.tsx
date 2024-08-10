@@ -13,7 +13,7 @@ import {
     handleAreaChange,
     handleNoteChange,
     resetForm,
-    handleErrMsg,
+    handleEmptyTasks,
 } from "@/features/formSlice";
 import { InputChangeEvent } from "@/lib/types";
 
@@ -33,7 +33,7 @@ export default function CreateArea() {
 
     // State to manage loading status
     const [isLoading, setIsLoading] = useState(false);
-    const [prevAreaValue, setPrevAreaValue] = useState(area);
+    const [prevAreaValue, setPrevAreaValue] = useState("");
     const [inputError, setInputError] = useState("");
 
     // Reset form and focus on area input
@@ -46,39 +46,39 @@ export default function CreateArea() {
     const submitForm = async (event: FormEvent) => {
         event.preventDefault();
 
-        if (prevAreaValue === area) {
-            return;
-        } else {
-            setInputError("");
-        }
+        // Set an error if the area or tasks array is empty
+        if (!validateForm() || !isAreaChanged()) return;
 
-        setIsLoading(true); // Set loading to true when form is submitted
+        setIsLoading(true);
 
-        // Form data object
-        const formData = {
-            area,
-            note,
-            tasks,
-        };
-
-        // Throw an error if the tasks array is empty
-        if (area.trim() && tasks.length) {
-            // Handle Submit
-            const response = await handleSubmit(formData); // Use the submitForm function
-            isDuplicateArea(response);
-        } else {
-            !area.trim() && setInputError("Area cannot be empty");
-            !tasks.length && dispatch(handleErrMsg("Tasks cannot be empty"));
-        }
+        // Handle Submit
+        const response = await handleSubmit({ area, note, tasks });
+        isDuplicateArea(response);
 
         setIsLoading(false);
+    };
+
+    // Validate form data function
+    const validateForm = () => {
+        if (!area.trim()) setInputError("Area cannot be empty!");
+        if (!tasks.length) dispatch(handleEmptyTasks("Tasks cannot be empty!"));
+
+        return area.trim() && tasks.length;
+    };
+
+    // Duplicate area handler function
+    const isAreaChanged = () => {
+        const areaChanged = prevAreaValue !== area;
+        if (!areaChanged) setInputError(`'${area}' already exists!`);
+
+        return areaChanged;
     };
 
     // Check duplicate area name
     const isDuplicateArea = (response: any) => {
         if (response?.duplicate) {
-            setInputError(response.message);
             setPrevAreaValue(area);
+            setInputError(`'${area}' already exists!`);
         } else if (response?._id) {
             router.push(`/areas/${response._id}`);
             dispatch(insertArea(response));
@@ -98,6 +98,7 @@ export default function CreateArea() {
                 dispatch(handleAreaChange(""));
                 return;
             }
+
             if (nextRef.current) nextRef.current.focus();
         }
     };

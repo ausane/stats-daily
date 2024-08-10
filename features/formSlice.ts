@@ -23,8 +23,8 @@ const formSlice = createSlice({
         handleTaskChange: (state, action) => {
             state.task = action.payload;
         },
-        handleErrMsg: (state, action) => {
-            state.errMsg = action.payload;
+        handleEmptyTasks: (state, action) => {
+            state.etem = action.payload;
         },
         removeTask: (state, action) => {
             const index = action.payload;
@@ -39,7 +39,7 @@ export const {
     handleNoteChange,
     handleTaskChange,
     addToTasks,
-    handleErrMsg,
+    handleEmptyTasks,
     removeTask,
     resetForm,
 } = formSlice.actions;

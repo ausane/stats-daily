@@ -7,44 +7,45 @@ import { X, CircleAlert } from "lucide-react";
 import Input from "@/components/ui/input";
 import IconButton from "@/components/ui/icon-button";
 import { InputChangeEvent } from "@/lib/types";
+import { handleKeyDownEnter } from "@/lib/constants";
 import {
     handleTaskChange,
     addToTasks,
-    handleErrMsg,
+    handleEmptyTasks,
     removeTask,
 } from "@/features/formSlice";
 
 export default function CreateTasks() {
-    const inputRef = useRef<HTMLInputElement>(null);
-
+    // Retrieve all required states from the store
     const task = useAppSelector((state) => state.form.task);
     const tasks = useAppSelector((state) => state.form.tasks);
+    const etem = useAppSelector((state) => state.form.etem);
 
+    // Initialize all useRef elements
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    // Initialize all useState elements
     const [placeholder, setPlaceholder] = useState("");
 
+    // Initialize dispatch function
     const dispatch = useAppDispatch();
 
+    // Input Change Event Handler
     const handleTaskInputChange = (event: InputChangeEvent) => {
-        setPlaceholder("");
         dispatch(handleTaskChange(event.target.value));
+        setPlaceholder("");
     };
 
-    const handleTaskSubmit = () => {
+    // Submit Task Handler Function
+    const submitTask = () => {
         if (task.trim()) {
             dispatch(addToTasks());
-            dispatch(handleErrMsg(""));
+            dispatch(handleEmptyTasks(""));
 
-            inputRef?.current?.focus();
+            inputRef.current?.focus();
         } else {
             dispatch(handleTaskChange(""));
-            setPlaceholder("Area cannot be empty!");
-        }
-    };
-
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            handleTaskSubmit();
+            setPlaceholder("Task cannot be empty!");
         }
     };
 
@@ -59,7 +60,7 @@ export default function CreateTasks() {
                         name="task"
                         value={task}
                         onChange={handleTaskInputChange}
-                        onKeyDown={handleKeyDown}
+                        onKeyDown={(e) => handleKeyDownEnter(e, submitTask)}
                         className="w-full h-10 mt-1 rounded-md"
                         labelClasses="w-full"
                         // required
@@ -71,19 +72,22 @@ export default function CreateTasks() {
                         </span>
                     )}
                 </span>
-                <Button
-                    type="button"
-                    className="self-end"
-                    onClick={handleTaskSubmit}
-                >
+                <Button type="button" className="self-end" onClick={submitTask}>
                     Add
                 </Button>
             </div>
 
             <div className="h-[calc(100%-6rem)] overflow-auto">
                 {!tasks.length && (
-                    <div className="w-full h-full flex-center opacity-50">
-                        <p>Your tasks will appear here</p>
+                    <div className="relative w-full h-full flex-center opacity-80">
+                        {etem ? (
+                            <span className="flex-center gap-1 text-[#f93a37] w-full h-full">
+                                <CircleAlert size={15} />
+                                <span>{etem}</span>
+                            </span>
+                        ) : (
+                            <p>Your tasks will appear here</p>
+                        )}
                     </div>
                 )}
                 {tasks.map((item, index) => (

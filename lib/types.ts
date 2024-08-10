@@ -55,7 +55,7 @@ export type InitialState = {
     note: string;
     task: string;
     tasks: OmitDocument<TTask>[];
-    errMsg: string;
+    etem: string;
 };
 
 // Apply OmitDocument to both TStat and TTask
