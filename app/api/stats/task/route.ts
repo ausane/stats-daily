@@ -44,7 +44,6 @@ export async function POST(request: NextRequest) {
 
         // Check for existing area
         const prevArea = await checkForExistingArea(data.area);
-
         if (prevArea) return duplicateAreaResponse(prevArea.area);
 
         // Create a new task
