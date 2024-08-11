@@ -1,24 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/lib/mongodb";
-import { Task } from "@/models/task.model";
-import type { TStat } from "@/lib/types";
-import mongoose from "mongoose";
 import { taskSchemaZod } from "@/lib/schema-validation";
-
-// GET REQUEST HANDLER
-export async function GET() {
-    await connectToDatabase();
-
-    try {
-        const findTasks = await Task.find({})
-            .then((data) => data)
-            .catch((error) => console.error(error));
-
-        return NextResponse.json(findTasks);
-    } catch (error) {
-        console.log(error);
-    }
-}
+import {
+    isValidObjectId,
+    checkForDuplicateArea,
+    updateArea,
+    updateTask,
+    updateNote,
+    addNewTask,
+    findTaskById,
+    deleteTaskByTaskId,
+    deleteAreaById,
+    createNewTask,
+    checkForExistingArea,
+} from "@/lib/route/task-utils";
+import {
+    invalidIdResponse,
+    noAreaFoundResponse,
+    incompleteDataResponse,
+    duplicateAreaResponse,
+    taskUpdatedResponse,
+    noteUpdatedResponse,
+    newIncompleteTasksResponse,
+    errorResponse,
+    areaDeletionResponse,
+    invalidAreaOrTasksResponse,
+    invalidStatsResponse,
+} from "@/lib/route/response";
 
 // POST REQUEST HANDLER
 export async function POST(request: NextRequest) {
@@ -27,40 +35,25 @@ export async function POST(request: NextRequest) {
     try {
         const data = await request.json();
 
-        // Validate with Zod before interacting with MongoDB
+        // Validate data using Zod
         taskSchemaZod.parse(data);
 
         if (!data.area.trim() || !data.tasks.length) {
-            return NextResponse.json(
-                {
-                    message:
-                        "Required fields 'area' and 'tasks' cannot be empty.",
-                },
-                { status: 400 }
-            );
+            return invalidAreaOrTasksResponse();
         }
 
-        const prevArea = await Task.findOne({ area: data.area });
+        // Check for existing area
+        const prevArea = await checkForExistingArea(data.area);
 
-        if (prevArea) {
-            return NextResponse.json(
-                {
-                    duplicate: true,
-                    message: `'${prevArea.area}' already exists.`,
-                },
-                { status: 409 }
-            );
-        }
+        if (prevArea) return duplicateAreaResponse(prevArea.area);
 
-        const newTask = await Task.create(data);
+        // Create a new task
+        const newTask = await createNewTask(data);
 
         return NextResponse.json({ _id: newTask._id, area: newTask.area });
     } catch (error) {
-        console.error("error:", error);
-        return NextResponse.json(
-            { error: "Please enter valid stats" },
-            { status: 400 }
-        );
+        console.error(error);
+        return invalidStatsResponse();
     }
 }
 
@@ -70,157 +63,69 @@ export async function PATCH(request: NextRequest) {
 
     try {
         const { id, taskId, task, note, area } = await request.json();
-        const isValidObjectId = mongoose.Types.ObjectId.isValid(id);
 
-        console.log(id, isValidObjectId);
+        if (!isValidObjectId(id)) return invalidIdResponse();
+        if (taskId && !isValidObjectId(taskId)) return invalidIdResponse();
 
-        if (!isValidObjectId) {
-            return NextResponse.json(
-                {
-                    message: "Invalid ID. Please check and try again.",
-                },
-                { status: 400 }
-            );
+        const item = await findTaskById(id);
+        if (!item) return noAreaFoundResponse();
+
+        if (area) {
+            const duplicateArea = await checkForDuplicateArea(area);
+            if (duplicateArea) return duplicateAreaResponse(area);
+
+            await updateArea(id, area);
         }
 
-        if (id && area) {
-            const prevArea = await Task.findOne({ area });
-
-            if (prevArea) {
-                return NextResponse.json(
-                    {
-                        duplicate: true,
-                        message: `'${prevArea.area}' already exists!`,
-                    },
-                    { status: 409 }
-                );
-            }
-
-            const updatedArea = await Task.findByIdAndUpdate(
-                id,
-                { $set: { area } },
-                { new: true }
-            );
-
-            if (!updatedArea) {
-                return NextResponse.json(
-                    { message: "No such area exists in the database." },
-                    { status: 400 }
-                );
-            }
+        if (task && taskId) {
+            await updateTask(id, taskId, task);
+            return taskUpdatedResponse(id);
         }
 
-        // console.log(taskId, task);
-        if (id && task && taskId) {
-            const updatedStats = await Task.findByIdAndUpdate(
-                id,
-                // Task's items should not be empty
-                { $set: { "tasks.$[elem]": task } },
-                {
-                    new: true,
-                    arrayFilters: [{ "elem._id": taskId }],
-                    runValidators: true,
-                }
-            );
-
-            // console.log(updatedStats);
-
-            if (!updatedStats) {
-                return NextResponse.json(
-                    { message: "No such area exists in the database." },
-                    { status: 400 }
-                );
-            }
+        if (note) {
+            await updateNote(id, note);
+            return noteUpdatedResponse(id);
         }
 
-        if (id && note) {
-            const updatedStats = await Task.findByIdAndUpdate(
-                id,
-                { $set: { note } },
-                { new: true }
-            );
-
-            // console.log(updatedStats);
-
-            if (!updatedStats) {
-                return NextResponse.json(
-                    { message: "No such area exists in the database." },
-                    { status: 400 }
-                );
-            }
+        if (task && !taskId) {
+            const newIncompleteTasks = await addNewTask(id, task);
+            return newIncompleteTasksResponse(newIncompleteTasks);
         }
 
-        if (id && task && !taskId) {
-            const updatedTask: TStat | null = await Task.findByIdAndUpdate(
-                id,
-                { $push: { tasks: task } },
-                { new: true }
-            );
-
-            if (!updatedTask) {
-                return NextResponse.json(
-                    { message: "No such area exists in the database." },
-                    { status: 400 }
-                );
-            } else {
-                const newIncompleteTasks = updatedTask.tasks?.filter(
-                    (task) => task.completed === false
-                );
-
-                return NextResponse.json(
-                    { newIncompleteTasks },
-                    { status: 200 }
-                );
-            }
-        }
-
-        // console.log(preStats);
-        return NextResponse.json(
-            { id, message: "Data updated!" },
-            { status: 200 }
-        );
+        return incompleteDataResponse(id);
     } catch (error) {
-        // return console.log(error);
-        return NextResponse.json(
-            { message: "Some error occured!" },
-            { status: 500 }
-        );
+        return errorResponse();
     }
 }
 
+// DELETE REQUEST HANDLER
 export async function DELETE(request: NextRequest) {
+    await connectToDatabase();
+
     try {
         const { id, taskId } = await request.json();
-        // console.log(id);
 
-        if (id && taskId) {
-            const result = await Task.findByIdAndUpdate(
-                id,
-                { $pull: { tasks: { _id: taskId } } },
-                { new: true }
-            );
+        // Validate ObjectId
+        if (!isValidObjectId(id)) return invalidIdResponse();
+        if (taskId && !isValidObjectId(taskId)) return invalidIdResponse();
 
-            // console.log(result);
-            return NextResponse.json(
-                // { message: `Task deleted` },
-                { status: 204 }
-            );
-        } else if (id) {
-            const area = await Task.findByIdAndDelete(id);
+        // Find the task by ID
+        const item = await findTaskById(id);
+        if (!item) return noAreaFoundResponse();
 
-            return NextResponse.json({
-                message: `Area '${area.area}' deleted`,
-                area: area,
-            });
-        } else {
-            return NextResponse.json({
-                error: `No such item exists in the database.`,
-            });
+        if (taskId) {
+            // Delete specific task from the tasks array
+            await deleteTaskByTaskId(id, taskId);
+            return NextResponse.json({}, { status: 204 }); // No Content
+        }
+
+        if (id) {
+            // Delete the area
+            const area = await deleteAreaById(id);
+            areaDeletionResponse(area);
         }
     } catch (error) {
-        console.log(error);
-        return NextResponse.json({
-            error: "Some error occured",
-        });
+        console.error(error);
+        return errorResponse();
     }
 }
