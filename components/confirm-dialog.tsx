@@ -89,9 +89,9 @@ export function CompletionDialog(props: CompletionDialogProps) {
 }
 
 export function RenameAreaDialog(props: RenameAreaDialogProps) {
-    const { onClick, renameDialog, setRenameDialog, children } = props;
+    const { onClick, updating, dialog, openDialog, children } = props;
     return (
-        <Dialog open={renameDialog} onOpenChange={setRenameDialog}>
+        <Dialog open={dialog} onOpenChange={openDialog}>
             <DialogTrigger className="hidden" asChild>
                 <Button variant="outline">Rename Area</Button>
             </DialogTrigger>
@@ -105,8 +105,8 @@ export function RenameAreaDialog(props: RenameAreaDialogProps) {
                 </DialogHeader>
                 <div className="w-full flex-end">{children}</div>
                 <DialogFooter>
-                    <Button type="submit" onClick={onClick}>
-                        Save
+                    <Button type="submit" onClick={onClick} disabled={updating}>
+                        {updating ? "Saving..." : "Save"}
                     </Button>
                 </DialogFooter>
             </DialogContent>
