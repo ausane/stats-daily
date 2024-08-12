@@ -10,7 +10,7 @@ import { TaskState, TaskContent, TaskOptions } from "../task-items";
 import CircularProgress from "../ui/circular-progress";
 import { createNewTask } from "@/lib/utils/handle-update";
 import IconButton from "../ui/icon-button";
-// import { Button } from "../ui/button";
+import { ValidationAlertDialog } from "../confirm-dialog";
 import {
     ArrowUp,
     X,
@@ -230,6 +230,7 @@ export function AddNewTask({
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [newTaskValue, setNewTaskValue] = useState("");
+    const [alertDialog, setAlertDialog] = useState(false);
 
     useEffect(() => {
         if (addTaskInput) inputRef.current?.focus();
@@ -238,11 +239,7 @@ export function AddNewTask({
     const dispatch = useAppDispatch();
 
     const addNewTask = async () => {
-        if (!newTaskValue.trim()) {
-            setNewTaskValue("");
-            setEmptyInputAlert(true);
-            return;
-        }
+        if (!validateNewTask()) return;
 
         setAddTaskInput(false);
         setNewTaskValue("");
@@ -256,7 +253,25 @@ export function AddNewTask({
             areaId as string,
             newTask
         );
+
         dispatch(setIncompleteTasks(newIncompleteTasks));
+    };
+
+    const validateNewTask = () => {
+        const newTask = newTaskValue.trim();
+
+        if (!newTask) {
+            setNewTaskValue("");
+            setEmptyInputAlert(true);
+            return false;
+        }
+
+        if (newTask.length > 40) {
+            setAlertDialog(true);
+            return false;
+        }
+
+        return true;
     };
 
     const handleNewTaskInputChange = (event: InputChangeEvent) => {
@@ -268,6 +283,11 @@ export function AddNewTask({
     if (addTaskInput) {
         return (
             <div className="p-2 flex-between">
+                <ValidationAlertDialog
+                    alertDialog={alertDialog}
+                    setAlertDialog={setAlertDialog}
+                />
+
                 <TaskState>
                     <span className="status-button bg-green-400"></span>
                 </TaskState>

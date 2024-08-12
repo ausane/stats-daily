@@ -121,14 +121,6 @@ export type TaskItemCompoProps = {
     openRenameAreaDialog: () => void;
 };
 
-// Sidebar Toggler Props Type
-export type SidebarTogglerProps = {
-    tasks: TSC[];
-    areaId: string;
-    isSidebarOpen: boolean;
-    toggleSidebar: () => void;
-};
-
 // Rename Area Dialog Props Type
 export type RenameAreaDialogProps = {
     onClick: () => void;
@@ -151,4 +143,10 @@ export type TaskListItemsProps = {
     index: number;
     areaId: string;
     taskItem: TTask;
+};
+
+// Validation Alert Dialog Props Type
+export type ValidationAlertDialogProps = {
+    alertDialog: boolean;
+    setAlertDialog: SetState<boolean>;
 };

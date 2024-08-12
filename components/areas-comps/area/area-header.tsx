@@ -8,7 +8,7 @@ import { removeAreaById, setCurrentArea } from "@/features/areaSlice";
 import IconButton from "@/components/ui/icon-button";
 import Input from "@/components/ui/input";
 import { updateAreaName } from "@/lib/utils/handle-update";
-import ConfirmDialog from "@/components/confirm-dialog";
+import { ConfirmDeletionDialog } from "@/components/confirm-dialog";
 import { InputChangeEvent, TaskItemCompoProps } from "@/lib/types";
 import { ModeToggle } from "@/components/theme-provider";
 import { handleKeyDownEnter } from "@/lib/constants";
@@ -160,7 +160,7 @@ export function TaskItemCompo(props: TaskItemCompoProps) {
             </DropdownMenu>
 
             {/* Confirm Delete Dialog Component */}
-            <ConfirmDialog
+            <ConfirmDeletionDialog
                 deleteDialog={deleteDialog}
                 setDeleteDialog={setDeleteDialog}
                 onClick={handleDelete}

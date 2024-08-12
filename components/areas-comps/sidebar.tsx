@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { TSC, SidebarTogglerProps } from "@/lib/types";
+import { TSC } from "@/lib/types";
 import { usePathname } from "next/navigation";
 import { insertAllAreas } from "@/features/areaSlice";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-// import { ModeToggle } from "../theme-provider";
 import { Menu, X, SquarePen } from "lucide-react";
 import IconButton from "../ui/icon-button";
 
@@ -93,26 +92,28 @@ export function SidebarContent({
                     <SquarePen size={20} />
                 </Link>
             </div>
-            <div className="overflow-auto w-full h-[calc(100%-6rem)] sticky top-20">
+            <div className="overflow-auto w-full h-[calc(100%-6rem)] sticky top-20 px-2">
                 {tasks?.map((task, index) => (
                     <div
                         key={index}
-                        className={`w-full my-2 h-9 flex-start box-border rounded-md hover:bg-secondary
+                        className={`w-[calc(100%-2px)] my-2 flex-start box-border rounded-md hover:bg-secondary
                                     ${
                                         task._id === areaId
                                             ? "bg-secondary"
                                             : "bg-background"
                                     }`}
                     >
-                        <span className="h-full w-9 flex-center bbn rounded-md">
-                            {index + 1}
-                        </span>
                         <Link
                             onClick={toggleSidebar}
                             href={`/areas/${task._id}`}
-                            className="w-4/5 h-full flex-start px-4 py-2 box-border"
+                            className="w-full flex-start gap-4 box-border"
                         >
-                            <p className="w-full truncate">{task.area}</p>
+                            <span className="h-9 w-9 flex-center bbn rounded-md">
+                                {index + 1}
+                            </span>
+                            <p className="w-[calc(100%-4rem)] truncate">
+                                {task.area}
+                            </p>
                         </Link>
                     </div>
                 ))}
