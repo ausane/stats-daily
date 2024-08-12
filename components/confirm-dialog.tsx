@@ -1,10 +1,11 @@
 import React from "react";
-import { CircleCheck } from "lucide-react";
+import { CircleCheck, CircleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     CompletionDialogProps,
     ConfirmDialogProps,
     RenameAreaDialogProps,
+    ValidationAlertDialogProps,
 } from "@/lib/types";
 import {
     AlertDialog,
@@ -28,7 +29,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 
-export default function ConfirmDialog(props: ConfirmDialogProps) {
+export function ConfirmDeletionDialog(props: ConfirmDialogProps) {
     const { onClick, deleteDialog, setDeleteDialog } = props;
 
     return (
@@ -59,7 +60,7 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
     );
 }
 
-export function CompletionDialog(props: CompletionDialogProps) {
+export function TaskCompletionDialog(props: CompletionDialogProps) {
     const { task, children, onClick, openDialog, setOpenDialog } = props;
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
@@ -111,5 +112,32 @@ export function RenameAreaDialog(props: RenameAreaDialogProps) {
                 </DialogFooter>
             </DialogContent>
         </Dialog>
+    );
+}
+
+export function ValidationAlertDialog(props: ValidationAlertDialogProps) {
+    const { alertDialog, setAlertDialog } = props;
+    return (
+        <AlertDialog open={alertDialog} onOpenChange={setAlertDialog}>
+            <AlertDialogTrigger className="hidden" asChild>
+                <Button variant="outline">Open</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle className="flex-start gap-1">
+                        <CircleAlert />
+                        Task Character Limit Exceeded!
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                        Your task description is too long. Please shorten it to
+                        40 characters or fewer to proceed. This limit helps
+                        maintain clarity and consistency across all tasks.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogAction>Okay</AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
     );
 }

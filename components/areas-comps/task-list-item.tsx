@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "@/store/hooks";
-import { CompletionDialog } from "../confirm-dialog";
+import { TaskCompletionDialog, ValidationAlertDialog } from "../confirm-dialog";
 import { Slider } from "../ui/slider";
 import { updateTask } from "@/lib/utils/handle-update";
 import IconButton from "../ui/icon-button";
@@ -31,6 +31,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
 
     const [inputTask, setInputTask] = useState(task);
     const [placeholder, setPlaceholder] = useState("");
+    const [alertDialog, setAlertDialog] = useState(false);
     const [openInputTask, setOpenInputTask] = useState(false);
 
     const dispatch = useAppDispatch();
@@ -46,11 +47,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
     };
 
     const handleEditTask = async () => {
-        if (!inputTask.trim()) {
-            setInputTask("");
-            setPlaceholder("Task cannot be empty!");
-            return;
-        }
+        if (!validateEditedTask()) return;
 
         dispatch(setEditedTask({ index, task: inputTask }));
         setOpenInputTask(false);
@@ -61,6 +58,22 @@ export default function TaskListItem(props: TaskListItemsProps) {
         };
 
         await updateTask(areaId, taskObj as TTask);
+    };
+
+    const validateEditedTask = () => {
+        const editedTask = inputTask.trim();
+        if (!editedTask) {
+            setInputTask("");
+            setPlaceholder("Task cannot be empty!");
+            return false;
+        }
+
+        if (editedTask.length > 40) {
+            setAlertDialog(true);
+            return false;
+        }
+
+        return true;
     };
 
     const handleEditInputChange = (event: InputChangeEvent) => {
@@ -76,6 +89,11 @@ export default function TaskListItem(props: TaskListItemsProps) {
 
     return (
         <>
+            <ValidationAlertDialog
+                alertDialog={alertDialog}
+                setAlertDialog={setAlertDialog}
+            />
+
             <div className="w-full flex-between">
                 <>
                     <TaskState>
@@ -168,7 +186,7 @@ export function TaskStatus(props: TaskStatusProps) {
         return <span className="status-button bg-blue-400"></span>;
     } else {
         return (
-            <CompletionDialog
+            <TaskCompletionDialog
                 onClick={handleClick}
                 task={taskItem.task}
                 openDialog={openDialog}
@@ -187,7 +205,7 @@ export function TaskStatus(props: TaskStatusProps) {
                     />
                     <span>{value}%</span>
                 </div>
-            </CompletionDialog>
+            </TaskCompletionDialog>
         );
     }
 }
