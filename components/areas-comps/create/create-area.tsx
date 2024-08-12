@@ -60,10 +60,13 @@ export default function CreateArea() {
 
     // Validate form data function
     const validateForm = () => {
-        if (!area.trim()) setInputError("Area cannot be empty!");
-        if (!tasks.length) dispatch(handleEmptyTasks("Tasks cannot be empty!"));
+        const areaName = area.trim();
 
-        return area.trim() && tasks.length;
+        if (!areaName) setInputError("Area cannot be empty!");
+        if (!tasks.length) dispatch(handleEmptyTasks("Tasks cannot be empty!"));
+        if (areaName.length > 20) setInputError("Only 20 characters allowed!");
+
+        return areaName && tasks.length && areaName.length <= 20;
     };
 
     // Duplicate area handler function
@@ -142,7 +145,7 @@ export default function CreateArea() {
                             // required
                         >
                             {inputError && (
-                                <span className="flex-start mt-2 text-sm gap-1 opacity-80 text-red-500 -z-10">
+                                <span className="flex-start mt-2 text-sm gap-1 opacity-80 text-[#f93a37] -z-10">
                                     <CircleAlert size={15} />
                                     <span>{inputError}</span>
                                 </span>

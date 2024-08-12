@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/lib/mongodb";
-import { taskSchemaZod } from "@/lib/schema-validation";
+import {
+    areaZodSchema,
+    areaNameZodSchema,
+    noteZodSchema,
+    taskZodSchema,
+} from "@/lib/schema-validation";
+import { z } from "zod";
 import {
     isValidObjectId,
     checkForDuplicateArea,
@@ -19,13 +25,15 @@ import {
     noAreaFoundResponse,
     incompleteDataResponse,
     duplicateAreaResponse,
+    newAreaCreatedResponse,
     taskUpdatedResponse,
     noteUpdatedResponse,
     newIncompleteTasksResponse,
     errorResponse,
     areaDeletionResponse,
-    invalidAreaOrTasksResponse,
     invalidStatsResponse,
+    areaRenamedResponse,
+    zodErrorResponse,
 } from "@/lib/route/response";
 
 // POST REQUEST HANDLER
@@ -36,22 +44,19 @@ export async function POST(request: NextRequest) {
         const data = await request.json();
 
         // Validate data using Zod
-        taskSchemaZod.parse(data);
-
-        if (!data.area.trim() || !data.tasks.length) {
-            return invalidAreaOrTasksResponse();
-        }
+        areaZodSchema.parse(data);
 
         // Check for existing area
         const prevArea = await checkForExistingArea(data.area);
         if (prevArea) return duplicateAreaResponse(prevArea.area);
 
-        // Create a new task
-        const newTask = await createNewTask(data);
-
-        return NextResponse.json({ _id: newTask._id, area: newTask.area });
+        // Create a new area
+        const newArea = await createNewTask(data);
+        return newAreaCreatedResponse(newArea);
     } catch (error) {
         console.error(error);
+
+        if (error instanceof z.ZodError) return zodErrorResponse(error);
         return invalidStatsResponse();
     }
 }
@@ -69,30 +74,43 @@ export async function PATCH(request: NextRequest) {
         const item = await findTaskById(id);
         if (!item) return noAreaFoundResponse();
 
+        // Update area name by ID
         if (area) {
+            areaNameZodSchema.parse(area);
+
             const duplicateArea = await checkForDuplicateArea(area);
             if (duplicateArea) return duplicateAreaResponse(area);
 
             await updateArea(id, area);
+            return areaRenamedResponse(id, area);
         }
 
+        // Update task by ID
         if (task && taskId) {
+            taskZodSchema.parse(task);
             await updateTask(id, taskId, task);
             return taskUpdatedResponse(id);
         }
 
+        // Update note by ID
         if (note) {
+            noteZodSchema.parse(note);
             await updateNote(id, note);
             return noteUpdatedResponse(id);
         }
 
+        // Add new task to the area by ID
         if (task && !taskId) {
+            taskZodSchema.parse(task);
             const newIncompleteTasks = await addNewTask(id, task);
             return newIncompleteTasksResponse(newIncompleteTasks);
         }
 
         return incompleteDataResponse(id);
     } catch (error) {
+        console.error(error);
+
+        if (error instanceof z.ZodError) return zodErrorResponse(error);
         return errorResponse();
     }
 }
@@ -115,14 +133,12 @@ export async function DELETE(request: NextRequest) {
         if (taskId) {
             // Delete specific task from the tasks array
             await deleteTaskByTaskId(id, taskId);
-            return NextResponse.json({}, { status: 204 }); // No Content
+            return NextResponse.json({ status: 204 });
         }
 
-        if (id) {
-            // Delete the area
-            const area = await deleteAreaById(id);
-            areaDeletionResponse(area);
-        }
+        // Delete the area
+        const area = await deleteAreaById(id);
+        return areaDeletionResponse(area);
     } catch (error) {
         console.error(error);
         return errorResponse();

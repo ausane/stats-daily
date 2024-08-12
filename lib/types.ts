@@ -132,8 +132,9 @@ export type SidebarTogglerProps = {
 // Rename Area Dialog Props Type
 export type RenameAreaDialogProps = {
     onClick: () => void;
-    renameDialog: boolean;
-    setRenameDialog: SetState<boolean>;
+    dialog: boolean;
+    updating: boolean;
+    openDialog: SetState<boolean>;
     children: React.ReactNode;
 };
 

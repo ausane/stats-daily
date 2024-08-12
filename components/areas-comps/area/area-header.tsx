@@ -27,41 +27,46 @@ export default function AreaHeader(props: { _id: string; area: string }) {
 
     const areaRef = useRef<HTMLInputElement>(null);
 
-    const [error, setError] = useState(false);
+    const [inputError, setInputError] = useState(false);
     const [areaName, setAreaName] = useState(area);
+    const [updating, setUpdating] = useState(false);
     const [areaInput, setAreaInput] = useState(areaName);
-    const [renameDialog, setRenameDialog] = useState(false);
+    const [dialog, openDialog] = useState(false);
 
     const dispatch = useAppDispatch();
 
     const handleAreaChange = (event: InputChangeEvent) => {
         setAreaInput(event.target.value);
-        setError(false);
+        setInputError(false);
     };
 
     const openRenameAreaDialog = () => {
-        setRenameDialog(true);
+        openDialog(true);
         setAreaInput(areaName);
-        setError(false);
+        setInputError(false);
     };
 
     const handleAreaUpdate = async () => {
-        if (error) return;
+        if (inputError) return;
         if (!areaInput) {
-            setError(true);
+            setInputError(true);
             return;
         }
+
+        setUpdating(true);
 
         const response = await updateAreaName(_id, areaInput);
 
         if (response && response.duplicate) {
-            setError(response.message);
+            setInputError(response.message);
         } else {
-            setError(false);
+            setInputError(false);
             setAreaName(areaInput);
             dispatch(setCurrentArea({ _id, area: areaInput }));
-            setRenameDialog(false);
+            openDialog(false);
         }
+
+        setUpdating(false);
     };
 
     return (
@@ -84,9 +89,10 @@ export default function AreaHeader(props: { _id: string; area: string }) {
             </div>
 
             <RenameAreaDialog
+                dialog={dialog}
+                updating={updating}
                 onClick={handleAreaUpdate}
-                renameDialog={renameDialog}
-                setRenameDialog={setRenameDialog}
+                openDialog={openDialog}
             >
                 <div className="w-full flex items-end justify-center flex-col gap-2">
                     <Input
@@ -101,11 +107,11 @@ export default function AreaHeader(props: { _id: string; area: string }) {
                             handleKeyDownEnter(e, handleAreaUpdate)
                         }
                     />
-                    {(!areaInput || error) && (
+                    {(!areaInput || inputError) && (
                         <span className="flex-start gap-1 text-sm text-[#f93a37] opacity-80">
                             <CircleAlert size={15} />
                             {!areaInput && <span>Area cannot be empty!</span>}
-                            {error && <span>{error}</span>}
+                            {inputError && <span>{inputError}</span>}
                         </span>
                     )}
                 </div>

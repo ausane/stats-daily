@@ -38,7 +38,14 @@ export default function CreateTasks() {
 
     // Submit Task Handler Function
     const submitTask = () => {
-        if (task.trim()) {
+        const trimmedTask = task.trim();
+
+        if (trimmedTask.length > 40) {
+            setPlaceholder("Only 40 characters allowed!");
+            return;
+        }
+
+        if (trimmedTask) {
             dispatch(addToTasks());
             dispatch(handleEmptyTasks(""));
 
@@ -51,8 +58,12 @@ export default function CreateTasks() {
 
     return (
         <div className="w-3/5 h-full border-l max-sm:border-0 max-sm:w-full">
-            <div className="w-full flex-between gap-4 p-4 h-24 border-b">
-                <span className="w-full flex-start relative">
+            <div
+                className={`w-full flex flex-col gap-2 p-4 border-b ${
+                    placeholder ? "h-32" : "h-24"
+                }`}
+            >
+                <span className="w-full flex relative gap-2">
                     <Input
                         label="Task"
                         ref={inputRef}
@@ -65,19 +76,27 @@ export default function CreateTasks() {
                         labelClasses="w-full"
                         // required
                     />
-                    {placeholder && (
-                        <span className="empty-alert w-full h-10 self-end">
-                            <CircleAlert size={15} />
-                            <span>{placeholder}</span>
-                        </span>
-                    )}
+                    <Button
+                        type="button"
+                        className="self-end"
+                        onClick={submitTask}
+                    >
+                        Add
+                    </Button>
                 </span>
-                <Button type="button" className="self-end" onClick={submitTask}>
-                    Add
-                </Button>
+                {placeholder && (
+                    <span className="flex-center self-start text-sm gap-1 opacity-80 text-[#f93a37]">
+                        <CircleAlert size={15} />
+                        <span>{placeholder}</span>
+                    </span>
+                )}
             </div>
 
-            <div className="h-[calc(100%-6rem)] overflow-auto">
+            <div
+                className={`overflow-auto ${
+                    placeholder ? "h-[calc(100%-8rem)]" : "h-[calc(100%-6rem)]"
+                }`}
+            >
                 {!tasks.length && (
                     <div className="relative w-full h-full flex-center opacity-80">
                         {etem ? (
