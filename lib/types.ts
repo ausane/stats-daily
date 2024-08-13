@@ -143,6 +143,8 @@ export type TaskListItemsProps = {
     index: number;
     areaId: string;
     taskItem: TTask;
+    oita: boolean;
+    nfaf: (s: boolean, i: number) => void;
 };
 
 // Validation Alert Dialog Props Type
