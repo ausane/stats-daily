@@ -84,7 +84,7 @@ export default function TaskList({ data }: { data: TStat }) {
         }, 10); // Adjust the interval timing to control the speed of animation
 
         return () => clearInterval(interval);
-    }, [completedTasks]);
+    }, [completedTasks, incompleteTasks.length]);
 
     return (
         <div className="size-full grow overflow-auto box-border flex-between gap-4">
