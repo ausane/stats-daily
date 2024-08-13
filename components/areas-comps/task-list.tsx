@@ -296,7 +296,7 @@ export function AddNewTask({
 
     if (addTaskInput) {
         return (
-            <div className="p-2 flex-between">
+            <div className="p-2 flex-between border-b">
                 <ValidationAlertDialog
                     alertDialog={alertDialog}
                     setAlertDialog={setAlertDialog}
