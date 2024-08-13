@@ -62,6 +62,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
 
     const validateEditedTask = () => {
         const editedTask = inputTask.trim();
+
         if (!editedTask) {
             setInputTask("");
             setPlaceholder("Task cannot be empty!");

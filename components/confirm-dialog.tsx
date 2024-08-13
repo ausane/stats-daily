@@ -100,8 +100,8 @@ export function RenameAreaDialog(props: RenameAreaDialogProps) {
                 <DialogHeader>
                     <DialogTitle>Rename Area</DialogTitle>
                     <DialogDescription>
-                        Edit the name of this area and then click the 'Save'
-                        button when you are done.
+                        Rename the area and then click the 'Save' button when
+                        you are done.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="w-full flex-end">{children}</div>

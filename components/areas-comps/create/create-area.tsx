@@ -33,8 +33,11 @@ export default function CreateArea() {
 
     // State to manage loading status
     const [isLoading, setIsLoading] = useState(false);
-    const [prevAreaValue, setPrevAreaValue] = useState("");
+    const [prevAreaInput, setPrevAreaInput] = useState("");
     const [inputError, setInputError] = useState("");
+
+    // Helper variable to store the trimmed area name
+    const areaName = area.trim();
 
     // Reset form and focus on area input
     useEffect(() => {
@@ -60,8 +63,6 @@ export default function CreateArea() {
 
     // Validate form data function
     const validateForm = () => {
-        const areaName = area.trim();
-
         if (!areaName) setInputError("Area cannot be empty!");
         if (!tasks.length) dispatch(handleEmptyTasks("Tasks cannot be empty!"));
         if (areaName.length > 20) setInputError("Only 20 characters allowed!");
@@ -71,8 +72,8 @@ export default function CreateArea() {
 
     // Duplicate area handler function
     const isAreaChanged = () => {
-        const areaChanged = prevAreaValue !== area;
-        if (!areaChanged) setInputError(`'${area}' already exists!`);
+        const areaChanged = prevAreaInput !== areaName;
+        if (!areaChanged) setInputError(`'${areaName}' already exists!`);
 
         return areaChanged;
     };
@@ -80,8 +81,8 @@ export default function CreateArea() {
     // Check duplicate area name
     const isDuplicateArea = (response: any) => {
         if (response?.duplicate) {
-            setPrevAreaValue(area);
-            setInputError(`'${area}' already exists!`);
+            setPrevAreaInput(areaName);
+            setInputError(`'${areaName}' already exists!`);
         } else if (response?._id) {
             router.push(`/areas/${response._id}`);
             dispatch(insertArea(response));
@@ -96,7 +97,7 @@ export default function CreateArea() {
     ) => {
         if (event.key === "Enter") {
             event.preventDefault();
-            if (!area.trim()) {
+            if (!areaName) {
                 setInputError("Area cannot be empty!");
                 dispatch(handleAreaChange(""));
                 return;

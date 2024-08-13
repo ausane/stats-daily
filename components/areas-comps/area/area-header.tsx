@@ -27,46 +27,69 @@ export default function AreaHeader(props: { _id: string; area: string }) {
 
     const areaRef = useRef<HTMLInputElement>(null);
 
-    const [inputError, setInputError] = useState(false);
+    const [inputError, setInputError] = useState("");
     const [areaName, setAreaName] = useState(area);
+    const [prevAreaInput, setPrevAreaInput] = useState("");
     const [updating, setUpdating] = useState(false);
     const [areaInput, setAreaInput] = useState(areaName);
     const [dialog, openDialog] = useState(false);
+
+    const tAreaInput = areaInput.trim();
 
     const dispatch = useAppDispatch();
 
     const handleAreaChange = (event: InputChangeEvent) => {
         setAreaInput(event.target.value);
-        setInputError(false);
+        setInputError("");
     };
 
     const openRenameAreaDialog = () => {
         openDialog(true);
         setAreaInput(areaName);
-        setInputError(false);
+        setInputError("");
     };
 
     const handleAreaUpdate = async () => {
-        if (inputError) return;
-        if (!areaInput) {
-            setInputError(true);
-            return;
-        }
+        // Validate input area name
+        if (!validateAreaName()) return;
 
         setUpdating(true);
 
         const response = await updateAreaName(_id, areaInput);
 
         if (response && response.duplicate) {
-            setInputError(response.message);
+            setPrevAreaInput(tAreaInput);
+            setInputError(`'${tAreaInput}' already exists!`);
         } else {
-            setInputError(false);
+            setInputError("");
             setAreaName(areaInput);
             dispatch(setCurrentArea({ _id, area: areaInput }));
             openDialog(false);
         }
 
         setUpdating(false);
+    };
+
+    const validateAreaName = () => {
+        if (inputError) return false;
+
+        if (!tAreaInput) {
+            setAreaInput("");
+            setInputError("Area cannot be empty!");
+            return false;
+        }
+
+        if (tAreaInput.length > 20) {
+            setInputError("Only 20 characters allowed!");
+            return false;
+        }
+
+        if (prevAreaInput === tAreaInput) {
+            setInputError(`'${tAreaInput}' already exists!`);
+            return false;
+        }
+
+        return true;
     };
 
     return (
@@ -107,11 +130,10 @@ export default function AreaHeader(props: { _id: string; area: string }) {
                             handleKeyDownEnter(e, handleAreaUpdate)
                         }
                     />
-                    {(!areaInput || inputError) && (
+                    {inputError && (
                         <span className="flex-start gap-1 text-sm text-[#f93a37] opacity-80">
                             <CircleAlert size={15} />
-                            {!areaInput && <span>Area cannot be empty!</span>}
-                            {inputError && <span>{inputError}</span>}
+                            <span>{inputError}</span>
                         </span>
                     )}
                 </div>
