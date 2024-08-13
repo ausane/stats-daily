@@ -5,7 +5,7 @@ import {
     areaNameZodSchema,
     noteZodSchema,
     taskZodSchema,
-} from "@/lib/schema-validation";
+} from "@/lib/zod-schema";
 import { z } from "zod";
 import {
     isValidObjectId,
