@@ -12,11 +12,9 @@ const areaSlice = createSlice({
             if (task) task.area = action.payload.area;
         },
         insertArea: (state, action) => {
-            // console.log(action);
             state.areas.unshift(action.payload);
         },
         insertAllAreas: (state, action) => {
-            // console.log(action);
             state.areas = action.payload;
         },
         removeAreaById: (state, action) => {
@@ -26,5 +24,6 @@ const areaSlice = createSlice({
     },
 });
 
-export const { insertArea, insertAllAreas, removeAreaById, setCurrentArea } = areaSlice.actions;
+export const { insertArea, insertAllAreas, removeAreaById, setCurrentArea } =
+    areaSlice.actions;
 export default areaSlice.reducer;

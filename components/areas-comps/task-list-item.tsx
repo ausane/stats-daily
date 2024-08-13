@@ -24,7 +24,7 @@ import {
 } from "@/features/taskSlice";
 
 export default function TaskListItem(props: TaskListItemsProps) {
-    const { index, areaId, taskItem } = props;
+    const { index, areaId, taskItem, oita, nfaf } = props;
 
     const task = taskItem.task;
     const inputRef = useRef<HTMLInputElement>(null);
@@ -32,17 +32,16 @@ export default function TaskListItem(props: TaskListItemsProps) {
     const [inputTask, setInputTask] = useState(task);
     const [placeholder, setPlaceholder] = useState("");
     const [alertDialog, setAlertDialog] = useState(false);
-    const [openInputTask, setOpenInputTask] = useState(false);
 
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (openInputTask) inputRef.current?.focus();
-    }, [openInputTask]);
+        if (oita) inputRef.current?.focus();
+    }, [oita]);
 
     const handleEditClick = () => {
         setPlaceholder("");
-        setOpenInputTask(true);
+        nfaf(true, index);
         setInputTask(task);
     };
 
@@ -50,7 +49,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
         if (!validateEditedTask()) return;
 
         dispatch(setEditedTask({ index, task: inputTask }));
-        setOpenInputTask(false);
+        nfaf(false, index);
 
         const taskObj = {
             ...taskItem,
@@ -101,13 +100,13 @@ export default function TaskListItem(props: TaskListItemsProps) {
                         <TaskStatus
                             index={index}
                             areaId={areaId}
-                            openInputTask={openInputTask}
+                            openInputTask={oita}
                             taskItem={taskItem}
                         />
                     </TaskState>
 
                     <TaskContent>
-                        {openInputTask ? (
+                        {oita ? (
                             <>
                                 <Input
                                     ref={inputRef}
@@ -133,14 +132,12 @@ export default function TaskListItem(props: TaskListItemsProps) {
                     </TaskContent>
 
                     <TaskOptions>
-                        {openInputTask ? (
+                        {oita ? (
                             <>
                                 <IconButton onClick={handleEditTask}>
                                     <Check size={15} />
                                 </IconButton>
-                                <IconButton
-                                    onClick={() => setOpenInputTask(false)}
-                                >
+                                <IconButton onClick={() => nfaf(false, index)}>
                                     <X size={15} />
                                 </IconButton>
                             </>

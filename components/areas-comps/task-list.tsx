@@ -57,6 +57,17 @@ export default function TaskList({ data }: { data: TStat }) {
         (state) => state.task.incompleteTasks
     );
 
+    // To handle each task's input state
+    const dfa = Array(incompleteTasks.length).fill(false);
+    const [oita, setOita] = useState(dfa); // Input task array state
+
+    const nfaf = (s: boolean, i: number) => {
+        setAddTaskInput(false);
+        const updatedState = [...dfa];
+        updatedState[i] = s;
+        setOita(updatedState);
+    };
+
     // Progress Animation
     useEffect(() => {
         const calculateProgress = () => {
@@ -105,6 +116,7 @@ export default function TaskList({ data }: { data: TStat }) {
                                 addTaskInput ? "rotate-45" : "rotate-90"
                             }`}
                             onClick={() => {
+                                setOita(dfa);
                                 setAddTaskInput(!addTaskInput);
                                 setEmptyInputAlert(false);
                             }}
@@ -125,6 +137,8 @@ export default function TaskList({ data }: { data: TStat }) {
                     {incompleteTasks?.map((item, index) => (
                         <div key={index} className="w-full border-b p-2">
                             <TaskListItem
+                                oita={oita[index]}
+                                nfaf={nfaf}
                                 areaId={_id as string}
                                 taskItem={item}
                                 index={index}
