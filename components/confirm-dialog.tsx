@@ -116,7 +116,7 @@ export function RenameAreaDialog(props: RenameAreaDialogProps) {
 }
 
 export function ValidationAlertDialog(props: ValidationAlertDialogProps) {
-    const { alertDialog, setAlertDialog } = props;
+    const { category, alertDialog, setAlertDialog } = props;
     return (
         <AlertDialog open={alertDialog} onOpenChange={setAlertDialog}>
             <AlertDialogTrigger className="hidden" asChild>
@@ -126,12 +126,14 @@ export function ValidationAlertDialog(props: ValidationAlertDialogProps) {
                 <AlertDialogHeader>
                     <AlertDialogTitle className="flex-start gap-1">
                         <CircleAlert />
-                        Task Character Limit Exceeded!
+                        {category === "task"
+                            ? `Task Character Limit Exceeded!`
+                            : `Note Character Limit Exceeded!`}
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                        Your task description is too long. Please shorten it to
-                        40 characters or fewer to proceed. This limit helps
-                        maintain clarity and consistency across all tasks.
+                        {category === "task"
+                            ? `Your task description is too long. Please shorten it to 40 characters or fewer to proceed. This limit helps maintain clarity and consistency across all tasks.`
+                            : `Your note is too long. Please shorten it to 400 characters or fewer to proceed. This limit helps maintain clarity and consistency across the note.`}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

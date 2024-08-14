@@ -13,7 +13,7 @@ export default function CircularProgress(props: CircularProgressProps) {
     const offset = circumference * (1 - validProgress / 100);
 
     return (
-        <div className="relative w-full h-2/5 flex-between">
+        <div className="relative w-full h-2/5 flex-between bbn rounded-md">
             <TooltipCompo tip="Progress">
                 <div className="relative w-3/5 flex-center">
                     <svg className="rotate-[-90deg]">

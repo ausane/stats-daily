@@ -90,6 +90,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
     return (
         <>
             <ValidationAlertDialog
+                category="task"
                 alertDialog={alertDialog}
                 setAlertDialog={setAlertDialog}
             />

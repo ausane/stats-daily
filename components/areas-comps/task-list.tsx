@@ -140,7 +140,7 @@ export default function TaskList({ data }: { data: TStat }) {
                     completedTasks={completedTasks}
                 />
             </div>
-            <div className="w-1/3 h-full max-sm:hidden max-lg:hidden max-lg:block max-md:block">
+            <div className="w-1/3 h-full flex max-sm:hidden max-lg:hidden max-lg:flex max-md:flex flex-col gap-4">
                 <CircularProgress progress={progress} ctp={ctp} />
                 <DailyNote id={_id as string} note={note as string} />
             </div>
@@ -289,6 +289,7 @@ export function AddNewTask({
         return (
             <div className="p-2 flex-between border-b">
                 <ValidationAlertDialog
+                    category="task"
                     alertDialog={alertDialog}
                     setAlertDialog={setAlertDialog}
                 />
