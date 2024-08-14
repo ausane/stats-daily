@@ -11,6 +11,7 @@ import CircularProgress from "../ui/circular-progress";
 import { createNewTask } from "@/lib/utils/handle-update";
 import IconButton from "../ui/icon-button";
 import { ValidationAlertDialog } from "../confirm-dialog";
+import { TooltipCompo } from "../ui/tooltip";
 import {
     ArrowUp,
     X,
@@ -31,6 +32,7 @@ import { handleKeyDownEnter } from "@/lib/constants";
 export default function TaskList({ data }: { data: TStat }) {
     const { _id, tasks, note } = data;
 
+    const [ctc, setCtc] = useState("");
     const [progress, setProgress] = useState(0);
     const [addTaskInput, setAddTaskInput] = useState(false);
     const [emptyInputAlert, setEmptyInputAlert] = useState(false);
@@ -70,6 +72,11 @@ export default function TaskList({ data }: { data: TStat }) {
 
     // Progress Animation
     useEffect(() => {
+        const tc = completedTasks.length + incompleteTasks.length;
+        const ts = (100 * completedTasks.length) / tc;
+        const ctc = parseInt(ts.toFixed(), 10) + "%";
+        setCtc(ctc);
+
         const calculateProgress = () => {
             if (!completedTasks.length && !incompleteTasks.length) return 0;
 
@@ -108,7 +115,7 @@ export default function TaskList({ data }: { data: TStat }) {
                         {incompleteTasks.length} Incomplete
                         {incompleteTasks.length === 1 ? " Task" : " Tasks"}
                     </p>
-                    <span>
+                    <TooltipCompo tip="Add Task">
                         <IconButton
                             variant="ghost"
                             circle={true}
@@ -123,7 +130,7 @@ export default function TaskList({ data }: { data: TStat }) {
                         >
                             <Plus />
                         </IconButton>
-                    </span>
+                    </TooltipCompo>
                 </div>
 
                 <div className="w-full h-[calc(100%-5rem)] overflow-auto overflow-x-hidden">
@@ -152,7 +159,7 @@ export default function TaskList({ data }: { data: TStat }) {
                 />
             </div>
             <div className="w-1/3 h-full max-sm:hidden max-lg:hidden max-lg:block max-md:block">
-                <CircularProgress progress={progress} />
+                <CircularProgress progress={progress} ctc={ctc} />
                 <DailyNote id={_id as string} note={note as string} />
             </div>
         </div>
@@ -195,17 +202,19 @@ export function ShowCompletedTasks({
                     {completedTasks.length} Completed
                     {completedTasks.length === 1 ? " Task" : " Tasks"}
                 </p>
-                <IconButton
-                    variant="ghost"
-                    circle={true}
-                    className={`transition-transform duration-400 ease-in-out p-0 ${
-                        open ? "rotate-180" : "rotate-0"
-                    }`}
-                    // className="transition-all duration-400 ease-in-out rotate-180"
-                    onClick={() => setOpen(!open)}
-                >
-                    <ArrowUp />
-                </IconButton>
+                <TooltipCompo tip={`${open ? "Close" : "Open"}`}>
+                    <IconButton
+                        variant="ghost"
+                        circle={true}
+                        className={`transition-transform duration-400 ease-in-out p-0 ${
+                            open ? "rotate-180" : "rotate-0"
+                        }`}
+                        // className="transition-all duration-400 ease-in-out rotate-180"
+                        onClick={() => setOpen(!open)}
+                    >
+                        <ArrowUp />
+                    </IconButton>
+                </TooltipCompo>
             </div>
             <div
                 className={`h-[calc(100%-2.5rem)] flex-col overflow-auto 
@@ -296,7 +305,7 @@ export function AddNewTask({
 
     if (addTaskInput) {
         return (
-            <div className="p-2 flex-between">
+            <div className="p-2 flex-between border-b">
                 <ValidationAlertDialog
                     alertDialog={alertDialog}
                     setAlertDialog={setAlertDialog}
