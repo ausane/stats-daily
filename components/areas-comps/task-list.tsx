@@ -7,7 +7,7 @@ import TaskListItem from "./task-list-item";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { updateTask } from "@/lib/utils/handle-update";
 import { TaskState, TaskContent, TaskOptions } from "../task-items";
-import CircularProgress from "../ui/circular-progress";
+import CircularProgress, { progressCalculator } from "../ui/circular-progress";
 import { createNewTask } from "@/lib/utils/handle-update";
 import IconButton from "../ui/icon-button";
 import { ValidationAlertDialog } from "../confirm-dialog";
@@ -32,7 +32,7 @@ import { handleKeyDownEnter } from "@/lib/constants";
 export default function TaskList({ data }: { data: TStat }) {
     const { _id, tasks, note } = data;
 
-    const [ctc, setCtc] = useState("");
+    const [ctp, setCtp] = useState(0);
     const [progress, setProgress] = useState(0);
     const [addTaskInput, setAddTaskInput] = useState(false);
     const [emptyInputAlert, setEmptyInputAlert] = useState(false);
@@ -72,36 +72,18 @@ export default function TaskList({ data }: { data: TStat }) {
 
     // Progress Animation
     useEffect(() => {
-        const tc = completedTasks.length + incompleteTasks.length;
-        const ts = (100 * completedTasks.length) / tc;
-        const ctc = parseInt(ts.toFixed(), 10) + "%";
-        setCtc(ctc);
+        const total = completedTasks.length + incompleteTasks.length;
+        if (!total) return;
 
-        const calculateProgress = () => {
-            if (!completedTasks.length && !incompleteTasks.length) return 0;
+        const cleanup = progressCalculator(
+            total,
+            completedTasks,
+            setProgress,
+            setCtp
+        );
 
-            const achievedArray = completedTasks.map((item) => item.achieved);
-            const total = achievedArray.reduce((sum, num) => sum + num, 0);
-            const target = completedTasks.length + incompleteTasks.length;
-
-            return parseInt((total / target).toFixed(), 10);
-        };
-
-        const targetProgress = calculateProgress();
-
-        // Animate the progress from 0 to the target value
-        let currentProgress = 0;
-        const increment = targetProgress / 100; // Adjust this to control the speed
-        const interval = setInterval(() => {
-            currentProgress += increment;
-            if (currentProgress >= targetProgress) {
-                currentProgress = targetProgress;
-                clearInterval(interval);
-            }
-            setProgress(parseInt(currentProgress.toFixed(), 10));
-        }, 10); // Adjust the interval timing to control the speed of animation
-
-        return () => clearInterval(interval);
+        // Cleanup the interval on component unmount
+        return () => cleanup();
     }, [completedTasks, incompleteTasks.length]);
 
     return (
@@ -159,7 +141,7 @@ export default function TaskList({ data }: { data: TStat }) {
                 />
             </div>
             <div className="w-1/3 h-full max-sm:hidden max-lg:hidden max-lg:block max-md:block">
-                <CircularProgress progress={progress} ctc={ctc} />
+                <CircularProgress progress={progress} ctp={ctp} />
                 <DailyNote id={_id as string} note={note as string} />
             </div>
         </div>

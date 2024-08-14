@@ -1,14 +1,16 @@
 import React from "react";
 import { TooltipCompo } from "./tooltip";
+import { SetState, TTask } from "@/lib/types";
 
-export type CircularProgressProps = { progress: number; ctc: string };
+export type CircularProgressProps = { progress: number; ctp: number };
 
-const CircularProgress = ({ progress, ctc }: CircularProgressProps) => {
+export default function CircularProgress(props: CircularProgressProps) {
+    const { progress, ctp } = props;
+
     const radius = 50;
     const circumference = 2 * Math.PI * radius;
-    const validProgress =
-        isNaN(progress) || progress < 0 ? 0 : progress > 100 ? 100 : progress;
-    const offset = circumference - (validProgress / 100) * circumference;
+    const validProgress = Math.max(0, Math.min(progress, 100));
+    const offset = circumference * (1 - validProgress / 100);
 
     return (
         <div className="relative w-full h-2/5 flex-between">
@@ -45,18 +47,18 @@ const CircularProgress = ({ progress, ctc }: CircularProgressProps) => {
                 </div>
             </TooltipCompo>
             <div className="w-2/5 h-full p-4 flex-center">
-                <TooltipCompo tip="Completed Tasks">
+                <TooltipCompo tip="Tasks Completed">
                     <div className="relative w-12 h-[108px] flex">
                         <div className="absolute h-full w-full bbn rounded-lg bg-secondary"></div>
                         <div
-                            style={{ height: ctc }}
+                            style={{ height: `${ctp ? ctp : 0}%` }}
                             className={`absolute w-full bbn rounded-lg opacity-50 self-end ${
-                                ctc === "100%" ? "bg-green-400" : "bg-primary"
+                                ctp === 100 ? "bg-green-400" : "bg-primary"
                             }`}
                         ></div>
                         <div className="absolute h-full w-full flex-center">
                             <p className="text-primary rotate-[-90deg]">
-                                {ctc}
+                                {ctp ? ctp : 0}%
                             </p>
                         </div>
                     </div>
@@ -64,6 +66,41 @@ const CircularProgress = ({ progress, ctc }: CircularProgressProps) => {
             </div>
         </div>
     );
-};
+}
 
-export default CircularProgress;
+// To calculate the progress
+export function progressCalculator(
+    total: number,
+    completedTasks: TTask[],
+    setProgress: SetState<number>,
+    setCtp: SetState<number>
+) {
+    const ctp = (100 * completedTasks.length) / total;
+    const totalCtp = parseInt(ctp.toFixed(), 10);
+
+    const achievedArray = completedTasks.map((item) => item.achieved);
+    const totalAchieved = achievedArray.reduce((sum, num) => sum + num, 0);
+    const totalProgress = parseInt((totalAchieved / total).toFixed(), 10);
+
+    let currentProgress = 0;
+    let currentCtp = 0;
+    const incrementProgress = totalProgress / 100;
+    const incrementCtp = totalCtp / 100;
+
+    const interval = setInterval(() => {
+        currentProgress += incrementProgress;
+        currentCtp += incrementCtp;
+
+        if (currentCtp >= totalCtp) currentCtp = totalCtp;
+        if (currentProgress >= totalProgress) currentProgress = totalProgress;
+
+        setProgress(parseInt(currentProgress.toFixed(), 10));
+        setCtp(parseInt(currentCtp.toFixed(), 10));
+
+        if (currentProgress === totalProgress && currentCtp === totalCtp) {
+            clearInterval(interval);
+        }
+    }, 10); // Adjust the timing to control the speed of animation
+
+    return () => clearInterval(interval);
+}
