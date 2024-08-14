@@ -8,7 +8,11 @@ export const areaNameZodSchema = z
     .max(20, "Area cannot exceed 20 characters!");
 
 // Define schema for `note`
-export const noteZodSchema = z.string().trim().optional();
+export const noteZodSchema = z
+    .string()
+    .trim()
+    .max(400, "Area note cannot exceed 400 characters!")
+    .optional();
 
 // Zod schema for individual task
 export const taskZodSchema = z.object({

@@ -93,7 +93,7 @@ export async function PATCH(request: NextRequest) {
         }
 
         // Update note by ID
-        if (note) {
+        if (typeof note === "string") {
             noteZodSchema.parse(note);
             await updateNote(id, note);
             return noteUpdatedResponse(id);

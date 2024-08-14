@@ -149,6 +149,7 @@ export type TaskListItemsProps = {
 
 // Validation Alert Dialog Props Type
 export type ValidationAlertDialogProps = {
+    category: "note" | "task";
     alertDialog: boolean;
     setAlertDialog: SetState<boolean>;
 };
