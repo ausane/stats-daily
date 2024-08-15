@@ -66,47 +66,47 @@ export async function PATCH(request: NextRequest) {
     await connectToDatabase();
 
     try {
-        const { id, taskId, task, note, area } = await request.json();
+        const { areaId, taskId, task, note, areaName } = await request.json();
 
-        if (!isValidObjectId(id)) return invalidIdResponse();
+        if (!isValidObjectId(areaId)) return invalidIdResponse();
         if (taskId && !isValidObjectId(taskId)) return invalidIdResponse();
 
-        const item = await findTaskById(id);
+        const item = await findTaskById(areaId);
         if (!item) return noAreaFoundResponse();
 
         // Update area name by ID
-        if (area) {
-            areaNameZodSchema.parse(area);
+        if (areaName) {
+            areaNameZodSchema.parse(areaName);
 
-            const duplicateArea = await checkForDuplicateArea(area);
-            if (duplicateArea) return duplicateAreaResponse(area);
+            const duplicateArea = await checkForDuplicateArea(areaName);
+            if (duplicateArea) return duplicateAreaResponse(areaName);
 
-            await updateArea(id, area);
-            return areaRenamedResponse(id, area);
+            await updateArea(areaId, areaName);
+            return areaRenamedResponse(areaId, areaName);
         }
 
         // Update task by ID
         if (task && taskId) {
             taskZodSchema.parse(task);
-            await updateTask(id, taskId, task);
-            return taskUpdatedResponse(id);
+            await updateTask(areaId, taskId, task);
+            return taskUpdatedResponse(areaId);
         }
 
         // Update note by ID
         if (typeof note === "string") {
             noteZodSchema.parse(note);
-            await updateNote(id, note);
-            return noteUpdatedResponse(id);
+            await updateNote(areaId, note);
+            return noteUpdatedResponse(areaId);
         }
 
         // Add new task to the area by ID
         if (task && !taskId) {
             taskZodSchema.parse(task);
-            const newIncompleteTasks = await addNewTask(id, task);
+            const newIncompleteTasks = await addNewTask(areaId, task);
             return newIncompleteTasksResponse(newIncompleteTasks);
         }
 
-        return incompleteDataResponse(id);
+        return incompleteDataResponse(areaId);
     } catch (error) {
         console.error(error);
 
@@ -120,24 +120,24 @@ export async function DELETE(request: NextRequest) {
     await connectToDatabase();
 
     try {
-        const { id, taskId } = await request.json();
+        const { areaId, taskId } = await request.json();
 
         // Validate ObjectId
-        if (!isValidObjectId(id)) return invalidIdResponse();
+        if (!isValidObjectId(areaId)) return invalidIdResponse();
         if (taskId && !isValidObjectId(taskId)) return invalidIdResponse();
 
         // Find the task by ID
-        const item = await findTaskById(id);
+        const item = await findTaskById(areaId);
         if (!item) return noAreaFoundResponse();
 
         if (taskId) {
             // Delete specific task from the tasks array
-            await deleteTaskByTaskId(id, taskId);
+            await deleteTaskByTaskId(areaId, taskId);
             return NextResponse.json({ status: 204 });
         }
 
         // Delete the area
-        const area = await deleteAreaById(id);
+        const area = await deleteAreaById(areaId);
         return areaDeletionResponse(area);
     } catch (error) {
         console.error(error);

@@ -23,8 +23,8 @@ import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { CircleAlert, Pencil, User2, Trash, ChevronDown } from "lucide-react";
 import { RenameAreaDialog } from "@/components/confirm-dialog";
 
-export default function AreaHeader(props: { _id: string; area: string }) {
-    const { _id, area } = props;
+export default function AreaHeader(props: { areaId: string; area: string }) {
+    const { areaId, area } = props;
 
     const areaRef = useRef<HTMLInputElement>(null);
 
@@ -56,7 +56,7 @@ export default function AreaHeader(props: { _id: string; area: string }) {
 
         setUpdating(true);
 
-        const response = await updateAreaName(_id, areaInput);
+        const response = await updateAreaName(areaId, areaInput);
 
         if (response && response.duplicate) {
             setPrevAreaInput(tAreaInput);
@@ -64,7 +64,7 @@ export default function AreaHeader(props: { _id: string; area: string }) {
         } else {
             setInputError("");
             setAreaName(areaInput);
-            dispatch(setCurrentArea({ _id, area: areaInput }));
+            dispatch(setCurrentArea({ areaId, area: areaInput }));
             openDialog(false);
         }
 
@@ -98,7 +98,7 @@ export default function AreaHeader(props: { _id: string; area: string }) {
             <div className="w-full max-md:pl-16 relative flex-between gap-4 py-4 overflow-x-hidden">
                 <div className="max-w-[80%] max-sm:max-w-[50%] flex-start">
                     <TaskItemCompo
-                        areaId={_id}
+                        areaId={areaId}
                         areaName={areaName}
                         openRenameAreaDialog={openRenameAreaDialog}
                     />

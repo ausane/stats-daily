@@ -1,13 +1,11 @@
-export async function deleteArea(id: string | undefined) {
-    console.log(id);
-
+export async function deleteArea(areaId: string) {
     try {
         const response = await fetch("/api/stats/task", {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ id }),
+            body: JSON.stringify({ areaId }),
         });
 
         if (!response.ok) throw new Error("Failed to delete task");
@@ -18,14 +16,14 @@ export async function deleteArea(id: string | undefined) {
     }
 }
 
-export async function deleteTask(id: string, taskId: string) {
+export async function deleteTask(areaId: string, taskId: string) {
     try {
         const response = await fetch("/api/stats/task", {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ id, taskId }),
+            body: JSON.stringify({ areaId, taskId }),
         });
 
         if (!response.ok) throw new Error("Failed to delete task");

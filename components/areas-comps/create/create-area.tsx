@@ -17,7 +17,7 @@ import {
 } from "@/features/formSlice";
 import { InputChangeEvent } from "@/lib/types";
 
-export default function CreateArea() {
+export default function CreateArea({ userId }: { userId: string }) {
     // Retrieve all required states from the store
     const area = useAppSelector((state) => state.form.area);
     const note = useAppSelector((state) => state.form.note);
@@ -55,7 +55,7 @@ export default function CreateArea() {
         setIsLoading(true);
 
         // Handle Submit
-        const response = await handleSubmit({ area, note, tasks });
+        const response = await handleSubmit({ userId, area, note, tasks });
         isDuplicateArea(response);
 
         setIsLoading(false);

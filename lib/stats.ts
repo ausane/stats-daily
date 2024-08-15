@@ -1,12 +1,14 @@
 import connectToDatabase from "@/lib/mongodb";
 import { Task } from "@/models/task.model";
+import { auth } from "@clerk/nextjs/server";
 import mongoose from "mongoose";
 
 export const fetchTasks = async () => {
     await connectToDatabase();
+    const { userId } = auth();
 
     try {
-        const response = await Task.find({}).sort({ updatedAt: -1 });
+        const response = await Task.find({ userId }).sort({ updatedAt: -1 });
         if (!response) throw new Error("Task not found");
 
         return response;

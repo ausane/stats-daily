@@ -3,18 +3,18 @@ import { fetchAreaById } from "@/lib/stats";
 import TaskList from "../task-list";
 import AreaHeader from "./area-header";
 
-export default async function ShowTasks({ id }: { id: string }) {
+export default async function ShowTasks({ areaId }: { areaId: string }) {
     type TSearchedData = TStat | void | null | undefined;
-    const searchedData: TSearchedData = await fetchAreaById(id);
+    const searchedData: TSearchedData = await fetchAreaById(areaId);
     const serializableData: TStat =
         searchedData && JSON.parse(JSON.stringify(searchedData));
 
     if (serializableData) {
-        const { _id, area } = serializableData;
+        const { _id: areaId, area } = serializableData;
 
         return (
             <div className="main-content bbn overflow-auto max-md:w-full flex flex-col gap-4 p-4 pt-0">
-                <AreaHeader _id={_id as string} area={area} />
+                <AreaHeader areaId={areaId as string} area={area} />
                 <TaskList data={serializableData} />
             </div>
         );

@@ -27,6 +27,7 @@ export const taskZodSchema = z.object({
 
 // Zod schema for the Task model
 export const areaZodSchema = z.object({
+    userId: z.string().min(1),
     area: areaNameZodSchema,
     note: noteZodSchema,
     tasks: z.array(taskZodSchema).nonempty("Tasks cannot be empty!"),

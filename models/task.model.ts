@@ -5,6 +5,10 @@ const { Schema, model, models } = mongoose;
 
 export const taskSchema = new Schema<TStat>(
     {
+        userId: {
+            type: String,
+            required: true,
+        },
         area: {
             type: String,
             unique: true,

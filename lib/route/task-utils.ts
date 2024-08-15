@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Task } from "@/models/task.model";
-import { TStat, TTask, OmitDocument } from "../types";
+import { TStat, TTask, StatsWithoutDocument } from "../types";
 
 // Utility function to check if an area already exists
 export async function checkForExistingArea(area: string) {
@@ -8,7 +8,7 @@ export async function checkForExistingArea(area: string) {
 }
 
 // Utility function to create a new task
-export async function createNewTask(data: OmitDocument<TStat>) {
+export async function createNewTask(data: StatsWithoutDocument) {
     return Task.create(data);
 }
 
