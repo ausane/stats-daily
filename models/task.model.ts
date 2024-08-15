@@ -1,7 +1,31 @@
 import mongoose from "mongoose";
-import { TStat } from "@/lib/types";
+import { TStat, TTask } from "@/lib/types";
 
 const { Schema, model, models } = mongoose;
+
+// Define a sub-schema for the tasks array
+const taskSubSchema = new Schema<TTask>(
+    {
+        task: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        achieved: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
+        completed: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
+    },
+    {
+        timestamps: true,
+    }
+);
 
 export const taskSchema = new Schema<TStat>(
     {
@@ -19,26 +43,7 @@ export const taskSchema = new Schema<TStat>(
             type: String,
             trim: true,
         },
-        tasks: [
-            {
-                task: {
-                    type: String,
-                    required: true,
-                    trim: true,
-                },
-
-                achieved: {
-                    type: Number,
-                    required: true,
-                    default: 0,
-                },
-                completed: {
-                    type: Boolean,
-                    required: true,
-                    default: false,
-                },
-            },
-        ],
+        tasks: [taskSubSchema],
     },
     {
         timestamps: true,

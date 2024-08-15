@@ -31,7 +31,14 @@ export async function updateArea(id: string, area: string) {
 export async function updateTask(id: string, taskId: string, task: TTask) {
     return Task.findByIdAndUpdate(
         id,
-        { $set: { "tasks.$[elem]": task } },
+        {
+            $set: {
+                "tasks.$[elem].task": task.task,
+                "tasks.$[elem].achieved": task.achieved,
+                "tasks.$[elem].completed": task.completed,
+                "tasks.$[elem].updatedAt": new Date(),
+            },
+        },
         {
             new: true,
             arrayFilters: [{ "elem._id": taskId }],
