@@ -16,7 +16,7 @@ export default async function DashboardLayout({
     const stats: TSC[] | void = await fetchAreas();
 
     return (
-        <div className="w-full h-screen flex">
+        <div className="w-screen h-screen flex">
             <Sidebar data={stats} />
             {children}
         </div>

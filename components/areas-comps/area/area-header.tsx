@@ -19,6 +19,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { CircleAlert, Pencil, User2, Trash, ChevronDown } from "lucide-react";
 import { RenameAreaDialog } from "@/components/confirm-dialog";
 
@@ -95,7 +96,7 @@ export default function AreaHeader(props: { _id: string; area: string }) {
     return (
         <div className="w-full">
             <div className="w-full max-md:pl-16 relative flex-between gap-4 py-4 overflow-x-hidden">
-                <div className="flex-start gap-4 group">
+                <div className="max-w-[80%] max-sm:max-w-[50%] flex-start">
                     <TaskItemCompo
                         areaId={_id}
                         areaName={areaName}
@@ -106,7 +107,7 @@ export default function AreaHeader(props: { _id: string; area: string }) {
                 <div className="flex gap-4 z-40">
                     <ModeToggle />
                     <IconButton className="h-10 w-10">
-                        <User2 size={20} />
+                        <UserButton />
                     </IconButton>
                 </div>
             </div>
@@ -161,12 +162,12 @@ export function TaskItemCompo(props: TaskItemCompoProps) {
                 <DropdownMenuTrigger asChild>
                     <Button
                         variant="ghost"
-                        className="border-0 outline-0 z-10 flex gap-1"
+                        className="w-full border-0 outline-0 z-10 flex-center gap-1"
                     >
-                        <h2 className="text-xl truncate max-w-[80%] opacity-80">
+                        <h2 className="text-xl max-md:text-lg truncate opacity-80">
                             {areaName}
                         </h2>
-                        <ChevronDown className="opacity-50" />
+                        <ChevronDown size={18} className="w-5 opacity-50" />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-20">
