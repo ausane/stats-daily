@@ -11,40 +11,35 @@ export async function updateTask(areaId: string, task: TTask) {
         });
 
         if (!response.ok) throw new Error("Failed to update task");
-
-        console.log(await response.json());
     } catch (error) {
         console.error(error);
     }
 }
 
-export async function updateNote(id: string, note: string) {
+export async function updateNote(areaId: string, note: string) {
     try {
         const response = await fetch("/api/stats/task", {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ id, note }),
+            body: JSON.stringify({ areaId, note }),
         });
 
         if (!response.ok) throw new Error("Failed to update note");
-
-        console.log(await response.json());
     } catch (error) {
         console.error(error);
     }
 }
 
-export async function createNewTask(id: string, task: OmitDocument<TTask>) {
+export async function createNewTask(areaId: string, task: OmitDocument<TTask>) {
     try {
-        console.log(task);
         const response = await fetch("/api/stats/task", {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ id, task }),
+            body: JSON.stringify({ areaId, task }),
         });
 
         if (!response.ok) throw new Error("Failed to add new task");
@@ -55,15 +50,14 @@ export async function createNewTask(id: string, task: OmitDocument<TTask>) {
     }
 }
 
-export async function updateAreaName(id: string, area: string) {
+export async function updateAreaName(areaId: string, areaName: string) {
     try {
-        console.log(area);
         const response = await fetch("/api/stats/task", {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ id, area }),
+            body: JSON.stringify({ areaId, areaName }),
         });
 
         const jsonResponse = await response.json();

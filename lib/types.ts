@@ -11,6 +11,7 @@ export type TStats = {
 
 // Stat Schema Type
 export type TStat = {
+    userId: string;
     area: string;
     note?: string;
     tasks: TTask[];
@@ -60,6 +61,7 @@ export type InitialState = {
 
 // Apply OmitDocument to both TStat and TTask
 export type StatsWithoutDocument = {
+    userId: string;
     area: string;
     note?: string;
     tasks: OmitDocument<TTask>[];
