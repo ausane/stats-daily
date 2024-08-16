@@ -94,7 +94,9 @@ export default function TaskList({ data }: { data: TStat }) {
                         <Circle />
                     </span>
                     <p className="h-full flex-center font-medium opacity-50">
-                        {incompleteTasks.length} Incomplete
+                        {incompleteTasks.length === 0
+                            ? "No Incomplete"
+                            : `${incompleteTasks.length} Incomplete`}
                         {incompleteTasks.length === 1 ? " Task" : " Tasks"}
                     </p>
                     <TooltipCompo tip="Add Task">
@@ -163,6 +165,8 @@ export function ShowCompletedTasks({
         const task = ntf(completedTasks[index], false, 0);
         dispatch(undoTaskCompletion(index));
 
+        if (completedTasks.length === 1) setOpen(false);
+
         await updateTask(areaId, task as TTask);
     };
 
@@ -176,7 +180,9 @@ export function ShowCompletedTasks({
                     <CheckCircle2 />
                 </span>
                 <p className="h-full flex-center font-medium opacity-50">
-                    {completedTasks.length} Completed
+                    {completedTasks.length === 0
+                        ? "No Completed"
+                        : `${completedTasks.length} Completed`}
                     {completedTasks.length === 1 ? " Task" : " Tasks"}
                 </p>
                 <TooltipCompo tip={`${open ? "Close" : "Open"}`}>
@@ -241,13 +247,13 @@ export function AddNewTask({
     const addNewTask = async () => {
         if (!validateNewTask()) return;
 
+        const newTaskInput = ntf(newTaskValue, false, 0);
+        const { newTask } = await createNewTask(areaId, newTaskInput);
+
+        dispatch(setIncompleteTasks(newTask));
+
         setAddTaskInput(false);
         setNewTaskValue("");
-
-        const newTask = ntf(newTaskValue, false, 0);
-        const { newIncompleteTasks } = await createNewTask(areaId, newTask);
-
-        dispatch(setIncompleteTasks(newIncompleteTasks));
     };
 
     const validateNewTask = () => {
