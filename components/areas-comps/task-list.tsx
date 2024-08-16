@@ -22,6 +22,7 @@ import {
     CircleAlert,
     Circle,
     CheckCircle2,
+    Loader2,
 } from "lucide-react";
 import {
     setIncompleteTasks,
@@ -235,6 +236,7 @@ export function AddNewTask({
 }: AddNewTaskProps) {
     const inputRef = useRef<HTMLInputElement>(null);
 
+    const [loading, setLoading] = useState(false);
     const [newTaskValue, setNewTaskValue] = useState("");
     const [alertDialog, setAlertDialog] = useState(false);
 
@@ -245,6 +247,7 @@ export function AddNewTask({
     const dispatch = useAppDispatch();
 
     const addNewTask = async () => {
+        setLoading(true);
         if (!validateNewTask()) return;
 
         const newTaskInput = ntf(newTaskValue, false, 0);
@@ -254,6 +257,7 @@ export function AddNewTask({
 
         setAddTaskInput(false);
         setNewTaskValue("");
+        setLoading(false);
     };
 
     const validateNewTask = () => {
@@ -311,18 +315,24 @@ export function AddNewTask({
                 </TaskContent>
 
                 <TaskOptions>
-                    <IconButton variant="default" onClick={addNewTask}>
-                        <Check size={15} />
-                    </IconButton>
-                    <IconButton
-                        variant="default"
-                        onClick={() => {
-                            setAddTaskInput(false);
-                            setNewTaskValue("");
-                        }}
-                    >
-                        <X size={15} />
-                    </IconButton>
+                    {loading ? (
+                        <Loader2 className="animate-spin" />
+                    ) : (
+                        <>
+                            <IconButton variant="default" onClick={addNewTask}>
+                                <Check size={15} />
+                            </IconButton>
+                            <IconButton
+                                variant="default"
+                                onClick={() => {
+                                    setAddTaskInput(false);
+                                    setNewTaskValue("");
+                                }}
+                            >
+                                <X size={15} />
+                            </IconButton>
+                        </>
+                    )}
                 </TaskOptions>
             </div>
         );
