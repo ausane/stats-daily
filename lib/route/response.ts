@@ -59,10 +59,8 @@ export function noteUpdatedResponse(id: string) {
     return NextResponse.json({ id, message: "Note updated!" }, { status: 200 });
 }
 
-export function newIncompleteTasksResponse(
-    newIncompleteTasks: TTask[] | undefined
-) {
-    return NextResponse.json({ newIncompleteTasks }, { status: 200 });
+export function newIncompleteTasksResponse(newTasks: TTask[] | undefined) {
+    return NextResponse.json({ newTasks }, { status: 200 });
 }
 
 export function incompleteDataResponse(id: string) {

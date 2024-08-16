@@ -13,7 +13,7 @@ import {
     addToTasks,
     handleEmptyTasks,
     removeTask,
-} from "@/features/formSlice";
+} from "@/features/form-slice";
 
 export default function CreateTasks() {
     // Retrieve all required states from the store

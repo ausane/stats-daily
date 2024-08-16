@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import formReducer from "@/features/formSlice";
-import areaReducer from "@/features/areaSlice";
-import taskReducer from "@/features/taskSlice";
+import formReducer from "@/features/form-slice";
+import areaReducer from "@/features/area-slice";
+import taskReducer from "@/features/task-slice";
 
 export const store = configureStore({
     reducer: {

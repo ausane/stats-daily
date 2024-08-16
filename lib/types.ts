@@ -22,6 +22,8 @@ export type TTask = {
     task: string;
     achieved: number;
     completed: boolean;
+    updatedAt?: Date;
+    createdAt?: Date;
 } & Document;
 
 // TSC Type

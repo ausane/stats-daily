@@ -7,14 +7,14 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState, useRef, useEffect } from "react";
 import { handleSubmit } from "@/lib/utils/handle-submit";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { insertArea } from "@/features/areaSlice";
+import { insertArea } from "@/features/area-slice";
 import { CircleAlert } from "lucide-react";
 import {
     handleAreaChange,
     handleNoteChange,
     resetForm,
     handleEmptyTasks,
-} from "@/features/formSlice";
+} from "@/features/form-slice";
 import { InputChangeEvent } from "@/lib/types";
 
 export default function CreateArea({ userId }: { userId: string }) {

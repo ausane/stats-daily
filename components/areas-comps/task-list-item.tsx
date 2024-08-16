@@ -8,7 +8,7 @@ import { updateTask } from "@/lib/utils/handle-update";
 import IconButton from "../ui/icon-button";
 import { deleteTask } from "@/lib/utils/handle-delete";
 import Input from "../ui/input";
-import { handleKeyDownEnter } from "@/lib/constants";
+import { handleKeyDownEnter, ntf } from "@/lib/constants";
 import { Check, CircleAlert, Pencil, Trash, X } from "lucide-react";
 import { TaskState, TaskContent, TaskOptions } from "../task-items";
 import {
@@ -21,7 +21,7 @@ import {
     setTaskCompletion,
     removeTaskById,
     setEditedTask,
-} from "@/features/taskSlice";
+} from "@/features/task-slice";
 
 export default function TaskListItem(props: TaskListItemsProps) {
     const { index, areaId, taskItem, oita, nfaf } = props;
@@ -51,10 +51,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
         dispatch(setEditedTask({ index, task: inputTask }));
         nfaf(false, index);
 
-        const taskObj = {
-            ...taskItem,
-            task: inputTask,
-        };
+        const taskObj = { ...taskItem, task: inputTask };
 
         await updateTask(areaId, taskObj as TTask);
     };
@@ -169,11 +166,7 @@ export function TaskStatus(props: TaskStatusProps) {
     const [value, setValue] = useState<number[]>([50]);
 
     const handleClick = async () => {
-        const taskObj = {
-            ...taskItem,
-            completed: true,
-            achieved: value[0],
-        };
+        const taskObj = ntf(taskItem, true, value[0]);
 
         dispatch(setTaskCompletion({ index, achieved: value[0] }));
 

@@ -9,7 +9,7 @@ export const fetchTasks = async () => {
 
     try {
         const response = await Task.find({ userId }).sort({ updatedAt: -1 });
-        if (!response) throw new Error("Task not found");
+        if (!response) throw new Error("Task not found!");
 
         return response;
     } catch (error) {
@@ -31,20 +31,20 @@ export const fetchAreas = async () => {
         return tasks;
     } else {
         // Handle the case when response is void
-        console.error("No tasks found.");
+        console.error("Tasks not found!");
     }
 };
 
-export const fetchAreaById = async (id: string) => {
+export const fetchAreaById = async (areaId: string) => {
     await connectToDatabase();
-    const isValidObjectId = mongoose.Types.ObjectId.isValid(id);
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(areaId);
 
     try {
         // Throw an error if id is invalid
-        if (!isValidObjectId) throw new Error("Invalid id");
+        if (!isValidObjectId) throw new Error("Invalid id!");
 
-        const response = await Task.findById(id);
-        if (!response) throw new Error("Task not found");
+        const response = await Task.findById(areaId);
+        if (!response) throw new Error("Task not found!");
 
         return response;
     } catch (error) {

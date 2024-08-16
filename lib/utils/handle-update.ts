@@ -7,7 +7,7 @@ export async function updateTask(areaId: string, task: TTask) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ id: areaId, taskId: task._id, task }),
+            body: JSON.stringify({ areaId, taskId: task._id, task }),
         });
 
         if (!response.ok) throw new Error("Failed to update task");
