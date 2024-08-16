@@ -248,9 +248,9 @@ export function AddNewTask({
         if (!validateNewTask()) return;
 
         const newTaskInput = ntf(newTaskValue, false, 0);
-        const { newTask } = await createNewTask(areaId, newTaskInput);
+        const { newTasks } = await createNewTask(areaId, newTaskInput);
 
-        dispatch(setIncompleteTasks(newTask));
+        dispatch(setIncompleteTasks(newTasks));
 
         setAddTaskInput(false);
         setNewTaskValue("");

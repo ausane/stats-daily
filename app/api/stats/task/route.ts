@@ -102,8 +102,8 @@ export async function PATCH(request: NextRequest) {
         // Add new task to the area by ID
         if (task && !taskId) {
             taskZodSchema.parse(task);
-            const newTask = await addNewTask(areaId, task);
-            return newIncompleteTasksResponse(newTask);
+            const newTasks = await addNewTask(areaId, task);
+            return newIncompleteTasksResponse(newTasks);
         }
 
         return incompleteDataResponse(areaId);
