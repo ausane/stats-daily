@@ -14,7 +14,6 @@ const taskSlice = createSlice({
         setCompleteTasks: (state, action) => {
             state.completedTasks = action.payload;
         },
-
         setTaskCompletion: (state, action) => {
             console.log(action.payload);
             const { index, achieved } = action.payload;
