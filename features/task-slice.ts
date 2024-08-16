@@ -24,7 +24,7 @@ const taskSlice = createSlice({
             taskItem.achieved = achieved;
 
             // Push the task to completed tasks
-            state.completedTasks.push(taskItem);
+            state.completedTasks.unshift(taskItem);
 
             // Remove the task from incompleted tasks
             state.incompleteTasks = state.incompleteTasks.filter(
@@ -39,7 +39,7 @@ const taskSlice = createSlice({
             taskItem.achieved = 0;
 
             // Push the task to completed tasks
-            state.incompleteTasks.push(taskItem);
+            state.incompleteTasks.unshift(taskItem);
 
             // Remove the task from incompleted tasks
             state.completedTasks = state.completedTasks.filter(

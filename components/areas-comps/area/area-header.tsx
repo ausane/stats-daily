@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { deleteArea } from "@/lib/utils/handle-delete";
 import { useAppDispatch } from "@/store/hooks";
-import { removeAreaById, setCurrentArea } from "@/features/areaSlice";
+import { removeAreaById, setCurrentArea } from "@/features/area-slice";
 import IconButton from "@/components/ui/icon-button";
 import Input from "@/components/ui/input";
 import { updateAreaName } from "@/lib/utils/handle-update";
@@ -19,8 +19,8 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { CircleAlert, Pencil, User2, Trash, ChevronDown } from "lucide-react";
+import { UserButton } from "@clerk/nextjs";
+import { CircleAlert, Pencil, Trash, ChevronDown } from "lucide-react";
 import { RenameAreaDialog } from "@/components/confirm-dialog";
 
 export default function AreaHeader(props: { areaId: string; area: string }) {

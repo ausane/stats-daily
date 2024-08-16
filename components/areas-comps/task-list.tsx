@@ -12,6 +12,8 @@ import { createNewTask } from "@/lib/utils/handle-update";
 import IconButton from "../ui/icon-button";
 import { ValidationAlertDialog } from "../confirm-dialog";
 import { TooltipCompo } from "../ui/tooltip";
+import Input from "../ui/input";
+import { handleKeyDownEnter, ntf, st } from "@/lib/constants";
 import {
     ArrowUp,
     X,
@@ -25,9 +27,7 @@ import {
     setIncompleteTasks,
     setCompleteTasks,
     undoTaskCompletion,
-} from "@/features/taskSlice";
-import Input from "../ui/input";
-import { handleKeyDownEnter } from "@/lib/constants";
+} from "@/features/task-slice";
 
 export default function TaskList({ data }: { data: TStat }) {
     const { _id, tasks, note } = data;
@@ -38,11 +38,11 @@ export default function TaskList({ data }: { data: TStat }) {
     const [emptyInputAlert, setEmptyInputAlert] = useState(false);
 
     const cdts = useMemo(
-        () => tasks?.filter((task) => task.completed === true),
+        () => tasks?.filter((task) => task.completed === true).sort(st),
         [tasks]
     );
     const icts = useMemo(
-        () => tasks?.filter((task) => task.completed === false),
+        () => tasks?.filter((task) => task.completed === false).sort(st),
         [tasks]
     );
 
@@ -160,12 +160,7 @@ export function ShowCompletedTasks({
     const dispatch = useAppDispatch();
 
     const handleUndoTask = async (index: number) => {
-        const task = {
-            ...completedTasks[index],
-            completed: false,
-            achieved: 0,
-        };
-
+        const task = ntf(completedTasks[index], false, 0);
         dispatch(undoTaskCompletion(index));
 
         await updateTask(areaId, task as TTask);
@@ -249,15 +244,8 @@ export function AddNewTask({
         setAddTaskInput(false);
         setNewTaskValue("");
 
-        const newTask = {
-            task: newTaskValue,
-            completed: false,
-            achieved: 0,
-        };
-        const { newIncompleteTasks } = await createNewTask(
-            areaId as string,
-            newTask
-        );
+        const newTask = ntf(newTaskValue, false, 0);
+        const { newIncompleteTasks } = await createNewTask(areaId, newTask);
 
         dispatch(setIncompleteTasks(newIncompleteTasks));
     };

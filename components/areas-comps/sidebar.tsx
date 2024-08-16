@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { TSC } from "@/lib/types";
 import { usePathname } from "next/navigation";
-import { insertAllAreas } from "@/features/areaSlice";
+import { insertAllAreas } from "@/features/area-slice";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { Menu, X, SquarePen } from "lucide-react";
 import IconButton from "../ui/icon-button";
