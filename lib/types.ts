@@ -113,9 +113,7 @@ export type ConfirmDialogProps = {
 export type AddNewTaskProps = {
     areaId: string;
     addTaskInput: boolean;
-    emptyInputAlert: boolean;
     setAddTaskInput: SetState<boolean>;
-    setEmptyInputAlert: SetState<boolean>;
 };
 
 // Task Item Props Type

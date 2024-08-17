@@ -84,6 +84,13 @@ export default function TaskListItem(props: TaskListItemsProps) {
         await deleteTask(areaId, taskItem._id as string);
     };
 
+    const handleOnBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+        const target = event.relatedTarget as HTMLElement;
+        const nte = ["edit-button", "cancel-button", "okay-button"];
+
+        if (!target || !nte.includes(target.id)) nfaf(false, index);
+    };
+
     return (
         <>
             <ValidationAlertDialog
@@ -116,6 +123,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
                                     onKeyDown={(e) =>
                                         handleKeyDownEnter(e, handleEditTask)
                                     }
+                                    onBlur={(e) => handleOnBlur(e)}
                                 />
                                 {placeholder && (
                                     <span className="empty-alert">
@@ -132,7 +140,10 @@ export default function TaskListItem(props: TaskListItemsProps) {
                     <TaskOptions>
                         {oita ? (
                             <>
-                                <IconButton onClick={handleEditTask}>
+                                <IconButton
+                                    id="edit-button"
+                                    onClick={handleEditTask}
+                                >
                                     <Check size={15} />
                                 </IconButton>
                                 <IconButton onClick={() => nfaf(false, index)}>
