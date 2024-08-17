@@ -9,8 +9,13 @@ import IconButton from "../ui/icon-button";
 import { deleteTask } from "@/lib/utils/handle-delete";
 import Input from "../ui/input";
 import { handleKeyDownEnter, ntf } from "@/lib/constants";
-import { Check, CircleAlert, Pencil, Trash, X } from "lucide-react";
-import { TaskState, TaskContent, TaskOptions } from "../task-items";
+import { Check, Pencil, Trash, X } from "lucide-react";
+import {
+    TaskState,
+    TaskContent,
+    TaskOptions,
+    InputRequiredAlert,
+} from "../task-items";
 import {
     InputChangeEvent,
     TaskListItemsProps,
@@ -30,8 +35,8 @@ export default function TaskListItem(props: TaskListItemsProps) {
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [inputTask, setInputTask] = useState(task);
-    const [placeholder, setPlaceholder] = useState("");
     const [alertDialog, setAlertDialog] = useState(false);
+    const [emptyInputAlert, setEmptyInputAlert] = useState(false);
 
     const dispatch = useAppDispatch();
 
@@ -40,7 +45,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
     }, [oita]);
 
     const handleEditClick = () => {
-        setPlaceholder("");
+        setEmptyInputAlert(false);
         nfaf(true, index);
         setInputTask(task);
     };
@@ -61,7 +66,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
 
         if (!editedTask) {
             setInputTask("");
-            setPlaceholder("Task cannot be empty!");
+            setEmptyInputAlert(true);
             return false;
         }
 
@@ -76,7 +81,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
     const handleEditInputChange = (event: InputChangeEvent) => {
         const { value } = event.target;
         setInputTask(value);
-        setPlaceholder(value ? "" : "Task cannot be empty!");
+        setEmptyInputAlert(value ? false : true);
     };
 
     const handleDeleteTask = async () => {
@@ -125,12 +130,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
                                     }
                                     onBlur={(e) => handleOnBlur(e)}
                                 />
-                                {placeholder && (
-                                    <span className="empty-alert">
-                                        <CircleAlert size={15} />
-                                        <span>{placeholder}</span>
-                                    </span>
-                                )}
+                                {emptyInputAlert && <InputRequiredAlert />}
                             </>
                         ) : (
                             <p className="w-11/12 truncate">{task}</p>

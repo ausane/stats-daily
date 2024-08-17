@@ -6,7 +6,12 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import TaskListItem from "./task-list-item";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { updateTask } from "@/lib/utils/handle-update";
-import { TaskState, TaskContent, TaskOptions } from "../task-items";
+import {
+    TaskState,
+    TaskContent,
+    TaskOptions,
+    InputRequiredAlert,
+} from "../task-items";
 import CircularProgress, { progressCalculator } from "../ui/circular-progress";
 import { createNewTask } from "@/lib/utils/handle-update";
 import IconButton from "../ui/icon-button";
@@ -19,7 +24,6 @@ import {
     X,
     Check,
     Plus,
-    CircleAlert,
     Circle,
     CheckCircle2,
     Loader2,
@@ -315,12 +319,7 @@ export function AddNewTask(props: AddNewTaskProps) {
                         onKeyDown={(e) => handleKeyDownEnter(e, addNewTask)}
                         onBlur={(e) => handleOnBlur(e)}
                     />
-                    {emptyInputAlert && (
-                        <span className="empty-alert">
-                            <CircleAlert size={15} />
-                            <span>Task cannot be empty!</span>
-                        </span>
-                    )}
+                    {emptyInputAlert && <InputRequiredAlert />}
                 </TaskContent>
 
                 <TaskOptions>
