@@ -137,7 +137,7 @@ export function ValidationAlertDialog(props: ValidationAlertDialogProps) {
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogAction>Okay</AlertDialogAction>
+                    <AlertDialogAction id="okay-button">Okay</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

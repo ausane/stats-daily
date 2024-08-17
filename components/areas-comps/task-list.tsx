@@ -6,7 +6,12 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import TaskListItem from "./task-list-item";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { updateTask } from "@/lib/utils/handle-update";
-import { TaskState, TaskContent, TaskOptions } from "../task-items";
+import {
+    TaskState,
+    TaskContent,
+    TaskOptions,
+    InputRequiredAlert,
+} from "../task-items";
 import CircularProgress, { progressCalculator } from "../ui/circular-progress";
 import { createNewTask } from "@/lib/utils/handle-update";
 import IconButton from "../ui/icon-button";
@@ -19,7 +24,6 @@ import {
     X,
     Check,
     Plus,
-    CircleAlert,
     Circle,
     CheckCircle2,
     Loader2,
@@ -36,7 +40,6 @@ export default function TaskList({ data }: { data: TStat }) {
     const [ctp, setCtp] = useState(0);
     const [progress, setProgress] = useState(0);
     const [addTaskInput, setAddTaskInput] = useState(false);
-    const [emptyInputAlert, setEmptyInputAlert] = useState(false);
 
     const cdts = useMemo(
         () => tasks?.filter((task) => task.completed === true).sort(st),
@@ -100,8 +103,11 @@ export default function TaskList({ data }: { data: TStat }) {
                             : `${incompleteTasks.length} Incomplete`}
                         {incompleteTasks.length === 1 ? " Task" : " Tasks"}
                     </p>
-                    <TooltipCompo tip="Add Task">
+                    <TooltipCompo
+                        tip={`${addTaskInput ? "Close" : "Add Task"}`}
+                    >
                         <IconButton
+                            id="cancel-button"
                             variant="ghost"
                             circle={true}
                             className={`transition-transform duration-400 ease-in-out p-0 ${
@@ -110,7 +116,6 @@ export default function TaskList({ data }: { data: TStat }) {
                             onClick={() => {
                                 setOita(dfa);
                                 setAddTaskInput(!addTaskInput);
-                                setEmptyInputAlert(false);
                             }}
                         >
                             <Plus />
@@ -123,8 +128,6 @@ export default function TaskList({ data }: { data: TStat }) {
                         areaId={_id as string}
                         addTaskInput={addTaskInput}
                         setAddTaskInput={setAddTaskInput}
-                        emptyInputAlert={emptyInputAlert}
-                        setEmptyInputAlert={setEmptyInputAlert}
                     />
                     {incompleteTasks?.map((item, index) => (
                         <div key={index} className="w-full border-b p-2">
@@ -193,7 +196,6 @@ export function ShowCompletedTasks({
                         className={`transition-transform duration-400 ease-in-out p-0 ${
                             open ? "rotate-180" : "rotate-0"
                         }`}
-                        // className="transition-all duration-400 ease-in-out rotate-180"
                         onClick={() => setOpen(!open)}
                     >
                         <ArrowUp />
@@ -227,21 +229,22 @@ export function ShowCompletedTasks({
     );
 }
 
-export function AddNewTask({
-    areaId,
-    addTaskInput,
-    emptyInputAlert,
-    setAddTaskInput,
-    setEmptyInputAlert,
-}: AddNewTaskProps) {
+export function AddNewTask(props: AddNewTaskProps) {
+    const { areaId, addTaskInput, setAddTaskInput } = props;
+
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [loading, setLoading] = useState(false);
     const [newTaskValue, setNewTaskValue] = useState("");
     const [alertDialog, setAlertDialog] = useState(false);
+    const [emptyInputAlert, setEmptyInputAlert] = useState(false);
 
     useEffect(() => {
-        if (addTaskInput) inputRef.current?.focus();
+        if (addTaskInput) {
+            setNewTaskValue("");
+            setEmptyInputAlert(false);
+            inputRef.current?.focus();
+        }
     }, [addTaskInput]);
 
     const dispatch = useAppDispatch();
@@ -266,11 +269,13 @@ export function AddNewTask({
         if (!newTask) {
             setNewTaskValue("");
             setEmptyInputAlert(true);
+            setLoading(false);
             return false;
         }
 
         if (newTask.length > 40) {
             setAlertDialog(true);
+            setLoading(false);
             return false;
         }
 
@@ -281,6 +286,13 @@ export function AddNewTask({
         const { value } = event.target;
         setNewTaskValue(value);
         setEmptyInputAlert(value ? false : true);
+    };
+
+    const handleOnBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+        const target = event.relatedTarget as HTMLElement;
+        const nte = ["submit-button", "cancel-button", "okay-button"];
+
+        if (!target || !nte.includes(target.id)) setAddTaskInput(false);
     };
 
     if (addTaskInput) {
@@ -305,13 +317,9 @@ export function AddNewTask({
                         value={newTaskValue}
                         onChange={handleNewTaskInputChange}
                         onKeyDown={(e) => handleKeyDownEnter(e, addNewTask)}
+                        onBlur={(e) => handleOnBlur(e)}
                     />
-                    {emptyInputAlert && (
-                        <span className="empty-alert">
-                            <CircleAlert size={15} />
-                            <span>Task cannot be empty!</span>
-                        </span>
-                    )}
+                    {emptyInputAlert && <InputRequiredAlert />}
                 </TaskContent>
 
                 <TaskOptions>
@@ -319,7 +327,11 @@ export function AddNewTask({
                         <Loader2 className="animate-spin" />
                     ) : (
                         <>
-                            <IconButton variant="default" onClick={addNewTask}>
+                            <IconButton
+                                id="submit-button"
+                                variant="default"
+                                onClick={addNewTask}
+                            >
                                 <Check size={15} />
                             </IconButton>
                             <IconButton

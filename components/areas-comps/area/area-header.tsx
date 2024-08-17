@@ -104,7 +104,7 @@ export default function AreaHeader(props: { areaId: string; area: string }) {
                     />
                 </div>
 
-                <div className="flex gap-4 z-40">
+                <div className="flex gap-4 z-20">
                     <ModeToggle />
                     <IconButton className="h-10 w-10">
                         <UserButton />
