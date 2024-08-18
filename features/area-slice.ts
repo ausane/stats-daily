@@ -8,8 +8,10 @@ const areaSlice = createSlice({
     },
     reducers: {
         setCurrentArea: (state, action) => {
-            const task = state.areas.find((i) => i._id === action.payload._id);
-            if (task) task.area = action.payload.area;
+            const { areaId } = action.payload;
+
+            const task = state.areas.find((i) => i.areaId === areaId);
+            if (task) task.areaName = action.payload.area;
         },
         insertArea: (state, action) => {
             state.areas.unshift(action.payload);
@@ -19,7 +21,7 @@ const areaSlice = createSlice({
         },
         removeAreaById: (state, action) => {
             const id = action.payload;
-            state.areas = state.areas.filter((item) => item._id !== id);
+            state.areas = state.areas.filter((item) => item.areaId !== id);
         },
     },
 });

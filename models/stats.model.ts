@@ -6,11 +6,6 @@ const { Schema, model, models } = mongoose;
 
 const statsSchema = new Schema<TStats>(
     {
-        date: {
-            type: Date,
-            required: true,
-            unique: true,
-        },
         stats: [taskSchema],
         note: {
             type: String,

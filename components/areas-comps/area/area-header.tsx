@@ -64,7 +64,7 @@ export default function AreaHeader(props: { areaId: string; area: string }) {
         } else {
             setInputError("");
             setAreaName(areaInput);
-            dispatch(setCurrentArea({ areaId, area: areaInput }));
+            dispatch(setCurrentArea({ areaId, area: tAreaInput }));
             openDialog(false);
         }
 

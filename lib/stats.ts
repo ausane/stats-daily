@@ -23,8 +23,8 @@ export const fetchAreas = async () => {
     if (response) {
         const tasks = response.map((task) => {
             return {
-                _id: task._id.toString(),
-                area: task.area,
+                areaId: task._id.toString(),
+                areaName: task.area,
             };
         });
 
