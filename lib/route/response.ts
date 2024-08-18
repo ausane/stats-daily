@@ -40,8 +40,8 @@ export function duplicateAreaResponse(areaName: string) {
 }
 
 export function newAreaCreatedResponse(newArea: TStat) {
-    const { _id, area } = newArea;
-    return NextResponse.json({ _id, area }, { status: 201 });
+    const { _id: areaId, area: areaName } = newArea;
+    return NextResponse.json({ areaId, areaName }, { status: 201 });
 }
 
 export function areaRenamedResponse(id: string, area: string) {

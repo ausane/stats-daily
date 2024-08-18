@@ -12,7 +12,7 @@ import {
     TaskOptions,
     InputRequiredAlert,
 } from "../task-items";
-import CircularProgress, { progressCalculator } from "../ui/circular-progress";
+import CircularProgress, { progressCalculator } from "../ui/progress";
 import { createNewTask } from "@/lib/utils/handle-update";
 import IconButton from "../ui/icon-button";
 import { ValidationAlertDialog } from "../confirm-dialog";
@@ -100,8 +100,8 @@ export default function TaskList({ data }: { data: TStat }) {
                     <p className="h-full flex-center font-medium opacity-50">
                         {incompleteTasks.length === 0
                             ? "No Incomplete"
-                            : `${incompleteTasks.length} Incomplete`}
-                        {incompleteTasks.length === 1 ? " Task" : " Tasks"}
+                            : `${incompleteTasks.length} Incomplete`}{" "}
+                        {incompleteTasks.length === 1 ? "Task" : "Tasks"}
                     </p>
                     <TooltipCompo
                         tip={`${addTaskInput ? "Close" : "Add Task"}`}
@@ -186,8 +186,8 @@ export function ShowCompletedTasks({
                 <p className="h-full flex-center font-medium opacity-50">
                     {completedTasks.length === 0
                         ? "No Completed"
-                        : `${completedTasks.length} Completed`}
-                    {completedTasks.length === 1 ? " Task" : " Tasks"}
+                        : `${completedTasks.length} Completed`}{" "}
+                    {completedTasks.length === 1 ? "Task" : "Tasks"}
                 </p>
                 <TooltipCompo tip={`${open ? "Close" : "Open"}`}>
                     <IconButton

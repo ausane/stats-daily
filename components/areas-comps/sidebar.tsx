@@ -11,7 +11,7 @@ import IconButton from "../ui/icon-button";
 
 export default function Sidebar({ data }: { data: TSC[] | void }) {
     const dispatch = useAppDispatch();
-    const tasks = useAppSelector((state) => state.area.areas);
+    const areas = useAppSelector((state) => state.area.areas);
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -57,7 +57,7 @@ export default function Sidebar({ data }: { data: TSC[] | void }) {
                         </IconButton>
                     </div>
                     <SidebarContent
-                        tasks={tasks}
+                        areas={areas}
                         areaId={id}
                         toggleSidebar={toggleSidebar}
                     />
@@ -65,7 +65,7 @@ export default function Sidebar({ data }: { data: TSC[] | void }) {
             </div>
 
             <div className="w-1/4 h-full bbn box-border overflow-auto px-2 max-md:hidden max-lg:w-2/5">
-                <SidebarContent tasks={tasks} areaId={id} />
+                <SidebarContent areas={areas} areaId={id} />
             </div>
         </>
     );
@@ -73,11 +73,11 @@ export default function Sidebar({ data }: { data: TSC[] | void }) {
 
 export function SidebarContent({
     areaId,
-    tasks,
+    areas,
     toggleSidebar,
 }: {
     areaId: string;
-    tasks: TSC[];
+    areas: TSC[];
     toggleSidebar?: () => void;
 }) {
     return (
@@ -93,26 +93,26 @@ export function SidebarContent({
                 </Link>
             </div>
             <div className="overflow-auto w-full h-[calc(100%-6rem)] sticky top-20 px-2">
-                {tasks?.map((task, index) => (
+                {areas?.map((item, index) => (
                     <div
                         key={index}
                         className={`w-[calc(100%-2px)] my-2 flex-start box-border rounded-md hover:bg-secondary
                                     ${
-                                        task._id === areaId
+                                        item.areaId === areaId
                                             ? "bg-secondary"
                                             : "bg-background"
                                     }`}
                     >
                         <Link
                             onClick={toggleSidebar}
-                            href={`/areas/${task._id}`}
+                            href={`/areas/${item.areaId}`}
                             className="w-full flex-start gap-4 box-border"
                         >
                             <span className="h-9 w-9 flex-center bbn rounded-md">
                                 {index + 1}
                             </span>
                             <p className="w-[calc(100%-4rem)] truncate">
-                                {task.area}
+                                {item.areaName}
                             </p>
                         </Link>
                     </div>

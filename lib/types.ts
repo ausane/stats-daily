@@ -4,7 +4,6 @@ import React, { ButtonHTMLAttributes, InputHTMLAttributes } from "react";
 
 // Stats Schema Type
 export type TStats = {
-    date: Date;
     note?: string;
     stats: TStat[];
 } & Document;
@@ -28,8 +27,8 @@ export type TTask = {
 
 // TSC Type
 export type TSC = {
-    _id: string;
-    area: string;
+    areaId: string;
+    areaName: string;
 };
 
 // Input Props Type

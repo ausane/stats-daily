@@ -15,7 +15,7 @@ import {
     resetForm,
     handleEmptyTasks,
 } from "@/features/form-slice";
-import { InputChangeEvent } from "@/lib/types";
+import { InputChangeEvent, TSC } from "@/lib/types";
 
 export default function CreateArea({ userId }: { userId: string }) {
     // Retrieve all required states from the store
@@ -79,12 +79,12 @@ export default function CreateArea({ userId }: { userId: string }) {
     };
 
     // Check duplicate area name
-    const isDuplicateArea = (response: any) => {
+    const isDuplicateArea = (response: TSC | any) => {
         if (response?.duplicate) {
             setPrevAreaInput(areaName);
             setInputError(`'${areaName}' already exists!`);
-        } else if (response?._id) {
-            router.push(`/areas/${response._id}`);
+        } else if (response?.areaId) {
+            router.push(`/areas/${response.areaId}`);
             dispatch(insertArea(response));
             dispatch(resetForm());
         }
