@@ -13,9 +13,9 @@ export default function CircularProgress(props: CircularProgressProps) {
     const offset = circumference * (1 - validProgress / 100);
 
     return (
-        <div className="relative w-full h-2/5 flex-between bbn rounded-md">
+        <div className="relative w-full h-2/5 flex-between gap-4">
             <TooltipCompo tip="Progress">
-                <div className="relative w-3/5 flex-center">
+                <div className="relative w-3/5 h-full bbn rounded-md flex-center">
                     <svg className="rotate-[-90deg]">
                         <circle
                             className="text-secondary"
@@ -46,13 +46,13 @@ export default function CircularProgress(props: CircularProgressProps) {
                     </div>
                 </div>
             </TooltipCompo>
-            <div className="w-2/5 h-full p-4 flex-center">
+            <div className="w-2/5 h-full bbn rounded-md flex-center">
                 <TooltipCompo tip="Tasks Completed">
                     <div className="relative w-12 h-[108px] flex">
-                        <div className="absolute h-full w-full bbn rounded-lg bg-secondary"></div>
+                        <div className="absolute h-full w-full rounded-lg bg-secondary"></div>
                         <div
                             style={{ height: `${ctp ? ctp : 0}%` }}
-                            className={`absolute w-full bbn rounded-lg opacity-50 self-end ${
+                            className={`absolute w-full rounded-lg opacity-50 self-end ${
                                 ctp === 100 ? "bg-green-400" : "bg-primary"
                             }`}
                         ></div>
@@ -76,11 +76,11 @@ export function progressCalculator(
     setCtp: SetState<number>
 ) {
     const ctp = (100 * completedTasks.length) / total;
-    const totalCtp = parseInt(ctp.toFixed(), 10);
+    const totalCtp = Math.floor(ctp);
 
     const achievedArray = completedTasks.map((item) => item.achieved);
     const totalAchieved = achievedArray.reduce((sum, num) => sum + num, 0);
-    const totalProgress = parseInt((totalAchieved / total).toFixed(), 10);
+    const totalProgress = Math.floor(totalAchieved / total);
 
     let currentProgress = 0;
     let currentCtp = 0;
@@ -94,8 +94,8 @@ export function progressCalculator(
         if (currentCtp >= totalCtp) currentCtp = totalCtp;
         if (currentProgress >= totalProgress) currentProgress = totalProgress;
 
-        setProgress(parseInt(currentProgress.toFixed(), 10));
-        setCtp(parseInt(currentCtp.toFixed(), 10));
+        setProgress(Math.floor(currentProgress));
+        setCtp(Math.floor(currentCtp));
 
         if (currentProgress === totalProgress && currentCtp === totalCtp) {
             clearInterval(interval);
