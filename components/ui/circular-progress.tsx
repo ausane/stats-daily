@@ -76,11 +76,11 @@ export function progressCalculator(
     setCtp: SetState<number>
 ) {
     const ctp = (100 * completedTasks.length) / total;
-    const totalCtp = parseInt(ctp.toFixed(), 10);
+    const totalCtp = Math.floor(ctp);
 
     const achievedArray = completedTasks.map((item) => item.achieved);
     const totalAchieved = achievedArray.reduce((sum, num) => sum + num, 0);
-    const totalProgress = parseInt((totalAchieved / total).toFixed(), 10);
+    const totalProgress = Math.floor(totalAchieved / total);
 
     let currentProgress = 0;
     let currentCtp = 0;
@@ -94,8 +94,8 @@ export function progressCalculator(
         if (currentCtp >= totalCtp) currentCtp = totalCtp;
         if (currentProgress >= totalProgress) currentProgress = totalProgress;
 
-        setProgress(parseInt(currentProgress.toFixed(), 10));
-        setCtp(parseInt(currentCtp.toFixed(), 10));
+        setProgress(Math.floor(currentProgress));
+        setCtp(Math.floor(currentCtp));
 
         if (currentProgress === totalProgress && currentCtp === totalCtp) {
             clearInterval(interval);
