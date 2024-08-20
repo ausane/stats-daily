@@ -1,5 +1,5 @@
 import connectToDatabase from "@/lib/mongodb";
-import { Task } from "@/models/task.model";
+import { Area } from "@/models/task.model";
 import { auth } from "@clerk/nextjs/server";
 import mongoose from "mongoose";
 
@@ -8,8 +8,8 @@ export const fetchTasks = async () => {
   const { userId } = auth();
 
   try {
-    const response = await Task.find({ userId }).sort({ updatedAt: -1 });
-    if (!response) throw new Error("Task not found!");
+    const response = await Area.find({ userId }).sort({ updatedAt: -1 });
+    if (!response) throw new Error("Area not found!");
 
     return response;
   } catch (error) {
@@ -43,8 +43,8 @@ export const fetchAreaById = async (areaId: string) => {
     // Throw an error if id is invalid
     if (!isValidObjectId) throw new Error("Invalid id!");
 
-    const response = await Task.findById(areaId);
-    if (!response) throw new Error("Task not found!");
+    const response = await Area.findById(areaId);
+    if (!response) throw new Error("Area not found!");
 
     return response;
   } catch (error) {

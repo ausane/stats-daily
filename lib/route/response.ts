@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { TStat, TTask } from "../types";
+import { TArea, TTask } from "../types";
 import { z } from "zod";
 
 // Response utility functions
@@ -36,7 +36,7 @@ export function duplicateAreaResponse(areaName: string) {
   );
 }
 
-export function newAreaCreatedResponse(newArea: TStat) {
+export function newAreaCreatedResponse(newArea: TArea) {
   const { _id: areaId, area: areaName } = newArea;
   return NextResponse.json({ areaId, areaName }, { status: 201 });
 }
@@ -74,7 +74,7 @@ export function errorResponse() {
   );
 }
 
-export function areaDeletionResponse(area: TStat) {
+export function areaDeletionResponse(area: TArea) {
   return NextResponse.json({
     message: `Area '${area?.area}' deleted!`,
     area,

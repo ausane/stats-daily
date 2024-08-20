@@ -1,6 +1,6 @@
 "use client";
 
-import { AddNewTaskProps, InputChangeEvent, TStat, TTask } from "@/lib/types";
+import { AddNewTaskProps, InputChangeEvent, TArea, TTask } from "@/lib/types";
 import DailyNote from "./area/daily-note";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import TaskListItem from "./task-list-item";
@@ -34,7 +34,7 @@ import {
   undoTaskCompletion,
 } from "@/features/task-slice";
 
-export default function TaskList({ data }: { data: TStat }) {
+export default function TaskList({ data }: { data: TArea }) {
   const { _id: areaId, tasks, note } = data;
   const dispatch = useAppDispatch();
 
@@ -43,11 +43,11 @@ export default function TaskList({ data }: { data: TStat }) {
   const [addTaskInput, setAddTaskInput] = useState(false);
 
   const cdts = useMemo(
-    () => tasks?.filter((task) => task.completed === true).sort(st),
+    () => tasks?.filter((task) => task.completed).sort(st),
     [tasks],
   );
   const icts = useMemo(
-    () => tasks?.filter((task) => task.completed === false).sort(st),
+    () => tasks?.filter((task) => !task.completed).sort(st),
     [tasks],
   );
 

@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import { TStat, TTask } from "@/lib/types";
+import { TArea, TTask } from "@/lib/types";
 
 const { Schema, model, models } = mongoose;
 
 // Define a sub-schema for the tasks array
-const taskSubSchema = new Schema<TTask>(
+export const taskSchema = new Schema<TTask>(
   {
     task: {
       type: String,
@@ -27,7 +27,7 @@ const taskSubSchema = new Schema<TTask>(
   },
 );
 
-export const taskSchema = new Schema<TStat>(
+export const areaSchema = new Schema<TArea>(
   {
     userId: {
       type: String,
@@ -43,11 +43,11 @@ export const taskSchema = new Schema<TStat>(
       type: String,
       trim: true,
     },
-    tasks: [taskSubSchema],
+    tasks: [taskSchema],
   },
   {
     timestamps: true,
   },
 );
 
-export const Task = models.Task || model<TStat>("Task", taskSchema);
+export const Area = models.Area || model<TArea>("Area", areaSchema);
