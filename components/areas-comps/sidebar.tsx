@@ -10,114 +10,104 @@ import { Menu, X, SquarePen } from "lucide-react";
 import IconButton from "../ui/icon-button";
 
 export default function Sidebar({ data }: { data: TSC[] | void }) {
-    const dispatch = useAppDispatch();
-    const areas = useAppSelector((state) => state.area.areas);
+  const dispatch = useAppDispatch();
+  const areas = useAppSelector((state) => state.area.areas);
 
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    const currentPath = usePathname();
-    const segments = currentPath.split("/"); // Split path by '/'
-    const id = segments[segments.length - 1]; // Get the last segment
+  const currentPath = usePathname();
+  const segments = currentPath.split("/"); // Split path by '/'
+  const id = segments[segments.length - 1]; // Get the last segment
 
-    useEffect(() => {
-        dispatch(insertAllAreas(data));
-    }, [data, dispatch]);
+  useEffect(() => {
+    dispatch(insertAllAreas(data));
+  }, [data, dispatch]);
 
-    const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
-    };
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
-    return (
-        <>
-            <IconButton
-                className={`w-10 h-10 max-md:flex md:hidden fixed top-4 left-4 z-10 ${
-                    isSidebarOpen && "hidden"
-                }`}
-                onClick={toggleSidebar}
-            >
-                <Menu size={20} />
+  return (
+    <>
+      <IconButton
+        className={`fixed left-4 top-4 z-10 h-10 w-10 max-md:flex md:hidden ${
+          isSidebarOpen && "hidden"
+        }`}
+        onClick={toggleSidebar}
+      >
+        <Menu size={20} />
+      </IconButton>
+
+      <div
+        className={`fixed inset-0 z-40 bg-black bg-opacity-50 transition-transform duration-300 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } hidden max-md:block`}
+        onClick={toggleSidebar}
+      >
+        <div
+          className="h-full w-80 max-w-sm transform bg-background px-2 py-4 shadow-lg transition-transform duration-300"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex-end sticky top-0 mb-2 box-border h-10 w-full bg-background">
+            <IconButton className="h-10 w-10" onClick={toggleSidebar}>
+              <X size={20} />
             </IconButton>
+          </div>
+          <SidebarContent
+            areas={areas}
+            areaId={id}
+            toggleSidebar={toggleSidebar}
+          />
+        </div>
+      </div>
 
-            <div
-                className={`fixed inset-0 z-40 transition-transform duration-300 bg-black bg-opacity-50 ${
-                    isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-                } max-md:block hidden`}
-                onClick={toggleSidebar}
-            >
-                <div
-                    className="w-80 max-w-sm h-full bg-background px-2 py-4 transition-transform duration-300 transform shadow-lg"
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <div className="w-full h-10 flex-end mb-2 box-border sticky top-0 bg-background">
-                        <IconButton
-                            className="w-10 h-10"
-                            onClick={toggleSidebar}
-                        >
-                            <X size={20} />
-                        </IconButton>
-                    </div>
-                    <SidebarContent
-                        areas={areas}
-                        areaId={id}
-                        toggleSidebar={toggleSidebar}
-                    />
-                </div>
-            </div>
-
-            <div className="w-1/4 h-full bbn box-border overflow-auto px-2 max-md:hidden max-lg:w-2/5">
-                <SidebarContent areas={areas} areaId={id} />
-            </div>
-        </>
-    );
+      <div className="bbn box-border h-full w-1/4 overflow-auto px-2 max-lg:w-2/5 max-md:hidden">
+        <SidebarContent areas={areas} areaId={id} />
+      </div>
+    </>
+  );
 }
 
 export function SidebarContent({
-    areaId,
-    areas,
-    toggleSidebar,
+  areaId,
+  areas,
+  toggleSidebar,
 }: {
-    areaId: string;
-    areas: TSC[];
-    toggleSidebar?: () => void;
+  areaId: string;
+  areas: TSC[];
+  toggleSidebar?: () => void;
 }) {
-    return (
-        <>
-            <div className="w-full flex-start box-border sticky top-4 bg-background">
-                <Link
-                    className="flex-between w-full h-10 opacity-80 hover:bg-accent hover:text-accent-foreground px-4 rounded-lg active:scale-95 transition-transform duration-200"
-                    onClick={toggleSidebar}
-                    href={`/areas/create`}
-                >
-                    <h2 className="text-lg">StatsDaily</h2>
-                    <SquarePen size={20} />
-                </Link>
-            </div>
-            <div className="overflow-auto w-full h-[calc(100%-6rem)] sticky top-20 px-2">
-                {areas?.map((item, index) => (
-                    <div
-                        key={index}
-                        className={`w-[calc(100%-2px)] my-2 flex-start box-border rounded-md hover:bg-secondary
-                                    ${
-                                        item.areaId === areaId
-                                            ? "bg-secondary"
-                                            : "bg-background"
-                                    }`}
-                    >
-                        <Link
-                            onClick={toggleSidebar}
-                            href={`/areas/${item.areaId}`}
-                            className="w-full flex-start gap-4 box-border"
-                        >
-                            <span className="h-9 w-9 flex-center bbn rounded-md">
-                                {index + 1}
-                            </span>
-                            <p className="w-[calc(100%-4rem)] truncate">
-                                {item.areaName}
-                            </p>
-                        </Link>
-                    </div>
-                ))}
-            </div>
-        </>
-    );
+  return (
+    <>
+      <div className="flex-start sticky top-4 box-border w-full bg-background">
+        <Link
+          className="flex-between h-10 w-full rounded-lg px-4 opacity-80 transition-transform duration-200 hover:bg-accent hover:text-accent-foreground active:scale-95"
+          onClick={toggleSidebar}
+          href={`/areas/create`}
+        >
+          <h2 className="text-lg">StatsDaily</h2>
+          <SquarePen size={20} />
+        </Link>
+      </div>
+      <div className="sticky top-20 h-[calc(100%-6rem)] w-full overflow-auto px-2">
+        {areas?.map((item, index) => (
+          <div
+            key={index}
+            className={`flex-start my-2 box-border w-[calc(100%-2px)] rounded-md hover:bg-secondary ${item.areaId === areaId ? "bg-secondary" : "bg-background"}`}
+          >
+            <Link
+              onClick={toggleSidebar}
+              href={`/areas/${item.areaId}`}
+              className="flex-start box-border w-full gap-4"
+            >
+              <span className="flex-center bbn h-9 w-9 rounded-md">
+                {index + 1}
+              </span>
+              <p className="w-[calc(100%-4rem)] truncate">{item.areaName}</p>
+            </Link>
+          </div>
+        ))}
+      </div>
+    </>
+  );
 }
