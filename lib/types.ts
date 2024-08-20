@@ -4,12 +4,21 @@ import React, { ButtonHTMLAttributes, InputHTMLAttributes } from "react";
 
 // Stats Schema Type
 export type TStats = {
+  userId: string;
   note?: string;
-  stats: TStat[];
+  taskStats: taskStats[];
 } & Document;
 
+export type taskStats = {
+  area: string;
+  note: string;
+  total: number;
+  completed: number;
+  achieved: number;
+};
+
 // Stat Schema Type
-export type TStat = {
+export type TArea = {
   userId: string;
   area: string;
   note?: string;

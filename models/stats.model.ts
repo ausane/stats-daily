@@ -1,15 +1,39 @@
 import mongoose from "mongoose";
-import { taskSchema } from "./task.model";
 import { TStats } from "@/lib/types";
 
 const { Schema, model, models } = mongoose;
 
 const statsSchema = new Schema<TStats>(
   {
-    stats: [
+    userId: {
+      type: String,
+      required: true,
+    },
+    taskStats: [
       {
-        type: mongoose.Schema.Types.Mixed,
-        required: true,
+        area: {
+          type: String,
+          required: true,
+        },
+        note: {
+          type: String,
+          // required: true,
+        },
+        total: {
+          type: Number,
+          required: true,
+          default: 0,
+        },
+        completed: {
+          type: Number,
+          required: true,
+          default: 0,
+        },
+        achieved: {
+          type: Number,
+          required: true,
+          default: 0,
+        },
       },
     ],
     note: {

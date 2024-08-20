@@ -1,12 +1,12 @@
-import { TStat } from "@/lib/types";
+import { TArea } from "@/lib/types";
 import { fetchAreaById } from "@/lib/stats";
 import TaskList from "../task-list";
 import AreaHeader from "./area-header";
 
 export default async function ShowTasks({ areaId }: { areaId: string }) {
-  type TSearchedData = TStat | void | null | undefined;
+  type TSearchedData = TArea | void | null | undefined;
   const searchedData: TSearchedData = await fetchAreaById(areaId);
-  const serializableData: TStat =
+  const serializableData: TArea =
     searchedData && JSON.parse(JSON.stringify(searchedData));
 
   if (serializableData) {
