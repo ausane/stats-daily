@@ -5,12 +5,12 @@ import { auth } from "@clerk/nextjs/server";
 export type TaskStatsProps = { params: { areaId: string } };
 
 export default async function TaskStats(props: TaskStatsProps) {
-    const { areaId } = props.params;
-    const { userId } = auth();
+  const { areaId } = props.params;
+  const { userId } = auth();
 
-    if (areaId === "create" && userId) {
-        return <CreateArea userId={userId} />;
-    } else {
-        return <ShowTasks areaId={areaId} />;
-    }
+  if (areaId === "create" && userId) {
+    return <CreateArea userId={userId} />;
+  } else {
+    return <ShowTasks areaId={areaId} />;
+  }
 }

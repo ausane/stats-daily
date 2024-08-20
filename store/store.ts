@@ -4,11 +4,11 @@ import areaReducer from "@/features/area-slice";
 import taskReducer from "@/features/task-slice";
 
 export const store = configureStore({
-    reducer: {
-        form: formReducer,
-        area: areaReducer,
-        task: taskReducer,
-    },
+  reducer: {
+    form: formReducer,
+    area: areaReducer,
+    task: taskReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
