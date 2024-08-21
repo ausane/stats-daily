@@ -14,7 +14,9 @@ export async function handleSubmit(formData: StatsWithoutDocument) {
     if (jsonResponse.duplicate) return jsonResponse;
 
     // Throw an error if the response status is not okay
-    if (!response.ok) throw new Error("Failed to create new area!");
+    if (!response.ok) {
+      throw new Error(jsonResponse.error || "Failed to create new area!");
+    }
 
     // Return the JSON response
     return jsonResponse;

@@ -33,8 +33,9 @@ export default function CreateArea({ userId }: { userId: string }) {
 
   // State to manage loading status
   const [isLoading, setIsLoading] = useState(false);
-  const [prevAreaInput, setPrevAreaInput] = useState("");
   const [inputError, setInputError] = useState("");
+  const [prevAreaInput, setPrevAreaInput] = useState("");
+  const [noteError, setNoteError] = useState(false);
 
   // Helper variable to store the trimmed area name
   const areaName = area.trim();
@@ -66,8 +67,14 @@ export default function CreateArea({ userId }: { userId: string }) {
     if (!areaName) setInputError("Area cannot be empty!");
     if (!tasks.length) dispatch(handleEmptyTasks("Tasks cannot be empty!"));
     if (areaName.length > 20) setInputError("Only 20 characters allowed!");
+    if (note.length > 400) setNoteError(true);
 
-    return areaName && tasks.length && areaName.length <= 20;
+    return (
+      areaName.length > 0 &&
+      tasks.length > 0 &&
+      areaName.length <= 20 &&
+      note.length <= 400
+    );
   };
 
   // Duplicate area handler function
@@ -159,9 +166,18 @@ export default function CreateArea({ userId }: { userId: string }) {
                 name="note"
                 value={note}
                 ref={noteRef}
-                onChange={(e) => dispatch(handleNoteChange(e.target.value))}
-                className="bbn mt-1 h-[calc(100%-28px)] min-h-20 w-full resize-none rounded-md bg-transparent p-1 max-sm:resize-y"
+                className={`bbn mt-1 ${noteError ? "h-[calc(100%-48px)]" : "h-[calc(100%-28px)]"} min-h-20 w-full resize-none rounded-md bg-transparent p-1 max-sm:resize-y`}
+                onChange={(e) => {
+                  dispatch(handleNoteChange(e.target.value));
+                  setNoteError(false);
+                }}
               />
+              {noteError && (
+                <span className="flex-start -z-10 gap-1 text-sm text-[#f93a37] opacity-80">
+                  <CircleAlert size={15} />
+                  <span>Only 400 characters allowed!</span>
+                </span>
+              )}
             </label>
           </div>
 
