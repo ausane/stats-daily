@@ -2,12 +2,12 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { deleteArea } from "@/lib/utils/handle-delete";
+import { deleteArea } from "@/lib/services/handle-delete";
 import { useAppDispatch } from "@/store/hooks";
 import { removeAreaById, setCurrentArea } from "@/features/area-slice";
 import IconButton from "@/components/ui/icon-button";
 import Input from "@/components/ui/input";
-import { updateAreaName } from "@/lib/utils/handle-update";
+import { updateAreaName } from "@/lib/services/handle-update";
 import { ConfirmDeletionDialog } from "@/components/confirm-dialog";
 import { InputChangeEvent, TaskItemCompoProps } from "@/lib/types";
 import { ModeToggle } from "@/components/theme-provider";

@@ -5,7 +5,7 @@ import DailyNote from "./area/daily-note";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import TaskListItem from "./task-list-item";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { updateTask } from "@/lib/utils/handle-update";
+import { updateTask } from "@/lib/services/handle-update";
 import {
   TaskState,
   TaskContent,
@@ -13,7 +13,7 @@ import {
   InputRequiredAlert,
 } from "../task-items";
 import CircularProgress, { progressCalculator } from "../ui/progress";
-import { createNewTask } from "@/lib/utils/handle-update";
+import { createNewTask } from "@/lib/services/handle-update";
 import IconButton from "../ui/icon-button";
 import { ValidationAlertDialog } from "../confirm-dialog";
 import { TooltipCompo } from "../ui/tooltip";

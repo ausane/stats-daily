@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { updateNote } from "@/lib/utils/handle-update";
+import { updateNote } from "@/lib/services/handle-update";
 import { X, Check, Pencil } from "lucide-react";
 import IconButton from "@/components/ui/icon-button";
 import { ValidationAlertDialog } from "@/components/confirm-dialog";

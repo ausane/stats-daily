@@ -1,5 +1,5 @@
 import { TArea } from "@/lib/types";
-import { fetchAreaById } from "@/lib/stats";
+import { fetchAreaById } from "@/lib/db/stats";
 import TaskList from "../task-list";
 import AreaHeader from "./area-header";
 

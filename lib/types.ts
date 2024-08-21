@@ -7,6 +7,8 @@ export type TStats = {
   userId: string;
   note?: string;
   taskStats: taskStats[];
+  updatedAt?: Date;
+  createdAt?: Date;
 } & Document;
 
 export type taskStats = {

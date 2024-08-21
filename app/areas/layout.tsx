@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { fetchAreas } from "@/lib/stats";
+import { fetchAreas } from "@/lib/db/stats";
 import Sidebar from "@/components/areas-comps/sidebar";
 
 export const metadata: Metadata = {
-    title: "Dashboard",
-    description: "your tasks",
+  title: "Dashboard",
+  description: "your tasks",
 };
 
 export default async function DashboardLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    return (
-        <div className="w-screen h-screen flex">
-            <Sidebar data={await fetchAreas()} />
-            {children}
-        </div>
-    );
+  return (
+    <div className="flex h-screen w-screen">
+      <Sidebar data={await fetchAreas()} />
+      {children}
+    </div>
+  );
 }

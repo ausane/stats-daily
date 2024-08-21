@@ -17,7 +17,7 @@ const statsSchema = new Schema<TStats>(
         },
         note: {
           type: String,
-          // required: true,
+          trim: true,
         },
         total: {
           type: Number,
