@@ -71,7 +71,7 @@
 }
 
 .bbn {
-  @apply border box-border;
+  @apply box-border border;
 }
 
 .flex-start {
@@ -95,7 +95,7 @@
 }
 
 .danger-button {
-  @apply btn bbn rounded px-2 bg-transparent hover:border-red-700 hover:text-red-500;
+  @apply btn bbn rounded bg-transparent px-2 hover:border-red-700 hover:text-red-500;
 }
 
 .contained-button {
@@ -103,15 +103,15 @@
 }
 
 .circle-button {
-  @apply btn border-none opacity-40 hover:opacity-100 p-2 rounded-full hover:bg-neutral-700;
+  @apply btn rounded-full border-none p-2 opacity-40 hover:bg-neutral-700 hover:opacity-100;
 }
 
 .rect-button {
-  @apply btn outlined-button px-2 py-1 rounded;
+  @apply btn outlined-button rounded px-2 py-1;
 }
 
 .icon-button {
-  @apply btn outlined-button p-1 rounded;
+  @apply btn outlined-button rounded p-1;
 }
 
 .outlined-button {
@@ -119,21 +119,21 @@
 }
 
 .btn {
-  @apply disabled:cursor-not-allowed disabled:opacity-80 ease-in duration-100;
+  @apply duration-100 ease-in disabled:cursor-not-allowed disabled:opacity-80;
 }
 
 input {
-  @apply bg-transparent rounded-md p-2 bbn h-8 w-full;
+  @apply bbn h-8 w-full rounded-md bg-transparent p-2;
 }
 
 .empty-alert {
-  @apply absolute ml-3 flex-start text-sm gap-1 opacity-80 text-[#f93a37] -z-10;
+  @apply flex-start absolute -z-10 ml-3 gap-1 text-sm text-[#f93a37] opacity-80;
 }
 
 .status-button {
-  @apply size-4 bbn rounded-full p-0;
+  @apply bbn size-4 rounded-full p-0;
 }
 
 .main-content {
-  @apply w-3/4 h-full box-border max-md:w-full;
+  @apply box-border h-full w-3/4 max-md:w-full;
 }

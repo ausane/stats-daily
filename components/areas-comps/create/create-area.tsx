@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState, useRef, useEffect } from "react";
-import { handleSubmit } from "@/lib/utils/handle-submit";
+import { handleSubmit } from "@/lib/services/handle-submit";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { insertArea } from "@/features/area-slice";
 import { CircleAlert } from "lucide-react";

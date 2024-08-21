@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import connectToDatabase from "@/lib/mongodb";
+import connectToDatabase from "@/lib/db/mongodb";
 import {
   areaZodSchema,
   areaNameZodSchema,
   noteZodSchema,
   taskZodSchema,
-} from "@/lib/zod-schema";
+} from "@/lib/route/zod-schema";
 import { z } from "zod";
 import {
   isValidObjectId,
@@ -35,6 +35,7 @@ import {
   areaRenamedResponse,
   zodErrorResponse,
 } from "@/lib/route/response";
+import "@/lib/cron";
 
 // POST REQUEST HANDLER
 export async function POST(request: NextRequest) {
