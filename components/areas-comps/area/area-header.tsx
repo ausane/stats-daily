@@ -8,7 +8,7 @@ import { removeAreaById, setCurrentArea } from "@/features/area-slice";
 import IconButton from "@/components/ui/icon-button";
 import Input from "@/components/ui/input";
 import { updateAreaName } from "@/lib/services/handle-update";
-import { ConfirmDeletionDialog } from "@/components/confirm-dialog";
+import { ConfirmDeletionDialog } from "@/components/dialogs";
 import { InputChangeEvent, TaskItemCompoProps } from "@/lib/types";
 import { ModeToggle } from "@/components/theme-provider";
 import { handleKeyDownEnter } from "@/lib/constants";
@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { UserButton } from "@clerk/nextjs";
 import { CircleAlert, Pencil, Trash, ChevronDown } from "lucide-react";
-import { RenameAreaDialog } from "@/components/confirm-dialog";
+import { RenameAreaDialog } from "@/components/dialogs";
 
 export default function AreaHeader(props: { areaId: string; area: string }) {
   const { areaId, area } = props;

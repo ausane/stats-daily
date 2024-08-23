@@ -15,7 +15,7 @@ import {
 import CircularProgress, { progressCalculator } from "../ui/progress";
 import { createNewTask } from "@/lib/services/handle-update";
 import IconButton from "../ui/icon-button";
-import { ValidationAlertDialog } from "../confirm-dialog";
+import { ValidationAlertDialog } from "../dialogs";
 import { TooltipCompo } from "../ui/tooltip";
 import Input from "../ui/input";
 import { handleKeyDownEnter, ntf, st } from "@/lib/constants";
@@ -112,6 +112,7 @@ export default function TaskList({ data }: { data: TArea }) {
                 setOita(dfa);
                 setAddTaskInput(!addTaskInput);
               }}
+              aria-label={`${addTaskInput ? "Close adding task" : "Add new task"}`}
             >
               <Plus />
             </IconButton>
@@ -189,6 +190,7 @@ export function ShowCompletedTasks({
             circle={true}
             className={`duration-400 p-0 transition-transform ease-in-out ${open ? "rotate-180" : "rotate-0"}`}
             onClick={() => setOpen(!open)}
+            aria-label={`${open ? "Close completed tasks tab" : "Open completed tasks tab"}`}
           >
             <ArrowUp />
           </IconButton>
@@ -203,6 +205,7 @@ export function ShowCompletedTasks({
               <button
                 onClick={() => handleUndoTask(index)}
                 className="status-button bg-red-700 hover:bg-red-800"
+                aria-label="Undo Task"
               ></button>
             </TaskState>
 
@@ -309,6 +312,9 @@ export function AddNewTask(props: AddNewTaskProps) {
             onChange={handleNewTaskInputChange}
             onKeyDown={(e) => handleKeyDownEnter(e, addNewTask)}
             onBlur={(e) => handleOnBlur(e)}
+            aria-label="Add new task input"
+            aria-invalid={emptyInputAlert}
+            aria-required="true"
           />
           {emptyInputAlert && <InputRequiredAlert />}
         </TaskContent>
@@ -322,6 +328,7 @@ export function AddNewTask(props: AddNewTaskProps) {
                 id="submit-button"
                 variant="default"
                 onClick={addNewTask}
+                aria-label="Save New Task"
               >
                 <Check size={15} />
               </IconButton>
@@ -331,6 +338,7 @@ export function AddNewTask(props: AddNewTaskProps) {
                   setAddTaskInput(false);
                   setNewTaskValue("");
                 }}
+                aria-label="Close Adding Task"
               >
                 <X size={15} />
               </IconButton>
