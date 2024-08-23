@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "@/store/hooks";
-import { TaskCompletionDialog, ValidationAlertDialog } from "../confirm-dialog";
+import { TaskCompletionDialog, ValidationAlertDialog } from "../dialogs";
 import { Slider } from "../ui/slider";
 import { updateTask } from "@/lib/services/handle-update";
 import IconButton from "../ui/icon-button";
@@ -131,26 +131,39 @@ export default function TaskListItem(props: TaskListItemsProps) {
                 {emptyInputAlert && <InputRequiredAlert />}
               </>
             ) : (
-              <p className="w-11/12 truncate">{task}</p>
+              <p
+                className="w-11/12 truncate"
+                aria-live="polite"
+                aria-relevant="additions"
+              >
+                {task}
+              </p>
             )}
           </TaskContent>
 
           <TaskOptions>
             {oita ? (
               <>
-                <IconButton id="edit-button" onClick={handleEditTask}>
+                <IconButton
+                  id="edit-button"
+                  onClick={handleEditTask}
+                  aria-label="Save Edited Task"
+                >
                   <Check size={15} />
                 </IconButton>
-                <IconButton onClick={() => nfaf(false, index)}>
+                <IconButton
+                  onClick={() => nfaf(false, index)}
+                  aria-label="Close Editing Task"
+                >
                   <X size={15} />
                 </IconButton>
               </>
             ) : (
               <>
-                <IconButton onClick={handleEditClick}>
+                <IconButton onClick={handleEditClick} aria-label="Edit Task">
                   <Pencil size={15} />
                 </IconButton>
-                <IconButton onClick={handleDeleteTask}>
+                <IconButton onClick={handleDeleteTask} aria-label="Delete Task">
                   <Trash size={15} />
                 </IconButton>
               </>

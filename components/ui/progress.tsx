@@ -15,7 +15,14 @@ export default function CircularProgress(props: CircularProgressProps) {
   return (
     <div className="flex-between relative h-2/5 w-full gap-4">
       <TooltipCompo tip="Progress">
-        <div className="bbn flex-center relative h-full w-3/5 rounded-md">
+        <div
+          className="bbn flex-center relative h-full w-3/5 rounded-md"
+          role="progressbar"
+          aria-label="Progress of the area"
+          aria-valuenow={validProgress}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        >
           <svg className="rotate-[-90deg]">
             <circle
               className="text-secondary"
@@ -44,7 +51,15 @@ export default function CircularProgress(props: CircularProgressProps) {
           <div className="flex-center absolute inset-0">{validProgress}%</div>
         </div>
       </TooltipCompo>
-      <div className="bbn flex-center h-full w-2/5 rounded-md">
+
+      <div
+        className="bbn flex-center h-full w-2/5 rounded-md"
+        role="progressbar"
+        aria-label="Tasks completed"
+        aria-valuenow={ctp || 0}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
         <TooltipCompo tip="Tasks Completed">
           <div className="relative flex h-[108px] w-12">
             <div className="absolute h-full w-full rounded-lg bg-secondary"></div>

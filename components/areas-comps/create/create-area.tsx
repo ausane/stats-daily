@@ -134,6 +134,7 @@ export default function CreateArea({ userId }: { userId: string }) {
               type="submit"
               className="bg-green-700 text-[#fafafa] hover:bg-green-800"
               disabled={isLoading} // Disable button when loading
+              aria-label="Submit Area"
             >
               {isLoading ? "Creating..." : "Create"}
             </Button>

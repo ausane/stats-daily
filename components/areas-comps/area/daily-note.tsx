@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { updateNote } from "@/lib/services/handle-update";
 import { X, Check, Pencil } from "lucide-react";
 import IconButton from "@/components/ui/icon-button";
-import { ValidationAlertDialog } from "@/components/confirm-dialog";
+import { ValidationAlertDialog } from "@/components/dialogs";
 
 export default function DailyNote({ id, note }: { id: string; note: string }) {
   const tRef = useRef<HTMLTextAreaElement>(null);
@@ -50,15 +50,24 @@ export default function DailyNote({ id, note }: { id: string; note: string }) {
         <h2 className="font-bold">Note</h2>
         {inputNote ? (
           <span className="flex gap-2">
-            <IconButton onClick={handleNoteChange}>
+            <IconButton
+              onClick={handleNoteChange}
+              aria-label="Save Edited Note"
+            >
               <Check size={15} />
             </IconButton>
-            <IconButton onClick={handleInputNoteClose}>
+            <IconButton
+              onClick={handleInputNoteClose}
+              aria-label="Close Editing Note"
+            >
               <X size={15} />
             </IconButton>
           </span>
         ) : (
-          <IconButton onClick={() => setInputNote(true)}>
+          <IconButton
+            onClick={() => setInputNote(true)}
+            aria-label="Edit note of the area"
+          >
             <Pencil size={15} />
           </IconButton>
         )}
@@ -70,6 +79,7 @@ export default function DailyNote({ id, note }: { id: string; note: string }) {
           value={noteInput}
           className="bbn h-[calc(100%-40px)] w-full resize-none rounded-md bg-transparent p-1"
           onChange={(e) => setNoteInput(e.target.value)}
+          aria-label="Edit Note Textarea"
         />
       ) : (
         <div className="h-[calc(100%-40px)] w-full overflow-auto overflow-x-hidden text-ellipsis">
