@@ -20,7 +20,7 @@ export function TaskOptions({ children }: { children: ReactNode }) {
 export function InputRequiredAlert() {
   return (
     <span role="alert" aria-live="assertive" className="empty-alert">
-      <CircleAlert size={15} />
+      <CircleAlert size={15} aria-hidden="true" />
       <span>Task cannot be empty!</span>
     </span>
   );

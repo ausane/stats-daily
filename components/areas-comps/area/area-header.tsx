@@ -11,7 +11,7 @@ import { updateAreaName } from "@/lib/services/handle-update";
 import { ConfirmDeletionDialog } from "@/components/dialogs";
 import { InputChangeEvent, TaskItemCompoProps } from "@/lib/types";
 import { ModeToggle } from "@/components/theme-provider";
-import { handleKeyDownEnter } from "@/lib/constants";
+import { handleKeyDownEnter } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -131,7 +131,7 @@ export default function AreaHeader(props: { areaId: string; area: string }) {
           />
           {inputError && (
             <span className="flex-start gap-1 text-sm text-[#f93a37] opacity-80">
-              <CircleAlert size={15} />
+              <CircleAlert size={15} aria-hidden="true" />
               <span>{inputError}</span>
             </span>
           )}

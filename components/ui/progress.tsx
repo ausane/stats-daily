@@ -14,11 +14,11 @@ export default function CircularProgress(props: CircularProgressProps) {
 
   return (
     <div className="flex-between relative h-2/5 w-full gap-4">
-      <TooltipCompo tip="Progress">
+      <TooltipCompo tip="Performance">
         <div
           className="bbn flex-center relative h-full w-3/5 rounded-md"
           role="progressbar"
-          aria-label="Progress of the area"
+          aria-label="Performance in the area"
           aria-valuenow={validProgress}
           aria-valuemin={0}
           aria-valuemax={100}

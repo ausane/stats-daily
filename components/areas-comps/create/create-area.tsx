@@ -32,9 +32,10 @@ export default function CreateArea({ userId }: { userId: string }) {
   const router = useRouter();
 
   // State to manage loading status
-  const [isLoading, setIsLoading] = useState(false);
   const [inputError, setInputError] = useState("");
   const [prevAreaInput, setPrevAreaInput] = useState("");
+  const [loadingMessage, setLoadingMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [noteError, setNoteError] = useState(false);
 
   // Helper variable to store the trimmed area name
@@ -42,6 +43,7 @@ export default function CreateArea({ userId }: { userId: string }) {
 
   // Reset form and focus on area input
   useEffect(() => {
+    setLoadingMessage("");
     dispatch(resetForm());
     areaRef.current?.focus();
   }, [dispatch]);
@@ -54,6 +56,7 @@ export default function CreateArea({ userId }: { userId: string }) {
     if (!validateForm() || !isAreaChanged()) return;
 
     setIsLoading(true);
+    setLoadingMessage("Creating New Area");
 
     // Handle Submit
     const response = await handleSubmit({ userId, area, note, tasks });
@@ -133,11 +136,21 @@ export default function CreateArea({ userId }: { userId: string }) {
             <Button
               type="submit"
               className="bg-green-700 text-[#fafafa] hover:bg-green-800"
-              disabled={isLoading} // Disable button when loading
+              disabled={isLoading}
+              role="button"
               aria-label="Submit Area"
+              aria-disabled={isLoading}
+              aria-live="polite"
             >
               {isLoading ? "Creating..." : "Create"}
             </Button>
+            <span
+              role="status"
+              aria-live="assertive"
+              className="absolute left-[-9999px]"
+            >
+              {loadingMessage}
+            </span>
           </div>
         </div>
         <div className="bbn flex h-4/5 w-full grow rounded-md max-sm:flex-col">
@@ -151,11 +164,20 @@ export default function CreateArea({ userId }: { userId: string }) {
               className="mt-1 h-10 w-full rounded-md"
               onChange={handleAreaChangeFunc}
               onKeyDown={(e) => handleKeyPress(e, noteRef)}
+              role="textbox"
+              aria-required="true"
+              aria-invalid={!!inputError}
+              aria-describedby={inputError ? "input-error-alert" : undefined}
               // required
             >
               {inputError && (
-                <span className="flex-start -z-10 mt-2 gap-1 text-sm text-[#f93a37] opacity-80">
-                  <CircleAlert size={15} />
+                <span
+                  id="input-error-alert"
+                  className="flex-start -z-10 mt-2 gap-1 text-sm text-[#f93a37] opacity-80"
+                  role="alert"
+                  aria-live="assertive"
+                >
+                  <CircleAlert size={15} aria-hidden="true" />
                   <span>{inputError}</span>
                 </span>
               )}
@@ -172,10 +194,19 @@ export default function CreateArea({ userId }: { userId: string }) {
                   dispatch(handleNoteChange(e.target.value));
                   setNoteError(false);
                 }}
+                role="textbox"
+                aria-required="false"
+                aria-invalid={noteError}
+                aria-describedby={noteError ? "note-error-alert" : undefined}
               />
               {noteError && (
-                <span className="flex-start -z-10 gap-1 text-sm text-[#f93a37] opacity-80">
-                  <CircleAlert size={15} />
+                <span
+                  id="note-error-alert"
+                  role="alert"
+                  aria-live="assertive"
+                  className="flex-start -z-10 gap-1 text-sm text-[#f93a37] opacity-80"
+                >
+                  <CircleAlert size={15} aria-hidden="true" />
                   <span>Only 400 characters allowed!</span>
                 </span>
               )}

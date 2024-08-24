@@ -36,6 +36,7 @@ export default function Sidebar({ data }: { data: TSC[] | void }) {
         onClick={toggleSidebar}
       >
         <Menu size={20} />
+        <span className="sr-only">Open Sidebar</span>
       </IconButton>
 
       <div
@@ -48,9 +49,10 @@ export default function Sidebar({ data }: { data: TSC[] | void }) {
           className="h-full w-80 max-w-sm transform bg-background px-2 py-4 shadow-lg transition-transform duration-300"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex-end sticky top-0 mb-2 box-border h-10 w-full bg-background">
-            <IconButton className="h-10 w-10" onClick={toggleSidebar}>
-              <X size={20} />
+          <div className="flex-end sticky top-0 mb-2 box-border h-8 w-full bg-background">
+            <IconButton onClick={toggleSidebar}>
+              <X size={15} />
+              <span className="sr-only">Close Sidebar</span>
             </IconButton>
           </div>
           <SidebarContent
@@ -79,7 +81,7 @@ export function SidebarContent({
 }) {
   return (
     <>
-      <div className="flex-start sticky top-4 box-border w-full bg-background">
+      <div className="flex-start sticky top-4 mb-4 box-border w-full bg-background">
         <Link
           className="flex-between h-10 w-full rounded-lg px-4 opacity-80 transition-transform duration-200 hover:bg-accent hover:text-accent-foreground active:scale-95"
           onClick={toggleSidebar}
@@ -87,6 +89,7 @@ export function SidebarContent({
         >
           <h2 className="text-lg">StatsDaily</h2>
           <SquarePen size={20} />
+          <span className="sr-only">Create new area</span>
         </Link>
       </div>
       <div className="sticky top-20 h-[calc(100%-6rem)] w-full overflow-auto px-2">

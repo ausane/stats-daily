@@ -79,6 +79,7 @@ export default function DailyNote({ id, note }: { id: string; note: string }) {
           value={noteInput}
           className="bbn h-[calc(100%-40px)] w-full resize-none rounded-md bg-transparent p-1"
           onChange={(e) => setNoteInput(e.target.value)}
+          role="textbox"
           aria-label="Edit Note Textarea"
         />
       ) : (
