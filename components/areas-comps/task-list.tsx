@@ -18,7 +18,7 @@ import IconButton from "../ui/icon-button";
 import { ValidationAlertDialog } from "../dialogs";
 import { TooltipCompo } from "../ui/tooltip";
 import Input from "../ui/input";
-import { handleKeyDownEnter, ntf, st } from "@/lib/constants";
+import { handleKeyDownEnter, ntf, st } from "@/lib/utils";
 import {
   ArrowUp,
   X,
@@ -232,10 +232,12 @@ export function AddNewTask(props: AddNewTaskProps) {
   const [newTaskValue, setNewTaskValue] = useState("");
   const [alertDialog, setAlertDialog] = useState(false);
   const [emptyInputAlert, setEmptyInputAlert] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
 
   useEffect(() => {
     if (addTaskInput) {
       setNewTaskValue("");
+      setLoadingMessage("");
       setEmptyInputAlert(false);
       inputRef.current?.focus();
     }
@@ -244,8 +246,10 @@ export function AddNewTask(props: AddNewTaskProps) {
   const dispatch = useAppDispatch();
 
   const addNewTask = async () => {
-    setLoading(true);
     if (!validateNewTask()) return;
+
+    setLoading(true);
+    setLoadingMessage("Saving New Task");
 
     const newTaskInput = ntf(newTaskValue, false, 0);
     const { newTasks } = await createNewTask(areaId, newTaskInput);
@@ -320,8 +324,17 @@ export function AddNewTask(props: AddNewTaskProps) {
         </TaskContent>
 
         <TaskOptions>
+          <span
+            role="status"
+            aria-live="assertive"
+            className="absolute left-[-9999px]"
+          >
+            {loadingMessage}
+          </span>
           {loading ? (
-            <Loader2 className="animate-spin" />
+            <>
+              <Loader2 className="animate-spin" />
+            </>
           ) : (
             <>
               <IconButton

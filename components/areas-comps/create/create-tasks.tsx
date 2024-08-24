@@ -7,7 +7,7 @@ import { X, CircleAlert } from "lucide-react";
 import Input from "@/components/ui/input";
 import IconButton from "@/components/ui/icon-button";
 import { InputChangeEvent } from "@/lib/types";
-import { handleKeyDownEnter } from "@/lib/constants";
+import { handleKeyDownEnter } from "@/lib/utils";
 import {
   handleTaskChange,
   addToTasks,
@@ -25,7 +25,7 @@ export default function CreateTasks() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Initialize all useState elements
-  const [placeholder, setPlaceholder] = useState("");
+  const [taskError, setTaskError] = useState("");
 
   // Initialize dispatch function
   const dispatch = useAppDispatch();
@@ -33,7 +33,7 @@ export default function CreateTasks() {
   // Input Change Event Handler
   const handleTaskInputChange = (event: InputChangeEvent) => {
     dispatch(handleTaskChange(event.target.value));
-    setPlaceholder("");
+    setTaskError("");
   };
 
   // Submit Task Handler Function
@@ -41,7 +41,7 @@ export default function CreateTasks() {
     const trimmedTask = task.trim();
 
     if (trimmedTask.length > 40) {
-      setPlaceholder("Only 40 characters allowed!");
+      setTaskError("Only 40 characters allowed!");
       return;
     }
 
@@ -52,7 +52,7 @@ export default function CreateTasks() {
       inputRef.current?.focus();
     } else {
       dispatch(handleTaskChange(""));
-      setPlaceholder("Task cannot be empty!");
+      setTaskError("Task cannot be empty!");
     }
   };
 
@@ -60,7 +60,7 @@ export default function CreateTasks() {
     <div className="h-full w-3/5 border-l max-sm:w-full max-sm:border-0">
       <div
         className={`flex w-full flex-col gap-2 border-b p-4 ${
-          placeholder ? "h-32" : "h-24"
+          taskError ? "h-32" : "h-24"
         }`}
       >
         <span className="relative flex w-full gap-2">
@@ -74,30 +74,47 @@ export default function CreateTasks() {
             onKeyDown={(e) => handleKeyDownEnter(e, submitTask)}
             className="mt-1 h-10 w-full rounded-md"
             labelClasses="w-full"
+            role="textbox"
+            aria-required="false"
+            aria-invalid={!!taskError}
+            aria-describedby={taskError ? "task-error-alert" : undefined}
             // required
           />
-          <Button type="button" className="self-end" onClick={submitTask}>
+          <Button
+            type="button"
+            className="self-end"
+            onClick={submitTask}
+            role="button"
+            aria-label="Add Task"
+          >
             Add
           </Button>
         </span>
-        {placeholder && (
-          <span className="flex-center gap-1 self-start text-sm text-[#f93a37] opacity-80">
-            <CircleAlert size={15} />
-            <span>{placeholder}</span>
+        {taskError && (
+          <span
+            id="task-error-alert"
+            className="flex-center gap-1 self-start text-sm text-[#f93a37] opacity-80"
+          >
+            <CircleAlert size={15} aria-hidden="true" />
+            <span>{taskError}</span>
           </span>
         )}
       </div>
 
       <div
         className={`overflow-auto ${
-          placeholder ? "h-[calc(100%-8rem)]" : "h-[calc(100%-6rem)]"
+          taskError ? "h-[calc(100%-8rem)]" : "h-[calc(100%-6rem)]"
         }`}
       >
         {!tasks.length && (
           <div className="flex-center relative h-full w-full opacity-80">
             {etem ? (
-              <span className="flex-center h-full w-full gap-1 text-[#f93a37]">
-                <CircleAlert size={15} />
+              <span
+                role="alert"
+                aria-live="assertive"
+                className="flex-center h-full w-full gap-1 text-[#f93a37]"
+              >
+                <CircleAlert size={15} aria-hidden="true" />
                 <span>{etem}</span>
               </span>
             ) : (
@@ -119,6 +136,7 @@ export default function CreateTasks() {
               variant="ghost"
               className="rounded-full"
               onClick={() => dispatch(removeTask(index))}
+              aria-label="Remove Task"
             >
               <X size={15} />
             </IconButton>

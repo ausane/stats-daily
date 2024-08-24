@@ -30,8 +30,9 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         )}
         {...btnAttr}
         ref={ref}
+        role="button"
       >
-        {children}
+        <span aria-hidden="true">{children}</span>
       </Button>
     );
   },
