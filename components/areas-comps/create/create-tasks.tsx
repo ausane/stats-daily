@@ -77,7 +77,6 @@ export default function CreateTasks() {
             role="textbox"
             aria-required="false"
             aria-invalid={!!taskError}
-            aria-describedby={taskError ? "task-error-alert" : undefined}
             // required
           />
           <Button
@@ -92,7 +91,8 @@ export default function CreateTasks() {
         </span>
         {taskError && (
           <span
-            id="task-error-alert"
+            role="alert"
+            aria-live="assertive"
             className="flex-center gap-1 self-start text-sm text-[#f93a37] opacity-80"
           >
             <CircleAlert size={15} aria-hidden="true" />

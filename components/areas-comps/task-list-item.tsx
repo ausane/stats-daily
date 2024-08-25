@@ -206,7 +206,6 @@ export function TaskStatus(props: TaskStatusProps) {
         <div className="flex-between w-full">
           <Slider
             className="w-4/5"
-            // defaultValue={[80]}
             min={1}
             max={100}
             step={1}

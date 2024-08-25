@@ -28,7 +28,7 @@ export default function DailyNote({ id, note }: { id: string; note: string }) {
   }, [inputNote]);
 
   const handleNoteChange = async () => {
-    if (noteState.trim().length > 400) {
+    if (noteInput.trim().length > 400) {
       setAlertDialog(true);
       return;
     }
