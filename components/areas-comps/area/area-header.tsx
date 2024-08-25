@@ -106,9 +106,9 @@ export default function AreaHeader(props: { areaId: string; area: string }) {
 
         <div className="z-20 flex gap-4">
           <ModeToggle />
-          <IconButton className="h-10 w-10">
+          <span className="flex-center bbn h-10 w-10 rounded-md hover:bg-accent hover:text-accent-foreground">
             <UserButton />
-          </IconButton>
+          </span>
         </div>
       </div>
 
@@ -130,7 +130,11 @@ export default function AreaHeader(props: { areaId: string; area: string }) {
             onKeyDown={(e) => handleKeyDownEnter(e, handleAreaUpdate)}
           />
           {inputError && (
-            <span className="flex-start gap-1 text-sm text-[#f93a37] opacity-80">
+            <span
+              role="alert"
+              aria-live="assertive"
+              className="flex-start gap-1 text-sm text-[#f93a37] opacity-80"
+            >
               <CircleAlert size={15} aria-hidden="true" />
               <span>{inputError}</span>
             </span>
@@ -170,11 +174,11 @@ export function TaskItemCompo(props: TaskItemCompoProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-20">
           <DropdownMenuItem onClick={openRenameAreaDialog}>
-            <Pencil className="mr-2 h-4 w-4" />
+            <Pencil className="mr-2 h-4 w-4" aria-hidden="true" />
             <span>Rename</span>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setDeleteDialog(true)}>
-            <Trash className="mr-2 h-4 w-4" />
+            <Trash className="mr-2 h-4 w-4" aria-hidden="true" />
             <span>Delete</span>
           </DropdownMenuItem>
         </DropdownMenuContent>

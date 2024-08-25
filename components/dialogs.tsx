@@ -72,8 +72,8 @@ export function TaskCompletionDialog(props: CompletionDialogProps) {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="flex-start mb-2">
-            <CircleCheck size={24} color="#3DD68C" />
-            <p className="ml-2">Task Completed!</p>
+            <CircleCheck size={24} color="#3DD68C" aria-hidden="true" />
+            <span className="ml-2">Task Completed!</span>
           </DialogTitle>
           <DialogDescription className="text-inherit">
             How much of this task have you completed?

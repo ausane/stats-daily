@@ -167,15 +167,13 @@ export default function CreateArea({ userId }: { userId: string }) {
               role="textbox"
               aria-required="true"
               aria-invalid={!!inputError}
-              aria-describedby={inputError ? "input-error-alert" : undefined}
               // required
             >
               {inputError && (
                 <span
-                  id="input-error-alert"
-                  className="flex-start -z-10 mt-2 gap-1 text-sm text-[#f93a37] opacity-80"
                   role="alert"
                   aria-live="assertive"
+                  className="flex-start -z-10 mt-2 gap-1 text-sm text-[#f93a37] opacity-80"
                 >
                   <CircleAlert size={15} aria-hidden="true" />
                   <span>{inputError}</span>
@@ -197,11 +195,9 @@ export default function CreateArea({ userId }: { userId: string }) {
                 role="textbox"
                 aria-required="false"
                 aria-invalid={noteError}
-                aria-describedby={noteError ? "note-error-alert" : undefined}
               />
               {noteError && (
                 <span
-                  id="note-error-alert"
                   role="alert"
                   aria-live="assertive"
                   className="flex-start -z-10 gap-1 text-sm text-[#f93a37] opacity-80"
