@@ -3,8 +3,10 @@ import { fetchAreas } from "@/lib/db/stats";
 import Sidebar from "@/components/areas-comps/sidebar";
 
 export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "your tasks",
+  title: {
+    default: "StatsDaily Area",
+    template: "%s - StatsDaily",
+  },
 };
 
 export default async function DashboardLayout({

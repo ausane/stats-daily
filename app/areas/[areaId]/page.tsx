@@ -2,12 +2,23 @@ import { Metadata } from "next";
 import ShowTasks from "@/components/areas-comps/area/show-tasks";
 import CreateArea from "@/components/areas-comps/create/create-area";
 import { auth } from "@clerk/nextjs/server";
+import { fetchAreaById } from "@/lib/db/stats";
+import { TArea } from "@/lib/types";
 
 export type TaskStatsProps = { params: { areaId: string } };
 
-export const generateMetadata = ({ params }: TaskStatsProps): Metadata => {
+export const generateMetadata = async ({
+  params,
+}: TaskStatsProps): Promise<Metadata> => {
+  const { areaId } = params;
+  const isCreateArea = areaId === "create";
+  const areaItem: TArea = isCreateArea || (await fetchAreaById(areaId));
+  const title = isCreateArea
+    ? "Create Area"
+    : areaItem?.area || "Area Not Found";
+
   return {
-    title: params.areaId,
+    title: title,
   };
 };
 
