@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { Area } from "@/models/task.model";
 import { TArea, TTask, StatsWithoutDocument } from "../types";
-import { st } from "../constants";
+import { st } from "../utils";
 
 // Utility function to check if an area already exists
 export async function checkForExistingArea(area: string) {
