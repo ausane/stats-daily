@@ -9,9 +9,9 @@ import IconButton from "../ui/icon-button";
 import { deleteTask } from "@/lib/services/handle-delete";
 import Input from "../ui/input";
 import { handleKeyDownEnter, ntf } from "@/lib/utils";
-import { Check, Pencil, Trash, X } from "lucide-react";
+import { Check, Pencil, Trash, X, Ellipsis } from "lucide-react";
 import {
-  TaskState,
+  TaskStatus,
   TaskContent,
   TaskOptions,
   InputRequiredAlert,
@@ -19,7 +19,7 @@ import {
 import {
   InputChangeEvent,
   TaskListItemsProps,
-  TaskStatusProps,
+  TaskStatusPCProps,
   TTask,
 } from "@/lib/types";
 import {
@@ -27,6 +27,12 @@ import {
   removeTaskById,
   setEditedTask,
 } from "@/features/task-slice";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function TaskListItem(props: TaskListItemsProps) {
   const { index, areaId, taskItem, oita, nfaf } = props;
@@ -37,6 +43,15 @@ export default function TaskListItem(props: TaskListItemsProps) {
   const [inputTask, setInputTask] = useState(task);
   const [alertDialog, setAlertDialog] = useState(false);
   const [emptyInputAlert, setEmptyInputAlert] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    // Function to update state with the current window width
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const dispatch = useAppDispatch();
 
@@ -106,14 +121,14 @@ export default function TaskListItem(props: TaskListItemsProps) {
 
       <div className="flex-between w-full">
         <>
-          <TaskState>
-            <TaskStatus
+          <TaskStatus>
+            <TaskStatusPC
               index={index}
               areaId={areaId}
               openInputTask={oita}
               taskItem={taskItem}
             />
-          </TaskState>
+          </TaskStatus>
 
           <TaskContent>
             {oita ? (
@@ -142,32 +157,15 @@ export default function TaskListItem(props: TaskListItemsProps) {
           </TaskContent>
 
           <TaskOptions>
-            {oita ? (
-              <>
-                <IconButton
-                  id="edit-button"
-                  onClick={handleEditTask}
-                  aria-label="Save Edited Task"
-                >
-                  <Check size={15} />
-                </IconButton>
-                <IconButton
-                  onClick={() => nfaf(false, index)}
-                  aria-label="Close Editing Task"
-                >
-                  <X size={15} />
-                </IconButton>
-              </>
-            ) : (
-              <>
-                <IconButton onClick={handleEditClick} aria-label="Edit Task">
-                  <Pencil size={15} />
-                </IconButton>
-                <IconButton onClick={handleDeleteTask} aria-label="Delete Task">
-                  <Trash size={15} />
-                </IconButton>
-              </>
-            )}
+            <TaskOptionsUI
+              oita={oita}
+              index={index}
+              nfaf={nfaf}
+              handleEditTask={handleEditTask}
+              handleDeleteTask={handleDeleteTask}
+              handleEditClick={handleEditClick}
+              windowWidth={windowWidth}
+            />
           </TaskOptions>
         </>
       </div>
@@ -175,7 +173,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
   );
 }
 
-export function TaskStatus(props: TaskStatusProps) {
+export function TaskStatusPC(props: TaskStatusPCProps) {
   const { areaId, index, openInputTask, taskItem } = props;
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -217,5 +215,80 @@ export function TaskStatus(props: TaskStatusProps) {
         </div>
       </TaskCompletionDialog>
     );
+  }
+}
+
+export function TaskOptionsUI({
+  oita,
+  index,
+  nfaf,
+  windowWidth,
+  handleEditTask,
+  handleDeleteTask,
+  handleEditClick,
+}: {
+  oita: boolean;
+  index: number;
+  handleEditTask: () => void;
+  handleDeleteTask: () => void;
+  handleEditClick: () => void;
+  nfaf: (s: boolean, i: number) => void;
+  windowWidth: number;
+}) {
+  if (oita) {
+    return (
+      <>
+        <IconButton
+          id="edit-button"
+          className="max-sm:mr-2"
+          onClick={handleEditTask}
+          aria-label="Save Edited Task"
+        >
+          <Check size={15} />
+        </IconButton>
+        <IconButton
+          className="max-sm:hidden"
+          onClick={() => nfaf(false, index)}
+          aria-label="Close Editing Task"
+        >
+          <X size={15} />
+        </IconButton>
+      </>
+    );
+  } else {
+    if (windowWidth < 640) {
+      return (
+        <span className="flex-end w-full pr-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <IconButton variant="ghost" circle={true}>
+                <Ellipsis size={15} />
+              </IconButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-32">
+              <DropdownMenuItem onClick={handleEditClick}>
+                <Pencil className="mr-2 h-4 w-4" />
+                <span>Edit</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDeleteTask}>
+                <Trash className="mr-2 h-4 w-4" />
+                <span>Delete</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </span>
+      );
+    } else {
+      return (
+        <>
+          <IconButton onClick={handleEditClick} aria-label="Edit Task">
+            <Pencil size={15} />
+          </IconButton>
+          <IconButton onClick={handleDeleteTask} aria-label="Delete Task">
+            <Trash size={15} />
+          </IconButton>
+        </>
+      );
+    }
   }
 }

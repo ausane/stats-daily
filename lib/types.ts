@@ -143,7 +143,7 @@ export type RenameAreaDialogProps = {
 };
 
 // Task Status Props Type
-export type TaskStatusProps = {
+export type TaskStatusPCProps = {
   areaId: string;
   index: number;
   openInputTask: boolean;
