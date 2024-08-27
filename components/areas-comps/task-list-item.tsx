@@ -19,6 +19,7 @@ import {
 import {
   InputChangeEvent,
   TaskListItemsProps,
+  TaskOptionsUIProps,
   TaskStatusPCProps,
   TTask,
 } from "@/lib/types";
@@ -43,15 +44,6 @@ export default function TaskListItem(props: TaskListItemsProps) {
   const [inputTask, setInputTask] = useState(task);
   const [alertDialog, setAlertDialog] = useState(false);
   const [emptyInputAlert, setEmptyInputAlert] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(0);
-
-  useEffect(() => {
-    // Function to update state with the current window width
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const dispatch = useAppDispatch();
 
@@ -164,7 +156,6 @@ export default function TaskListItem(props: TaskListItemsProps) {
               handleEditTask={handleEditTask}
               handleDeleteTask={handleDeleteTask}
               handleEditClick={handleEditClick}
-              windowWidth={windowWidth}
             />
           </TaskOptions>
         </>
@@ -222,19 +213,20 @@ export function TaskOptionsUI({
   oita,
   index,
   nfaf,
-  windowWidth,
   handleEditTask,
   handleDeleteTask,
   handleEditClick,
-}: {
-  oita: boolean;
-  index: number;
-  handleEditTask: () => void;
-  handleDeleteTask: () => void;
-  handleEditClick: () => void;
-  nfaf: (s: boolean, i: number) => void;
-  windowWidth: number;
-}) {
+}: TaskOptionsUIProps) {
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    // Function to update state with the current window width
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   if (oita) {
     return (
       <>

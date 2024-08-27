@@ -165,3 +165,13 @@ export type ValidationAlertDialogProps = {
   alertDialog: boolean;
   setAlertDialog: SetState<boolean>;
 };
+
+// Task Options UI Props Type
+export type TaskOptionsUIProps = {
+  oita: boolean;
+  index: number;
+  handleEditTask: () => void;
+  handleDeleteTask: () => void;
+  handleEditClick: () => void;
+  nfaf: (s: boolean, i: number) => void;
+};
