@@ -1,20 +1,20 @@
 import React, { ReactNode } from "react";
 import { CircleAlert } from "lucide-react";
 
-export function TaskState({ children }: { children: ReactNode }) {
+export function TaskStatus({ children }: { children: ReactNode }) {
   return <span className="flex-center w-12">{children}</span>;
 }
 
 export function TaskContent({ children }: { children: ReactNode }) {
   return (
-    <span className="flex-start relative h-auto w-[calc(100%-8rem)]">
+    <span className="flex-start relative h-auto w-[calc(100%-8rem)] max-sm:w-[calc(100%-4rem)]">
       {children}
     </span>
   );
 }
 
 export function TaskOptions({ children }: { children: ReactNode }) {
-  return <span className="flex-around w-20">{children}</span>;
+  return <span className="flex-around w-20 max-sm:w-10">{children}</span>;
 }
 
 export function InputRequiredAlert() {

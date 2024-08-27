@@ -7,7 +7,7 @@ import TaskListItem from "./task-list-item";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { updateTask } from "@/lib/services/handle-update";
 import {
-  TaskState,
+  TaskStatus,
   TaskContent,
   TaskOptions,
   InputRequiredAlert,
@@ -207,13 +207,13 @@ export function ShowCompletedTasks({
       >
         {completedTasks?.map((item, index) => (
           <div key={index} className="flex-between bbn w-full p-2">
-            <TaskState>
+            <TaskStatus>
               <button
                 onClick={() => handleUndoTask(index)}
                 className="status-button bg-red-700 hover:bg-red-800"
                 aria-label="Undo Task"
               ></button>
-            </TaskState>
+            </TaskStatus>
 
             <TaskContent>
               <p className="w-11/12 truncate">{item.task}</p>
@@ -308,9 +308,9 @@ export function AddNewTask(props: AddNewTaskProps) {
           setAlertDialog={setAlertDialog}
         />
 
-        <TaskState>
+        <TaskStatus>
           <span className="status-button bg-green-400"></span>
-        </TaskState>
+        </TaskStatus>
 
         <TaskContent>
           <Input
@@ -338,13 +338,14 @@ export function AddNewTask(props: AddNewTaskProps) {
             {loadingMessage}
           </span>
           {loading ? (
-            <Loader2 className="animate-spin" aria-hidden="true" />
+            <Loader2 className="animate-spin max-sm:mr-2" aria-hidden="true" />
           ) : (
             <>
               <IconButton
                 id="submit-button"
                 variant="default"
                 onClick={addNewTask}
+                className="max-sm:mr-2"
                 aria-label="Save New Task"
               >
                 <Check size={15} />
@@ -355,6 +356,7 @@ export function AddNewTask(props: AddNewTaskProps) {
                   setAddTaskInput(false);
                   setNewTaskValue("");
                 }}
+                className="max-sm:hidden"
                 aria-label="Close Adding Task"
               >
                 <X size={15} />
