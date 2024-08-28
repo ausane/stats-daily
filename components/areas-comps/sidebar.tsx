@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { insertAllAreas } from "@/features/area-slice";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { Menu, SquarePen } from "lucide-react";
+import Image from "next/image";
 import {
   Sheet,
   SheetContent,
@@ -47,7 +48,7 @@ export default function Sidebar({ data }: { data: TSC[] | void }) {
         </SheetTrigger>
         <SheetContent side="left" className="w-2/3 max-sm:w-4/5">
           <SheetHeader>
-            <SheetTitle className="mt-4">
+            <SheetTitle className="my-8">
               <CreateAreaLink setSidebarState={setSidebarState} />
             </SheetTitle>
             <SheetDescription></SheetDescription>
@@ -92,7 +93,7 @@ export function SidebarContent({
               href={`/areas/${item.areaId}`}
               className="flex-start box-border w-full gap-4"
             >
-              <span className="flex-center bbn h-9 w-9 rounded-md">
+              <span className="flex-center bbn h-10 w-10 rounded-md">
                 {index + 1}
               </span>
               <p className="w-[calc(100%-4rem)] truncate">{item.areaName}</p>
@@ -111,11 +112,16 @@ export function CreateAreaLink({
 }) {
   return (
     <Link
-      className="flex-between h-10 w-full rounded-lg px-4 opacity-80 transition-transform duration-200 hover:bg-accent hover:text-accent-foreground active:scale-95"
+      className="flex-between mx-2 h-10 w-full rounded-lg pr-4 opacity-80 transition-transform duration-200 hover:bg-accent hover:text-accent-foreground active:scale-95"
       onClick={() => setSidebarState(false)}
       href={`/areas/create`}
     >
-      <h2 className="text-lg">StatsDaily</h2>
+      <h2 className="flex-start gap-4 text-lg">
+        <code className="bbn flex-center bold h-10 w-10 rounded-md text-2xl">
+          SD
+        </code>
+        <span>StatsDaily</span>
+      </h2>
       <SquarePen size={20} aria-hidden="true" />
       <span className="sr-only">Create new area</span>
     </Link>
