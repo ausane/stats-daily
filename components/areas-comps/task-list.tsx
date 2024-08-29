@@ -11,8 +11,8 @@ import {
   TaskContent,
   TaskOptions,
   InputRequiredAlert,
-} from "../task-items";
-import CircularProgress, { progressCalculator } from "../ui/progress";
+} from "./task-items";
+import CircularProgress, { progressCalculator } from "./area/progress";
 import { createNewTask } from "@/lib/services/handle-update";
 import IconButton from "../ui/icon-button";
 import { ValidationAlertDialog } from "../dialogs";
