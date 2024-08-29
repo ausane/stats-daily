@@ -1,11 +1,15 @@
+"use client";
+
 import Link from "next/link";
+import LandingPage from "@/components/landing-page";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Link href={"/areas/create"} className="bbn rounded p-2">
-        Create Tasks
-      </Link>
-    </main>
+    // <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    //   <Link href={"/areas/create"} className="bbn rounded p-2">
+    //     Create Tasks
+    //   </Link>
+    // </main>
+    <LandingPage />
   );
 }

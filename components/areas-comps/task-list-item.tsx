@@ -15,7 +15,7 @@ import {
   TaskContent,
   TaskOptions,
   InputRequiredAlert,
-} from "../task-items";
+} from "./task-items";
 import {
   InputChangeEvent,
   TaskListItemsProps,
