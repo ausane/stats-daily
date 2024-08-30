@@ -3,6 +3,7 @@
  * @see https://v0.dev/t/2kO1UsA91Lh
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Component() {
@@ -50,6 +51,7 @@ export default function Component() {
           </Link>
         </nav>
       </header>
+
       <main className="flex-1">
         <section className="relative w-full py-12 md:py-24 lg:py-32">
           <div className="container relative z-10 px-4 md:px-6">
@@ -66,7 +68,7 @@ export default function Component() {
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Link
-                    href="#"
+                    href="/areas/create"
                     className="inline-flex h-10 items-center justify-center rounded-md bg-muted px-8 text-sm font-medium text-muted-foreground shadow transition-colors hover:bg-muted/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                     prefetch={false}
                   >
@@ -82,17 +84,32 @@ export default function Component() {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div className="aspect-square rounded-xl bg-[url('/placeholder.svg')] bg-cover bg-center" />
-                <div className="aspect-square rounded-xl bg-[url('/placeholder.svg')] bg-cover bg-center" />
-                <div className="aspect-square rounded-xl bg-[url('/placeholder.svg')] bg-cover bg-center" />
-                <div className="aspect-square rounded-xl bg-[url('/placeholder.svg')] bg-cover bg-center" />
+                <div className="aspect-square rounded-xl bg-[url('/stats.webp')] bg-cover bg-center" />
+                <div className="aspect-square rounded-xl bg-[url('/stats.webp')] bg-cover bg-center" />
+                <div className="aspect-square rounded-xl bg-[url('/stats.webp')] bg-cover bg-center" />
+                <div className="aspect-square rounded-xl bg-[url('/stats.webp')] bg-cover bg-center" />
               </div>
             </div>
           </div>
           <div className="animate-gradient-xy absolute inset-0 z-0 bg-gradient-to-r from-[#000000] to-[#000000] opacity-20" />
           <div className="animate-gradient-xy absolute inset-0 z-0 bg-[url('/stats.webp')] bg-cover bg-center opacity-10" />
         </section>
-        <section className="w-full bg-muted py-12 md:py-24 lg:py-32">
+        <section className="relative flex w-full flex-col gap-8 bg-muted px-4 py-12">
+          <div className="w-full space-y-2 md:w-4/5">
+            <h1 className="text-3xl font-bold tracking-tighter text-muted-foreground sm:text-5xl xl:text-6xl/none">
+              Easy, Understandable, user friendly UI
+            </h1>
+            <p className="text-muted-foreground md:text-xl">
+              Our data-driven daily tasks completion app helps you stay
+              organized, track your progress, and achieve your goals.
+            </p>
+          </div>
+          <div className="flex-center h-full w-2/5 w-full">
+            <div className="relative aspect-video w-full rounded-lg bg-[url('/area.png')] bg-contain bg-center bg-no-repeat" />
+          </div>
+        </section>
+
+        <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
@@ -175,7 +192,7 @@ export default function Component() {
           &copy; 2024 StatsDaily - Daily Tasks Completion Tracker. All rights
           reserved.
         </p>
-        <nav className="flex gap-4 sm:ml-auto sm:gap-6">
+        {/* <nav className="flex gap-4 sm:ml-auto sm:gap-6">
           <Link
             href="#"
             className="text-xs text-muted-foreground underline-offset-4 hover:underline"
@@ -190,7 +207,7 @@ export default function Component() {
           >
             Privacy
           </Link>
-        </nav>
+        </nav> */}
       </footer>
     </div>
   );
