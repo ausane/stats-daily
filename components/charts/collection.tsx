@@ -1,15 +1,12 @@
 "use client";
 
-import { SetState, TStats } from "@/lib/types";
+import { HeaderProps, TStats, MainContentProps } from "@/lib/types";
 import { useEffect, useState } from "react";
-
 import { PieChartComponent } from "@/components/charts/pie-chart";
 import { LineChartComponent } from "@/components/charts/line-chart";
 import { RadialChartComponent } from "@/components/charts/radial-chart";
-import { Component } from "@/components/charts/bar-multiple";
-import { AreaChartComponent } from "@/components/charts/area-chart";
-import Link from "next/link";
-import { CheckIcon } from "@/components/landing-page";
+import { PageFooter, SDIconWithTitle } from "@/components/landing-page";
+import { InfoIcon } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -21,89 +18,122 @@ import {
 } from "@/components/ui/select";
 
 export function ChartCollection({ data }: { data: TStats[] }) {
-  const [selectedValue, setSelectedValue] = useState("60");
-  const [stats, setStats] = useState(data);
+  const [selectedValue, setSelectedValue] = useState<string>("1");
+  const [stats, setStats] = useState<TStats[]>(data);
 
   useEffect(() => {
-    const count = parseInt(selectedValue);
+    const count = parseInt(selectedValue, 10);
     setStats(data.slice(0, count));
   }, [selectedValue, data]);
 
-  const chartData = calculateAvgStats(stats);
-  const barChartData = generateLineChartData(stats).reverse();
+  const tasksCompleted: boolean = isTasksCompleted(stats);
+  if (!stats.length || !tasksCompleted) {
+    const info = stats.length ? "tnc" : "nsf";
+    return (
+      <>
+        <ChartHeader
+          selectedValue={selectedValue}
+          setSelectedValue={setSelectedValue}
+        />
+        <NoStatsFound info={info} />
+        <PageFooter />
+      </>
+    );
+  }
 
-  // Calculate degree for a gauge or radial chart
+  const PieChartData = calculatePieChartData(stats);
+  const lineChartData = generateLineChartData(stats).reverse();
   const achievedPercentage = calculateAchievedPercentage(stats);
   const degree = Math.floor((achievedPercentage / 100) * 360);
 
   return (
     <>
-      <header className="flex-between sticky top-0 z-40 h-14 border-b bg-background px-4 lg:px-6">
-        <Link href="/" className="flex-center gap-4" prefetch={false}>
-          <CheckIcon />
-          <span className="text-2xl font-bold text-muted-foreground">
-            StatsDaily
-          </span>
-          <span className="sr-only">
-            statsDaily - Daily Tasks Completion Tracker
-          </span>
-        </Link>
-        <SelectTimeline
-          selectedValue={selectedValue}
-          setSelectedValue={setSelectedValue}
-        />
-      </header>
-      <div className="flex w-full max-sm:flex-col">
-        <PieChartComponent chartData={chartData} />
-        <RadialChartComponent total={achievedPercentage} degree={degree} />
-      </div>
-      {/* <div className="flex w-full max-sm:flex-col">
-        <Component />
-        <AreaChartComponent />
-      </div> */}
-
-      <LineChartComponent LCCD={barChartData} />
+      <ChartHeader
+        selectedValue={selectedValue}
+        setSelectedValue={setSelectedValue}
+      />
+      <ChartMainContent
+        PieChartData={PieChartData}
+        lineChartData={lineChartData}
+        achievedPercentage={achievedPercentage}
+        degree={degree}
+      />
+      <PageFooter />
     </>
   );
 }
 
-export function SelectTimeline({
-  selectedValue,
-  setSelectedValue,
-}: {
-  selectedValue: string;
-  setSelectedValue: SetState<string>;
-}) {
+// Chart Collection Component Header
+export function ChartHeader({ selectedValue, setSelectedValue }: HeaderProps) {
   return (
-    <div>
-      <Select
-        value={selectedValue}
-        onValueChange={setSelectedValue}
-        name="select-timeline"
-      >
-        <SelectTrigger className="w-[140px]">
-          <SelectValue placeholder="Last 2 months" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Select Timeline</SelectLabel>
-            <SelectItem value="60">Last 2 months</SelectItem>
-            <SelectItem value="30">Last month</SelectItem>
-            <SelectItem value="21">Last 21 days</SelectItem>
-            <SelectItem value="15">Last 15 days</SelectItem>
-            <SelectItem value="7">Last 7 days</SelectItem>
-            <SelectItem value="2">Last 2 days</SelectItem>
-            <SelectItem value="1">Yesterday</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+    <header className="flex-between sticky top-0 z-40 h-14 border-b bg-background px-4 lg:px-6">
+      <SDIconWithTitle />
+      <div>
+        <Select
+          value={selectedValue}
+          onValueChange={setSelectedValue}
+          name="select-timeline"
+        >
+          <SelectTrigger className="w-[140px]">
+            <SelectValue placeholder="Select Timeline" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Timelines</SelectLabel>
+              <SelectItem value="60">Last 2 months</SelectItem>
+              <SelectItem value="30">Last month</SelectItem>
+              <SelectItem value="21">Last 21 days</SelectItem>
+              <SelectItem value="15">Last 15 days</SelectItem>
+              <SelectItem value="7">Last 7 days</SelectItem>
+              <SelectItem value="2">Last 2 days</SelectItem>
+              <SelectItem value="1">Yesterday</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+    </header>
+  );
+}
+
+// Chart Collection Component Main Content
+export function ChartMainContent({
+  PieChartData,
+  lineChartData,
+  achievedPercentage,
+  degree,
+}: MainContentProps) {
+  return (
+    <main>
+      <div className="flex w-full max-sm:flex-col">
+        <PieChartComponent chartData={PieChartData} />
+        <RadialChartComponent total={achievedPercentage} degree={degree} />
+      </div>
+      <LineChartComponent chartData={lineChartData} />
+    </main>
+  );
+}
+
+export function NoStatsFound({ info }: { info: "tnc" | "nsf" }) {
+  const title = info === "tnc" ? "Tasks Not Completed!" : "No Stats Found!";
+  const message =
+    info === "tnc"
+      ? "You haven't completed any tasks yet!"
+      : "Please wait at least a day to get started!";
+
+  return (
+    <div className="flex-center h-[calc(100vh-8rem)] flex-col">
+      <div className="flex items-center space-x-2">
+        <InfoIcon size={24} aria-hidden="true" />
+        <h1 className="text-xl font-semibold">{title}</h1>
+      </div>
+      <p className="mt-2 text-muted-foreground">{message}</p>
     </div>
   );
 }
 
 // Generate bar chart data
 const generateLineChartData = (stats: TStats[]) => {
-  if (!stats) return [];
+  if (!stats.length) return [];
 
   return stats.map((item) => {
     const formattedDate =
@@ -124,7 +154,7 @@ const generateLineChartData = (stats: TStats[]) => {
 
 // Calculate achieved percentage
 const calculateAchievedPercentage = (stats: TStats[]) => {
-  if (!stats) return 0;
+  if (!stats.length) return 0;
 
   const totalAchieved = stats.reduce((sum, item) => {
     const l = item.taskStats.length;
@@ -137,8 +167,6 @@ const calculateAchievedPercentage = (stats: TStats[]) => {
 
 // Calculate average stats by area
 const calculateAvgStats = (stats: TStats[]) => {
-  if (!stats) return [];
-
   const taskStats = stats.flatMap((item) =>
     item.taskStats.map((taskItem) => ({
       area: taskItem.area,
@@ -162,7 +190,15 @@ const calculateAvgStats = (stats: TStats[]) => {
     };
   });
 
-  // Calculate chart data
+  return aggregatedStats;
+};
+
+// Calculate chart data
+export function calculatePieChartData(stats: TStats[]) {
+  if (!stats.length) return [];
+
+  const aggregatedStats = calculateAvgStats(stats);
+
   const avgStats = aggregatedStats.sort((a, b) => b.tasks - a.tasks);
   const othersTasks =
     avgStats.length > 4
@@ -189,4 +225,8 @@ const calculateAvgStats = (stats: TStats[]) => {
   });
 
   return chartData;
-};
+}
+
+export function isTasksCompleted(stats: TStats[]): boolean {
+  return stats.some((item) => item.taskStats.some((task) => task.completed));
+}

@@ -17,7 +17,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-import { BCCProps } from "./bar-chart";
+import { RangeChartProps as LineChartProps } from "@/lib/types";
 
 const chartConfig = {
   views: {
@@ -33,7 +33,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function LineChartComponent({ LCCD: chartData }: { LCCD: BCCProps[] }) {
+export function LineChartComponent({
+  chartData,
+}: {
+  chartData: LineChartProps[];
+}) {
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("desktop");
 

@@ -1,3 +1,4 @@
+import { PieChartProps } from "@/components/charts/pie-chart";
 import { Document } from "mongoose";
 import { ImageProps } from "next/image";
 import React, { ButtonHTMLAttributes, InputHTMLAttributes } from "react";
@@ -174,4 +175,25 @@ export type TaskOptionsUIProps = {
   handleDeleteTask: () => void;
   handleEditClick: () => void;
   nfaf: (s: boolean, i: number) => void;
+};
+
+//  Range Chart Component Props
+export type RangeChartProps = {
+  date: string;
+  desktop: number;
+  mobile: number;
+};
+
+// Stats Page Header Props
+export type HeaderProps = {
+  selectedValue: string;
+  setSelectedValue: SetState<string>;
+};
+
+// Stats Page Main Content Props
+export type MainContentProps = {
+  PieChartData: PieChartProps[];
+  lineChartData: RangeChartProps[];
+  achievedPercentage: number;
+  degree: number;
 };
