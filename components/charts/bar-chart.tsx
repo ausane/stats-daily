@@ -16,6 +16,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { RangeChartProps as BarChartProps } from "@/lib/types";
 
 const chartConfig = {
   views: {
@@ -31,12 +32,10 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export type BCCProps = { date: string; desktop: number; mobile: number };
-
 export function BarChartComponent({
   barChartData,
 }: {
-  barChartData: BCCProps[];
+  barChartData: BarChartProps[];
 }) {
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("desktop");

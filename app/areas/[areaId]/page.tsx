@@ -2,8 +2,9 @@ import { Metadata } from "next";
 import ShowTasks from "@/components/areas-comps/area/show-tasks";
 import CreateArea from "@/components/areas-comps/create/create-area";
 import { auth } from "@clerk/nextjs/server";
-import { fetchAreaById } from "@/lib/db/stats";
+import { fetchAreaById, fetchTasks } from "@/lib/db/stats";
 import { TArea } from "@/lib/types";
+import InitializeSD from "@/components/areas-comps/create/initialize";
 
 export type TaskStatsProps = { params: { areaId: string } };
 
@@ -25,6 +26,12 @@ export const generateMetadata = async ({
 export default async function TaskStats(props: TaskStatsProps) {
   const { areaId } = props.params;
   const { userId } = auth();
+
+  const data = await fetchTasks();
+
+  if (!data?.length) {
+    return <InitializeSD userId={userId as string} />;
+  }
 
   if (areaId === "create" && userId) {
     return <CreateArea userId={userId} />;

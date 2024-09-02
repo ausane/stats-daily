@@ -5,15 +5,7 @@ export default function LandingPage() {
   return (
     <div className="flex min-h-[100dvh] flex-col">
       <header className="flex h-14 items-center px-4 lg:px-6">
-        <Link href="/" className="flex-center gap-4" prefetch={false}>
-          <CheckIcon />
-          <span className="text-2xl font-bold text-muted-foreground">
-            StatsDaily
-          </span>
-          <span className="sr-only">
-            statsDaily - Daily Tasks Completion Tracker
-          </span>
-        </Link>
+        <SDIconWithTitle />
         <nav className="ml-auto flex gap-4 sm:gap-6">
           <Link
             href="/areas/create"
@@ -60,7 +52,7 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="flex-center h-full w-2/5 w-full">
-            <div className="bbn relative aspect-video w-full rounded-lg bg-[url('/area.png')] bg-contain bg-center bg-no-repeat" />
+            <div className="bbn relative aspect-video w-full rounded-lg bg-[url('/layout.png')] bg-contain bg-center bg-no-repeat" />
           </div>
         </section>
         <section className="w-full bg-background py-12 md:py-24 lg:py-32">
@@ -83,23 +75,30 @@ export default function LandingPage() {
           </div>
         </section>
       </main>
-      <footer className="flex-between w-full shrink-0 border-t border-muted px-4 py-6 sm:flex-row md:px-6">
-        <p className="text-xs text-muted-foreground">
-          &copy; 2024 StatsDaily - Daily Tasks Completion Tracker.
-        </p>
-        <Link href="https://github.com/ausane/stats-daily">
-          <Image src="/github.svg" alt="github-logo" width={24} height={24} />
-        </Link>
-      </footer>
+      <PageFooter />
     </div>
   );
 }
 
-export function CheckIcon() {
+export function SDIcon() {
   return (
-    <code className="bbn flex-center bold h-10 w-10 rounded-md border-muted text-2xl font-bold text-muted-foreground">
+    <code className="bbn flex-center bold h-10 w-10 rounded-md border-border text-2xl font-bold text-muted-foreground">
       SD
     </code>
+  );
+}
+
+export function SDIconWithTitle() {
+  return (
+    <Link href="/" className="flex-center gap-4" prefetch={false}>
+      <SDIcon />
+      <span className="text-2xl font-bold text-muted-foreground">
+        StatsDaily
+      </span>
+      <span className="sr-only">
+        StatsDaily - Daily Tasks Completion Tracker
+      </span>
+    </Link>
   );
 }
 
@@ -114,5 +113,18 @@ export function SignUpButton() {
         Sign Up
       </Link>
     </div>
+  );
+}
+
+export function PageFooter() {
+  return (
+    <footer className="flex-between w-full shrink-0 border-t border-muted px-4 py-6 sm:flex-row md:px-6">
+      <p className="text-xs text-muted-foreground">
+        &copy; 2024 StatsDaily - Daily Tasks Completion Tracker.
+      </p>
+      <Link href="https://github.com/ausane/stats-daily">
+        <Image src="/github.svg" alt="github-logo" width={24} height={24} />
+      </Link>
+    </footer>
   );
 }

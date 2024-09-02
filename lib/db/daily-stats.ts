@@ -28,7 +28,7 @@ export const dailyStats = async () => {
 
     // console.log(toStats);
 
-    await Stats.deleteMany();
+    // await Stats.deleteMany();
     await Stats.create(toStats);
     // return newStats;
   } catch (error) {
@@ -66,16 +66,18 @@ export const calcAchieved = (tasks: TTask[]) => {
   return Math.floor(totalAchieved / tasks.length);
 };
 
-// export async function cleanTask(userId: string) {
-//   await connectToDatabase();
+export async function cleanTask(userId: string) {
+  await connectToDatabase();
 
-//   try {
-//     const newArea = tasksArray.map((item) => {
-//       return { ...item, userId: userId };
-//     });
-//     console.log(newArea);
-//     await Area.create(newArea);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
+  try {
+    const newArea = tasksArray.map((item) => {
+      return { ...item, userId: userId };
+    });
+    console.log(newArea);
+    await Area.create(newArea);
+    // await Area.deleteMany({ userId });
+    // await Stats.deleteMany();
+  } catch (error) {
+    console.error(error);
+  }
+}
