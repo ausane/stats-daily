@@ -10,6 +10,21 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "StatsDaily",
   description: `Stats Daily is a web application designed to help users track their daily tasks, set targets, and evaluate their work performance. By visualizing their progress and statistics, users can gain insights into their productivity and make necessary changes to improve.`,
+  openGraph: {
+    title: "StatsDaily",
+    description: "Daily Tasks Completion Tracker.",
+    url: "https://statsdaily.vercel.app/",
+    siteName: "StatsDaily",
+    images: [
+      {
+        url: "/layout.png",
+        width: 800,
+        height: 600,
+        alt: "Default OG Image",
+      },
+    ],
+    type: "website",
+  },
 };
 
 export default function RootLayout({

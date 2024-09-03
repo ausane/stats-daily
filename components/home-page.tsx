@@ -18,7 +18,7 @@ export default function HomePage() {
       </header>
       <main className="flex-1">
         <section className="relative h-[calc(100vh-3.5rem)] w-full py-12 md:py-24 lg:py-32">
-          <div className="container relative z-10 px-12 md:px-16">
+          <div className="container relative z-10 px-4 sm:px-8 md:px-16">
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold tracking-tighter text-muted-foreground sm:text-5xl xl:text-6xl/none">
@@ -38,25 +38,27 @@ export default function HomePage() {
           <div className="animate-gradient-xy absolute inset-0 z-0 bg-gradient-to-r from-[#000000] to-[#000000] opacity-20" />
           <div className="animate-gradient-xy absolute inset-0 z-0 bg-[url('/stats.webp')] bg-cover bg-center opacity-10" />
         </section>
-        <section className="relative flex w-full flex-col gap-8 px-12 py-12 md:px-16 md:py-24">
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tighter text-muted-foreground sm:text-5xl xl:text-6xl/none">
-              Intuitive Streamlined and
-              <br />
-              User-Focused Design
-            </h1>
-            <p className="max-w-[600px] text-muted-foreground md:text-xl">
-              Effortlessly manage your tasks with our intuitive interface,
-              designed to keep you organized, monitor your progress, and help
-              you achieve your goals efficiently.
-            </p>
-          </div>
-          <div className="flex-center h-full w-2/5 w-full">
-            <div className="div-bg-image bg-[url('/layout.png')]" />
+        <section className="relative flex w-full flex-col gap-8 py-12 md:py-24">
+          <div className="space-y-4 px-4 sm:px-8 md:px-16">
+            <div className="space-y-2">
+              <h1 className="text-3xl font-bold tracking-tighter text-muted-foreground sm:text-5xl xl:text-6xl/none">
+                Intuitive Streamlined and
+                <br />
+                User-Focused Design
+              </h1>
+              <p className="max-w-[600px] text-muted-foreground md:text-xl">
+                Effortlessly manage your tasks with our intuitive interface,
+                designed to keep you organized, monitor your progress, and help
+                you achieve your goals efficiently.
+              </p>
+            </div>
+            <div className="flex-center h-full w-2/5 w-full">
+              <div className="div-bg-image bg-[url('/layout.png')]" />
+            </div>
           </div>
         </section>
         <section className="w-full bg-background py-12 md:py-24 lg:py-32">
-          <div className="container px-12 md:px-16">
+          <div className="container px-4 sm:px-8 md:px-16">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm text-muted-foreground">
@@ -120,7 +122,11 @@ export function PageFooter() {
   return (
     <footer className="flex-between w-full shrink-0 border-t border-muted px-4 py-6 sm:flex-row md:px-6">
       <p className="text-xs text-muted-foreground">
-        &copy; 2024 StatsDaily - Daily Tasks Completion Tracker.
+        Copyright &copy; 2024 StatsDaily
+        <span className="max-sm:hidden">
+          {" "}
+          - Daily Tasks Completion Tracker.
+        </span>
       </p>
       <Link href="https://github.com/ausane/stats-daily">
         <Image src="/github.svg" alt="github-logo" width={24} height={24} />
