@@ -95,7 +95,7 @@ export default function CreateArea({ userId }: { userId: string }) {
       setInputError(`'${areaName}' already exists!`);
     } else if (response?.areaId) {
       router.push(`/areas/${response.areaId}`);
-      dispatch(insertArea(response));
+      dispatch(insertArea(response as TSC));
       dispatch(resetForm());
     }
   };

@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { fetchAreaById, fetchTasks } from "@/lib/db/stats";
 import { TArea } from "@/lib/types";
 import InitializeSD from "@/components/areas-comps/create/initialize";
+import { cleanTask } from "@/lib/db/daily-stats";
 
 export type TaskStatsProps = { params: { areaId: string } };
 
@@ -28,6 +29,7 @@ export default async function TaskStats(props: TaskStatsProps) {
   const { userId } = auth();
 
   const data = await fetchTasks();
+  // const init = async () => await cleanTask(userId as string);
 
   if (!data?.length) {
     return <InitializeSD userId={userId as string} />;

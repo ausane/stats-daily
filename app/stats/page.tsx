@@ -8,7 +8,7 @@ export default async function StatsPage() {
   const { userId } = auth();
   const stats: TStats[] = await statsdaily(userId as string, 60);
 
-  // cleanTask(userId as string);
+  cleanTask(userId as string);
 
   const d1 = JSON.stringify(stats);
   const d2: TStats[] = JSON.parse(d1);
