@@ -5,13 +5,12 @@ import { auth } from "@clerk/nextjs/server";
 import { fetchAreaById, fetchTasks } from "@/lib/db/stats";
 import { TArea } from "@/lib/types";
 import InitializeSD from "@/components/areas-comps/create/initialize";
-import { cleanTask } from "@/lib/db/daily-stats";
 
-export type TaskStatsProps = { params: { areaId: string } };
+export type AreasPageProps = { params: { areaId: string } };
 
 export const generateMetadata = async ({
   params,
-}: TaskStatsProps): Promise<Metadata> => {
+}: AreasPageProps): Promise<Metadata> => {
   const { areaId } = params;
   const isCreateArea = areaId === "create";
   const areaItem: TArea = isCreateArea || (await fetchAreaById(areaId));
@@ -24,12 +23,11 @@ export const generateMetadata = async ({
   };
 };
 
-export default async function TaskStats(props: TaskStatsProps) {
+export default async function AreasPage(props: AreasPageProps) {
   const { areaId } = props.params;
   const { userId } = auth();
 
   const data = await fetchTasks();
-  // const init = async () => await cleanTask(userId as string);
 
   if (!data?.length) {
     return <InitializeSD userId={userId as string} />;

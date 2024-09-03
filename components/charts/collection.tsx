@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { PieChartComponent } from "@/components/charts/pie-chart";
 import { LineChartComponent } from "@/components/charts/line-chart";
 import { RadialChartComponent } from "@/components/charts/radial-chart";
-import { PageFooter, SDIconWithTitle } from "@/components/landing-page";
+import { PageFooter, SDIconWithTitle } from "@/components/home-page";
 import { InfoIcon } from "lucide-react";
 import {
   Select,
