@@ -70,12 +70,12 @@ export async function cleanTask(userId: string) {
   await connectToDatabase();
 
   try {
-    const newArea = tasksArray.map((item) => {
-      return { ...item, userId: userId };
-    });
-    console.log(newArea);
-    await Area.create(newArea);
-    // await Area.deleteMany({ userId });
+    // const newArea = tasksArray.map((item) => {
+    //   return { ...item, userId: userId };
+    // });
+    // console.log(newArea);
+    // await Area.create(newArea);
+    await Area.deleteMany({ userId });
     // await Stats.deleteMany();
   } catch (error) {
     console.error(error);
