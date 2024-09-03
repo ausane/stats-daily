@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { fetchAreas } from "@/lib/db/stats";
 import Sidebar from "@/components/areas-comps/sidebar";
+import { TSC } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: {
@@ -14,9 +15,10 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const data: TSC[] | undefined = await fetchAreas();
   return (
     <div className="flex h-screen w-screen">
-      <Sidebar data={await fetchAreas()} />
+      <Sidebar data={data as TSC[]} />
       {children}
     </div>
   );

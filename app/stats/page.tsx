@@ -12,9 +12,5 @@ export default async function StatsPage() {
   const d1 = JSON.stringify(stats);
   const d2: TStats[] = JSON.parse(d1);
 
-  return (
-    <>
-      <ChartCollection data={d2} />
-    </>
-  );
+  return <ChartCollection data={d2} />;
 }
