@@ -177,23 +177,30 @@ export type TaskOptionsUIProps = {
   nfaf: (s: boolean, i: number) => void;
 };
 
-//  Range Chart Component Props
+//  Range Chart Component Props Type
 export type RangeChartProps = {
   date: string;
   desktop: number;
   mobile: number;
 };
 
-// Stats Page Header Props
+// Stats Page Header Props Type
 export type HeaderProps = {
   selectedValue: string;
   setSelectedValue: SetState<string>;
 };
 
-// Stats Page Main Content Props
+// Stats Page Main Content Props Type
 export type MainContentProps = {
   PieChartData: PieChartProps[];
   lineChartData: RangeChartProps[];
   achievedPercentage: number;
   degree: number;
+};
+
+// Sidebar Content Props Type
+export type SidebarContentProps = {
+  areaId: string;
+  areas: TSC[];
+  setSidebarState?: SetState<boolean>;
 };

@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { TSC, SetState } from "@/lib/types";
-import { usePathname } from "next/navigation";
+import { TSC, SetState, SidebarContentProps } from "@/lib/types";
+import { usePathname, useRouter } from "next/navigation";
 import { insertAllAreas } from "@/features/area-slice";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { Menu, SquarePen } from "lucide-react";
-import Image from "next/image";
 import {
   Sheet,
   SheetContent,
@@ -17,7 +16,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-export default function Sidebar({ data }: { data: TSC[] | void }) {
+export default function Sidebar({ data }: { data: TSC[] }) {
   const dispatch = useAppDispatch();
   const areas = useAppSelector((state) => state.area.areas);
 
@@ -37,7 +36,7 @@ export default function Sidebar({ data }: { data: TSC[] | void }) {
     <>
       <Sheet open={isSidebarOpen} onOpenChange={setSidebarState}>
         <SheetTrigger
-          className={`flex-center bbn fixed left-4 top-4 z-10 h-10 w-10 rounded-md bg-background hover:bg-accent hover:text-accent-foreground max-md:flex md:hidden ${isSidebarOpen && "hidden"}`}
+          className={`flex-center bbn fixed left-4 top-4 z-50 h-10 w-10 rounded-md bg-background hover:bg-accent hover:text-accent-foreground max-md:flex md:hidden ${isSidebarOpen && "hidden"}`}
           onClick={toggleSidebar}
           aria-labelledby="open-sidebar-btn"
         >
@@ -61,7 +60,7 @@ export default function Sidebar({ data }: { data: TSC[] | void }) {
         </SheetContent>
       </Sheet>
 
-      <div className="bbn box-border h-full w-1/4 overflow-auto px-2 max-lg:w-2/5 max-md:hidden">
+      <div className="box-border h-full w-1/4 overflow-auto border-r px-2 max-lg:w-2/5 max-md:hidden">
         <div className="flex-start sticky top-4 mb-4 box-border w-full bg-background">
           <CreateAreaLink setSidebarState={setSidebarState} />
         </div>
@@ -71,15 +70,17 @@ export default function Sidebar({ data }: { data: TSC[] | void }) {
   );
 }
 
-export function SidebarContent({
-  areaId,
-  areas,
-  setSidebarState,
-}: {
-  areaId: string;
-  areas: TSC[];
-  setSidebarState?: SetState<boolean>;
-}) {
+export function SidebarContent(props: SidebarContentProps) {
+  const { areaId, areas, setSidebarState } = props;
+
+  const router = useRouter();
+
+  const handleAreaNavigation = (areaId: string) => {
+    if (setSidebarState) setSidebarState(false);
+    router.push(`/areas/${areaId}`);
+    router.refresh();
+  };
+
   return (
     <>
       <div className="sticky top-20 h-[calc(100%-6rem)] w-full overflow-auto px-2">
@@ -88,16 +89,17 @@ export function SidebarContent({
             key={index}
             className={`flex-start my-2 box-border w-[calc(100%-2px)] rounded-md hover:bg-secondary ${item.areaId === areaId ? "bg-secondary" : "bg-background"}`}
           >
-            <Link
-              onClick={() => setSidebarState && setSidebarState(false)}
-              href={`/areas/${item.areaId}`}
+            <button
+              onClick={() => handleAreaNavigation(item.areaId)}
               className="flex-start box-border w-full gap-4"
             >
               <span className="flex-center bbn h-10 w-10 rounded-md">
                 {index + 1}
               </span>
-              <p className="w-[calc(100%-4rem)] truncate">{item.areaName}</p>
-            </Link>
+              <p className="flex-start w-[calc(100%-4rem)] truncate">
+                {item.areaName}
+              </p>
+            </button>
           </div>
         ))}
       </div>

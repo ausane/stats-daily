@@ -137,3 +137,7 @@ input {
 .main-content {
   @apply box-border h-full w-3/4 max-md:w-full;
 }
+
+.div-bg-image {
+  @apply bbn relative aspect-video w-full rounded-lg bg-contain bg-center bg-no-repeat;
+}
