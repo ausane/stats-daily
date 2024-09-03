@@ -12,7 +12,7 @@ export default function Icon() {
   return new ImageResponse(
     (
       // ImageResponse JSX element
-      <code
+      <div
         style={{
           fontSize: 24,
           background: "black",
@@ -25,8 +25,8 @@ export default function Icon() {
           borderRadius: "8px",
         }}
       >
-        SD
-      </code>
+        <code>SD</code>
+      </div>
     ),
     // ImageResponse options
     {
