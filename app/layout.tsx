@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "StatsDaily",
     description: "Daily Tasks Completion Tracker.",
-    url: "https://statsdaily.vercel.app/",
+    url: "https://stats-daily.vercel.app/",
     siteName: "StatsDaily",
     images: [
       {
