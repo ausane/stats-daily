@@ -73,7 +73,5 @@ export const handleInit = async (
     }
   } catch (error) {
     console.error("Error:", (error as Error).message);
-  } finally {
-    setLoading(false);
   }
 };
