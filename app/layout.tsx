@@ -28,10 +28,14 @@ export const metadata: Metadata = {
   twitter: {
     title: "StatsDaily",
     description: "Daily Tasks Completion Tracker",
-    images: {
-      url: "/layout.png",
-      alt: "StatsDaily Twitter Image",
-    },
+    images: [
+      {
+        url: "/layout.png",
+        width: 1600,
+        height: 900,
+        alt: "StatsDaily Twitter Image",
+      },
+    ],
   },
 };
 
