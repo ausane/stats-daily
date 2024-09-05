@@ -200,7 +200,6 @@ export type MainContentProps = {
 
 // Sidebar Content Props Type
 export type SidebarContentProps = {
-  areaId: string;
   areas: TSC[];
   setSidebarState?: SetState<boolean>;
 };
