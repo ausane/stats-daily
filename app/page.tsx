@@ -1,12 +1,14 @@
 import HomePage from "@/components/home-page";
+import { fetchTasks } from "@/lib/db/stats";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
   const { userId } = auth();
-  if (userId) {
-    redirect("/areas/create");
-  } else {
-    return <HomePage />;
-  }
+
+  if (!userId) return <HomePage />;
+
+  const areas = await fetchTasks();
+
+  return redirect(`/areas/${areas?.length ? areas[0]._id : "create"}`);
 }
