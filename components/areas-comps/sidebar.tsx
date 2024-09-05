@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { TSC, SetState, SidebarContentProps } from "@/lib/types";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { insertAllAreas } from "@/features/area-slice";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { Menu, SquarePen } from "lucide-react";
@@ -21,10 +21,6 @@ export default function Sidebar({ data }: { data: TSC[] }) {
   const areas = useAppSelector((state) => state.area.areas);
 
   const [isSidebarOpen, setSidebarState] = useState(false);
-
-  const currentPath = usePathname();
-  const segments = currentPath.split("/");
-  const id = segments[segments.length - 1];
 
   useEffect(() => {
     dispatch(insertAllAreas(data));
@@ -52,11 +48,7 @@ export default function Sidebar({ data }: { data: TSC[] }) {
             </SheetTitle>
             <SheetDescription></SheetDescription>
           </SheetHeader>
-          <SidebarContent
-            areaId={id}
-            areas={areas}
-            setSidebarState={setSidebarState}
-          />
+          <SidebarContent areas={areas} setSidebarState={setSidebarState} />
         </SheetContent>
       </Sheet>
 
@@ -64,15 +56,16 @@ export default function Sidebar({ data }: { data: TSC[] }) {
         <div className="flex-start sticky top-4 mb-4 box-border w-full bg-background">
           <CreateAreaLink setSidebarState={setSidebarState} />
         </div>
-        <SidebarContent areaId={id} areas={areas} />
+        <SidebarContent areas={areas} />
       </div>
     </>
   );
 }
 
 export function SidebarContent(props: SidebarContentProps) {
-  const { areaId, areas, setSidebarState } = props;
+  const { areas, setSidebarState } = props;
 
+  const { areaId } = useParams();
   const router = useRouter();
 
   const handleAreaNavigation = (areaId: string) => {
