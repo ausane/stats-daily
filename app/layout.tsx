@@ -5,7 +5,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import StoreProvider from "@/components/store-provider";
 import { ThemeProvider } from "@/components/theme-provider";
-// import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -47,23 +46,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // <ClerkProvider>
     <html lang="en">
       <body className={inter.className}>
         <StackProvider app={stackServerApp}>
-          <StackTheme>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <StoreProvider>{children}</StoreProvider>
-            </ThemeProvider>
-          </StackTheme>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <StoreProvider>{children}</StoreProvider>
+          </ThemeProvider>
         </StackProvider>
       </body>
     </html>
-    // </ClerkProvider>
   );
 }
