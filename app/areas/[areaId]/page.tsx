@@ -1,10 +1,11 @@
 import { Metadata } from "next";
 import ShowTasks from "@/components/areas-comps/area/show-tasks";
 import CreateArea from "@/components/areas-comps/create/create-area";
-import { auth } from "@clerk/nextjs/server";
 import { fetchAreaById, fetchTasks } from "@/lib/db/stats";
 import { TArea } from "@/lib/types";
 import InitializeSD from "@/components/areas-comps/create/initialize";
+import { stackServerApp } from "@/stack";
+import { redirect } from "next/navigation";
 
 export type AreasPageProps = { params: { areaId: string } };
 
@@ -25,16 +26,15 @@ export const generateMetadata = async ({
 
 export default async function AreasPage(props: AreasPageProps) {
   const { areaId } = props.params;
-  const { userId } = auth();
+  const user = await stackServerApp.getUser();
 
-  const data = await fetchTasks();
+  if (!user) return redirect("/sign-in");
 
-  if (!data?.length) {
-    return <InitializeSD userId={userId as string} />;
-  }
+  if (areaId === "create") {
+    const data = await fetchTasks();
+    if (!data?.length) return <InitializeSD userId={user?.id} />;
 
-  if (areaId === "create" && userId) {
-    return <CreateArea userId={userId} />;
+    return <CreateArea userId={user?.id} />;
   } else {
     return <ShowTasks areaId={areaId} />;
   }

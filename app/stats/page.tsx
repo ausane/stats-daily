@@ -1,11 +1,14 @@
 import { ChartCollection } from "@/components/charts/collection";
 import { statsdaily, cleanTask } from "@/lib/db/daily-stats";
-import { auth } from "@clerk/nextjs/server";
 import { TStats } from "@/lib/types";
+import { stackServerApp } from "@/stack";
+import { redirect } from "next/navigation";
 
 export default async function StatsPage() {
-  const { userId } = auth();
-  const stats: TStats[] = await statsdaily(userId as string, 60);
+  const user = await stackServerApp.getUser();
+  if (!user) return redirect("/sign-in");
+
+  const stats: TStats[] = await statsdaily(user?.id as string, 60);
 
   // cleanTask();
 

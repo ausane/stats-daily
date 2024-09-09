@@ -52,7 +52,7 @@ export default function HomePage() {
                 you achieve your goals efficiently.
               </p>
             </div>
-            <div className="flex-center h-full w-2/5 w-full">
+            <div className="flex-center size-full">
               <div className="div-bg-image bg-[url('/layout.png')]" />
             </div>
           </div>
@@ -128,7 +128,7 @@ export function PageFooter() {
           - Daily Tasks Completion Tracker.
         </span>
       </p>
-      <Link href="https://github.com/ausane/stats-daily">
+      <Link href="https://github.com/ausane/stats-daily" target="_blank">
         <Image src="/github.svg" alt="github-logo" width={24} height={24} />
       </Link>
     </footer>

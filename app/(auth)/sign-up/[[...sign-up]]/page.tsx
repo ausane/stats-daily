@@ -1,9 +1,18 @@
-import { SignUp } from "@clerk/nextjs";
+import AuthCard from "@/components/ui/auth-card";
+import { stackServerApp } from "@/stack";
+import { SignUp } from "@stackframe/stack";
+import { redirect } from "next/navigation";
 
-export default function Page() {
-  return (
-    <div className="flex-center h-screen w-screen bg-slate-200">
-      <SignUp />
-    </div>
-  );
+export default async function SignUpPage() {
+  const user = await stackServerApp.getUser();
+
+  if (user) {
+    return redirect("/");
+  } else {
+    return (
+      <AuthCard>
+        <SignUp />
+      </AuthCard>
+    );
+  }
 }
