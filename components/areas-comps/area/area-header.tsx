@@ -18,9 +18,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UserButton } from "@clerk/nextjs";
 import { CircleAlert, Pencil, Trash, ChevronDown } from "lucide-react";
 import { RenameAreaDialog } from "@/components/dialogs";
+import { UserButton } from "@stackframe/stack";
 
 export default function AreaHeader(props: { areaId: string; area: string }) {
   const { areaId, area } = props;
