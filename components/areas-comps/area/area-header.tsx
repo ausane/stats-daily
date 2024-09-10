@@ -106,7 +106,7 @@ export default function AreaHeader(props: { areaId: string; area: string }) {
         <div className="z-20 flex gap-4">
           <ModeToggle />
           <span className="flex-center bbn h-10 w-10 rounded-md hover:bg-accent hover:text-accent-foreground">
-            <UserButton />
+            <UserButton aria-label="User Button Icon" />
           </span>
         </div>
       </div>
