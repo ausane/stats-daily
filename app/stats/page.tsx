@@ -6,7 +6,6 @@ import { redirect } from "next/navigation";
 
 export default async function StatsPage() {
   const user = await stackServerApp.getUser();
-  if (!user) return redirect("/sign-in");
 
   const stats: TStats[] = await statsdaily(user?.id as string, 60);
 

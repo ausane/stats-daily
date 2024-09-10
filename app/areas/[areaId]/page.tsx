@@ -5,7 +5,6 @@ import { fetchAreaById, fetchTasks } from "@/lib/db/stats";
 import { TArea } from "@/lib/types";
 import InitializeSD from "@/components/areas-comps/create/initialize";
 import { stackServerApp } from "@/stack";
-import { redirect } from "next/navigation";
 
 export type AreasPageProps = { params: { areaId: string } };
 
@@ -28,14 +27,16 @@ export default async function AreasPage(props: AreasPageProps) {
   const { areaId } = props.params;
   const user = await stackServerApp.getUser();
 
-  if (!user) return redirect("/sign-in");
+  if (user) {
+    if (areaId === "create") {
+      const data = await fetchTasks();
+      return !data?.length ? (
+        <InitializeSD userId={user.id} />
+      ) : (
+        <CreateArea userId={user.id} />
+      );
+    }
 
-  if (areaId === "create") {
-    const data = await fetchTasks();
-    if (!data?.length) return <InitializeSD userId={user?.id} />;
-
-    return <CreateArea userId={user?.id} />;
-  } else {
     return <ShowTasks areaId={areaId} />;
   }
 }

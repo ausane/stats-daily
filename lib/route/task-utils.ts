@@ -2,10 +2,12 @@ import mongoose from "mongoose";
 import { Area } from "@/models/task.model";
 import { TArea, TTask, StatsWithoutDocument } from "../types";
 import { st } from "../utils";
+import { stackServerApp } from "@/stack";
 
 // Utility function to check if an area already exists
 export async function checkForExistingArea(area: string) {
-  return await Area.findOne({ area });
+  const user = await stackServerApp.getUser();
+  return await Area.findOne({ userId: user?.id, area });
 }
 
 // Utility function to create a new task
@@ -20,7 +22,8 @@ export function isValidObjectId(id: string) {
 
 // Utility function to check if an area already exists in the database
 export async function checkForDuplicateArea(area: string) {
-  return await Area.findOne({ area });
+  const user = await stackServerApp.getUser();
+  return await Area.findOne({ userId: user?.id, area });
 }
 
 // Utility function to update the area field of a Task document
