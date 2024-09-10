@@ -1,7 +1,7 @@
 import connectToDatabase from "@/lib/db/mongodb";
 import { Area } from "@/models/task.model";
 import { stackServerApp } from "@/stack";
-import mongoose from "mongoose";
+import { Types } from "mongoose";
 
 export const fetchTasks = async () => {
   await connectToDatabase();
@@ -40,7 +40,7 @@ export const fetchAreas = async () => {
 
 export const fetchAreaById = async (areaId: string) => {
   await connectToDatabase();
-  const isValidObjectId = mongoose.Types.ObjectId.isValid(areaId);
+  const isValidObjectId = Types.ObjectId.isValid(areaId);
 
   try {
     // Throw an error if id is invalid

@@ -35,7 +35,6 @@ export const areaSchema = new Schema<TArea>(
     },
     area: {
       type: String,
-      unique: true,
       required: true,
       trim: true,
     },

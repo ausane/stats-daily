@@ -129,7 +129,13 @@ export function PageFooter() {
         </span>
       </p>
       <Link href="https://github.com/ausane/stats-daily" target="_blank">
-        <Image src="/github.svg" alt="github-logo" width={24} height={24} />
+        <Image
+          className="h-6 w-6"
+          src="/github.svg"
+          alt="github-logo"
+          width={24}
+          height={24}
+        />
       </Link>
     </footer>
   );
