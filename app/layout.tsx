@@ -1,6 +1,6 @@
 import "./globals.css";
-import { StackProvider } from "@stackframe/stack";
-import { stackServerApp } from "../stack";
+// import { StackProvider } from "@stackframe/stack";
+// import { stackServerApp } from "../stack";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import StoreProvider from "@/components/store-provider";
@@ -49,16 +49,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <StackProvider app={stackServerApp}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <StoreProvider>{children}</StoreProvider>
-          </ThemeProvider>
-        </StackProvider>
+        {/* <StackProvider app={stackServerApp}> */}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <StoreProvider>{children}</StoreProvider>
+        </ThemeProvider>
+        {/* </StackProvider> */}
       </body>
     </html>
   );

@@ -1,15 +1,15 @@
 import connectToDatabase from "@/lib/db/mongodb";
 import { Area } from "@/models/task.model";
-import { stackServerApp } from "@/stack";
+// import { stackServerApp } from "@/stack";
 import { Types } from "mongoose";
 
 export const fetchTasks = async () => {
   await connectToDatabase();
 
   try {
-    const user = await stackServerApp.getUser();
+    // const user = await stackServerApp.getUser();
 
-    const response = await Area.find({ userId: user?.id }).sort({
+    const response = await Area.find({}).sort({
       updatedAt: -1,
     });
     if (!response) throw new Error("Area not found!");

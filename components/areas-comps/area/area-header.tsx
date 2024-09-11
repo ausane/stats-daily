@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CircleAlert, Pencil, Trash, ChevronDown } from "lucide-react";
 import { RenameAreaDialog } from "@/components/dialogs";
-import { UserButton } from "@stackframe/stack";
+// import { UserButton } from "@stackframe/stack";
 
 export default function AreaHeader(props: { areaId: string; area: string }) {
   const { areaId, area } = props;
@@ -106,7 +106,7 @@ export default function AreaHeader(props: { areaId: string; area: string }) {
         <div className="z-20 flex gap-4">
           <ModeToggle />
           <span className="flex-center bbn h-10 w-10 rounded-md hover:bg-accent hover:text-accent-foreground">
-            <UserButton aria-label="User Button Icon" />
+            {/* <UserButton aria-label="User Button Icon" /> */}
           </span>
         </div>
       </div>
