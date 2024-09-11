@@ -135,7 +135,7 @@ input {
 }
 
 .main-content {
-  @apply box-border h-full w-3/4 max-md:w-full;
+  @apply box-border h-dvh w-3/4 max-md:w-full;
 }
 
 .div-bg-image {
