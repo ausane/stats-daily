@@ -41,7 +41,7 @@ export default function Sidebar({ data }: { data: TSC[] }) {
             Open Sidebar
           </span>
         </SheetTrigger>
-        <SheetContent side="left" className="w-2/3 max-sm:w-4/5">
+        <SheetContent side="left" className="w-2/3 p-2 max-sm:w-4/5">
           <SheetHeader>
             <SheetTitle className="my-8">
               <CreateAreaLink setSidebarState={setSidebarState} />
