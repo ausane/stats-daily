@@ -94,7 +94,7 @@ export default function AreaHeader(props: { areaId: string; area: string }) {
 
   return (
     <div className="w-full">
-      <div className="flex-between relative w-full gap-4 overflow-x-hidden py-4 max-md:pl-14">
+      <div className="flex-between relative w-full gap-4 overflow-x-hidden py-4 max-md:pl-14 max-sm:pl-10">
         <div className="flex-start max-w-[80%] max-sm:max-w-[60%]">
           <TaskItemCompo
             areaId={areaId}
