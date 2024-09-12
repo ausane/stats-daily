@@ -175,7 +175,7 @@ export function ShowCompletedTasks({
 
   return (
     <div
-      className={`duration-400 absolute bottom-0 left-0 w-full overflow-hidden border-t bg-background transition-all ease-in-out ${open ? "h-full" : "h-12"}`}
+      className={`duration-400 absolute bottom-0 left-0 w-full overflow-hidden bg-background transition-all ease-in-out ${open ? "h-full" : "h-12 border-t"}`}
     >
       <div className="flex-between sticky left-0 top-0 h-12 w-full border-b px-2 pr-4">
         <span
@@ -203,10 +203,10 @@ export function ShowCompletedTasks({
         </TooltipCompo>
       </div>
       <div
-        className={`h-[calc(100%-2.5rem)] flex-col overflow-auto ${open ? "flex" : "hidden"} `}
+        className={`h-[calc(100%-3rem)] flex-col overflow-auto ${open ? "flex" : "hidden"} `}
       >
         {completedTasks?.map((item, index) => (
-          <div key={index} className="flex-between bbn w-full p-2">
+          <div key={index} className="flex-between w-full border-b p-2">
             <TaskStatus>
               <button
                 onClick={() => handleUndoTask(index)}
