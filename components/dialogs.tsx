@@ -65,7 +65,7 @@ export function TaskCompletionDialog(props: CompletionDialogProps) {
         <Button
           role="button"
           tabIndex={0}
-          className="status-button border-primary bg-transparent hover:border-border hover:bg-yellow-400"
+          className="status-button border-primary bg-transparent hover:border-yellow-400 hover:bg-yellow-400"
           aria-label="Mark as Done"
         ></Button>
       </DialogTrigger>
