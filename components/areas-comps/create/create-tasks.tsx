@@ -63,7 +63,7 @@ export default function CreateTasks() {
           taskError ? "h-32" : "h-24"
         }`}
       >
-        <span className="relative flex w-full gap-2">
+        <span className="relative flex w-full gap-2 max-sm:gap-4">
           <Input
             label="Task"
             ref={inputRef}
@@ -102,12 +102,12 @@ export default function CreateTasks() {
       </div>
 
       <div
-        className={`overflow-auto ${
+        className={`overflow-auto py-2 ${
           taskError ? "h-[calc(100%-8rem)]" : "h-[calc(100%-6rem)]"
         }`}
       >
         {!tasks.length && (
-          <div className="flex-center relative h-full w-full opacity-80">
+          <div className="flex-center relative h-full w-full opacity-80 max-sm:p-4">
             {etem ? (
               <span
                 role="alert"
@@ -123,12 +123,12 @@ export default function CreateTasks() {
           </div>
         )}
         {tasks.map((item, index) => (
-          <div key={index} className="flex-between border-b p-2">
-            <span className="flex-start w-11/12 gap-4">
-              <span className="bbn flex-center h-8 w-8 rounded">
+          <div key={index} className="flex-between px-4 py-2">
+            <span className="flex-start w-5/6 gap-4">
+              <span className="bbn flex-center h-8 w-8 rounded-md">
                 {index + 1}
               </span>
-              <p className="w-5/6 truncate">{item.task}</p>
+              <p className="w-[calc(100%-3rem)] truncate">{item.task}</p>
             </span>
 
             <IconButton

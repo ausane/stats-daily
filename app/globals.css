@@ -131,7 +131,7 @@ input {
 }
 
 .status-button {
-  @apply bbn size-4 rounded-full p-0;
+  @apply bbn size-4 rounded-full p-0 max-sm:size-5;
 }
 
 .main-content {

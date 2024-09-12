@@ -125,14 +125,14 @@ export default function CreateArea({ userId }: { userId: string }) {
   };
 
   return (
-    <div className="h-full w-3/4 overflow-auto p-4 pt-0 max-md:w-full">
+    <div className="h-full w-3/4 overflow-auto max-md:w-full">
       <form
         onSubmit={submitForm}
         className="flex-between h-full w-full flex-col gap-4 max-sm:h-auto"
       >
-        <div className="flex-start sticky top-0 w-full flex-col bg-background max-md:pl-16">
-          <div className="flex-between w-full py-4">
-            <h2 className="px-4 text-xl opacity-80">Create Area</h2>
+        <div className="flex-start sticky top-0 z-40 w-full flex-col border-b bg-background max-md:pl-14">
+          <div className="flex-between w-full p-4">
+            <h2 className="text-xl opacity-80">Create Area</h2>
             <Button
               type="submit"
               className="bg-green-700 text-[#fafafa] hover:bg-green-800"
@@ -153,63 +153,65 @@ export default function CreateArea({ userId }: { userId: string }) {
             </span>
           </div>
         </div>
-        <div className="bbn flex h-4/5 w-full grow rounded-md max-sm:flex-col">
-          <div className="flex w-2/5 flex-col max-sm:w-full">
-            <Input
-              ref={areaRef}
-              label="Area"
-              labelClasses="border-b p-4 w-full"
-              name="area"
-              value={area}
-              className="mt-1 h-10 w-full rounded-md"
-              onChange={handleAreaChangeFunc}
-              onKeyDown={(e) => handleKeyPress(e, noteRef)}
-              role="textbox"
-              aria-required="true"
-              aria-invalid={!!inputError}
-              // required
-            >
-              {inputError && (
-                <span
-                  role="alert"
-                  aria-live="assertive"
-                  className="flex-start -z-10 mt-2 gap-1 text-sm text-[#f93a37] opacity-80"
-                >
-                  <CircleAlert size={15} aria-hidden="true" />
-                  <span>{inputError}</span>
-                </span>
-              )}
-            </Input>
-
-            <label className="h-full w-full grow p-4 max-sm:border-b">
-              Note
-              <textarea
-                name="note"
-                value={note}
-                ref={noteRef}
-                className={`bbn mt-1 ${noteError ? "h-[calc(100%-48px)]" : "h-[calc(100%-28px)]"} min-h-20 w-full resize-none rounded-md bg-transparent p-1 max-sm:resize-y`}
-                onChange={(e) => {
-                  dispatch(handleNoteChange(e.target.value));
-                  setNoteError(false);
-                }}
+        <div className="h-4/5 w-full p-4 pt-0">
+          <div className="bbn flex size-full grow rounded-md max-sm:flex-col">
+            <div className="flex w-2/5 flex-col max-sm:w-full">
+              <Input
+                ref={areaRef}
+                label="Area"
+                labelClasses="max-sm:border-b p-4 w-full"
+                name="area"
+                value={area}
+                className="mt-1 h-10 w-full rounded-md"
+                onChange={handleAreaChangeFunc}
+                onKeyDown={(e) => handleKeyPress(e, noteRef)}
                 role="textbox"
-                aria-required="false"
-                aria-invalid={noteError}
-              />
-              {noteError && (
-                <span
-                  role="alert"
-                  aria-live="assertive"
-                  className="flex-start -z-10 gap-1 text-sm text-[#f93a37] opacity-80"
-                >
-                  <CircleAlert size={15} aria-hidden="true" />
-                  <span>Only 400 characters allowed!</span>
-                </span>
-              )}
-            </label>
-          </div>
+                aria-required="true"
+                aria-invalid={!!inputError}
+                // required
+              >
+                {inputError && (
+                  <span
+                    role="alert"
+                    aria-live="assertive"
+                    className="flex-start -z-10 mt-2 gap-1 text-sm text-[#f93a37] opacity-80"
+                  >
+                    <CircleAlert size={15} aria-hidden="true" />
+                    <span>{inputError}</span>
+                  </span>
+                )}
+              </Input>
 
-          <CreateTasks />
+              <label className="h-full w-full grow p-4 max-sm:border-b">
+                Note
+                <textarea
+                  name="note"
+                  value={note}
+                  ref={noteRef}
+                  className={`bbn mt-1 ${noteError ? "h-[calc(100%-48px)]" : "h-[calc(100%-28px)]"} min-h-20 w-full resize-none rounded-md bg-transparent p-1 max-sm:resize-y`}
+                  onChange={(e) => {
+                    dispatch(handleNoteChange(e.target.value));
+                    setNoteError(false);
+                  }}
+                  role="textbox"
+                  aria-required="false"
+                  aria-invalid={noteError}
+                />
+                {noteError && (
+                  <span
+                    role="alert"
+                    aria-live="assertive"
+                    className="flex-start -z-10 gap-1 text-sm text-[#f93a37] opacity-80"
+                  >
+                    <CircleAlert size={15} aria-hidden="true" />
+                    <span>Only 400 characters allowed!</span>
+                  </span>
+                )}
+              </label>
+            </div>
+
+            <CreateTasks />
+          </div>
         </div>
       </form>
     </div>
