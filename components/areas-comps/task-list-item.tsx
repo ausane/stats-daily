@@ -184,7 +184,7 @@ export function TaskStatusPC(props: TaskStatusPCProps) {
   };
 
   if (openInputTask) {
-    return <span className="status-button bg-blue-400"></span>;
+    return <span className="status-button border-blue-400 bg-blue-400"></span>;
   } else {
     return (
       <TaskCompletionDialog

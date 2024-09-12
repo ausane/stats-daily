@@ -90,7 +90,7 @@ export default function TaskList({ data }: { data: TArea }) {
   return (
     <div className="flex-between box-border size-full grow gap-4 overflow-auto">
       <div className="bbn relative box-border h-full w-8/12 overflow-auto rounded-md max-lg:w-full">
-        <div className="flex-between sticky top-0 box-border h-10 w-full border-b px-2 pr-4">
+        <div className="flex-between sticky top-0 box-border h-12 w-full border-b px-2 pr-4">
           <span
             className="flex-center w-12 text-muted-foreground"
             aria-hidden="true"
@@ -122,7 +122,7 @@ export default function TaskList({ data }: { data: TArea }) {
           </TooltipCompo>
         </div>
 
-        <div className="h-[calc(100%-5rem)] w-full overflow-auto overflow-x-hidden">
+        <div className="h-[calc(100%-6rem)] w-full overflow-auto overflow-x-hidden">
           <AddNewTask
             areaId={areaId as string}
             addTaskInput={addTaskInput}
@@ -175,9 +175,9 @@ export function ShowCompletedTasks({
 
   return (
     <div
-      className={`duration-400 absolute bottom-0 left-0 w-full overflow-hidden border-t bg-background transition-all ease-in-out ${open ? "h-full" : "h-10"}`}
+      className={`duration-400 absolute bottom-0 left-0 w-full overflow-hidden border-t bg-background transition-all ease-in-out ${open ? "h-full" : "h-12"}`}
     >
-      <div className="flex-between sticky left-0 top-0 h-10 w-full border-b px-2 pr-4">
+      <div className="flex-between sticky left-0 top-0 h-12 w-full border-b px-2 pr-4">
         <span
           className="flex-center w-12 text-muted-foreground"
           aria-hidden="true"
@@ -210,7 +210,7 @@ export function ShowCompletedTasks({
             <TaskStatus>
               <button
                 onClick={() => handleUndoTask(index)}
-                className="status-button bg-red-700 hover:bg-red-800"
+                className="status-button border-red-700 bg-red-700 hover:bg-red-800"
                 aria-label="Undo Task"
               ></button>
             </TaskStatus>
@@ -309,7 +309,7 @@ export function AddNewTask(props: AddNewTaskProps) {
         />
 
         <TaskStatus>
-          <span className="status-button bg-green-400"></span>
+          <span className="status-button border-green-400 bg-green-400"></span>
         </TaskStatus>
 
         <TaskContent>
