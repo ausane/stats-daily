@@ -88,8 +88,8 @@ export default function TaskList({ data }: { data: TArea }) {
   }, [completedTasks, incompleteTasks.length]);
 
   return (
-    <div className="flex-between box-border size-full grow gap-4 overflow-auto">
-      <div className="bbn relative box-border h-full w-8/12 overflow-auto rounded-md max-lg:w-full">
+    <div className="flex-between box-border size-full grow gap-4 overflow-hidden">
+      <div className="bbn relative box-border h-full w-8/12 overflow-auto rounded-lg max-lg:w-full">
         <div className="flex-between sticky top-0 box-border h-12 w-full border-b px-2 pr-4">
           <span
             className="flex-center w-12 text-muted-foreground"

@@ -45,7 +45,7 @@ export default function DailyNote({ id, note }: { id: string; note: string }) {
   };
 
   return (
-    <div className="bbn box-border h-[calc(100%-10rem)] rounded-md px-4 py-2">
+    <div className="bbn box-border h-[calc(100%-10rem)] rounded-lg px-4 py-2">
       <div className="flex-between h-10">
         <h2 className="font-bold">Note</h2>
         {inputNote ? (
