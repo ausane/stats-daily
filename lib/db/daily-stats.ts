@@ -2,6 +2,7 @@ import { Area } from "@/models/task.model";
 import connectToDatabase from "./mongodb";
 import { Stats } from "@/models/stats.model";
 import { TArea, TStats, OmitDocument, taskStats, TTask } from "../types";
+import { Schema } from "mongoose";
 
 export const dailyStats = async () => {
   await connectToDatabase();
@@ -45,7 +46,10 @@ export const statsdaily = async (userId: string, count: number) => {
   }
 };
 
-export const taskStatsArray = (stats: TArea[], userId: string) => {
+export const taskStatsArray = (
+  stats: TArea[],
+  userId: Schema.Types.ObjectId,
+) => {
   const userStats = stats.filter((item) => item.userId === userId);
 
   const taskStats: taskStats[] = userStats.map((item) => {
