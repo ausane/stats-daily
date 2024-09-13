@@ -6,7 +6,7 @@ import { currentUser } from "@/lib/db/stats";
 export default async function StatsPage() {
   const { _id: userId }: TUser = await currentUser();
 
-  const stats: TStats[] = await statsdaily(userId as string, 60);
+  const stats: TStats[] = await statsdaily(userId?.toString() as string, 60);
 
   // cleanTask();
 
