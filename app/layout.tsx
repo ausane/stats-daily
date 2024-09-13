@@ -1,10 +1,10 @@
 import "./globals.css";
-// import { StackProvider } from "@stackframe/stack";
-// import { stackServerApp } from "../stack";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import StoreProvider from "@/components/store-provider";
 import { ThemeProvider } from "@/components/theme-provider";
+import SessionProviderComponent from "@/components/session-provider";
+import { Session } from "next-auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -43,22 +43,24 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  session,
 }: Readonly<{
   children: React.ReactNode;
+  session: Session;
 }>) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* <StackProvider app={stackServerApp}> */}
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <StoreProvider>{children}</StoreProvider>
-        </ThemeProvider>
-        {/* </StackProvider> */}
+        <SessionProviderComponent session={session}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <StoreProvider>{children}</StoreProvider>
+          </ThemeProvider>
+        </SessionProviderComponent>
       </body>
     </html>
   );

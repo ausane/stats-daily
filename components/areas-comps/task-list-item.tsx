@@ -263,14 +263,17 @@ export function TaskOptionsUI({
                 <Ellipsis size={15} aria-hidden="true" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-32">
-              <DropdownMenuItem onClick={handleEditClick}>
-                <Pencil className="mr-2 h-4 w-4" />
+            <DropdownMenuContent className="w-24">
+              <DropdownMenuItem onClick={handleEditClick} className="p-2">
+                <Pencil className="mr-2 h-4 w-4" aria-hidden="true" />
                 <span>Edit</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleDeleteTask}>
-                <Trash className="mr-2 h-4 w-4" />
-                <span>Delete</span>
+              <DropdownMenuItem onClick={handleDeleteTask} className="p-2">
+                <Trash
+                  className="mr-2 h-4 w-4 text-red-500"
+                  aria-hidden="true"
+                />
+                <span className="text-red-500">Delete</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

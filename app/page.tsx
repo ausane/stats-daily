@@ -1,11 +1,13 @@
 import HomePage from "@/components/home-page";
 import { fetchTasks } from "@/lib/db/stats";
-// import { stackServerApp } from "@/stack";
 import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
 
 export default async function Home() {
-  // const user = await stackServerApp.getUser();
-  // if (!user) return <HomePage />;
+  const session = await getServerSession();
+
+  // console.log(session);
+  if (!session) return <HomePage />;
 
   const areas = await fetchTasks();
 

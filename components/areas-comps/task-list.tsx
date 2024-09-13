@@ -206,7 +206,7 @@ export function ShowCompletedTasks({
         className={`h-[calc(100%-3rem)] flex-col overflow-auto ${open ? "flex" : "hidden"} `}
       >
         {completedTasks?.map((item, index) => (
-          <div key={index} className="flex-between w-full border-b p-2">
+          <div key={index} className="flex-between w-full border-b px-2 py-3">
             <TaskStatus>
               <button
                 onClick={() => handleUndoTask(index)}
