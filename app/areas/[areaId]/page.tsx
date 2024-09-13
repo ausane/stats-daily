@@ -1,10 +1,9 @@
 import { Metadata } from "next";
 import ShowTasks from "@/components/areas-comps/area/show-tasks";
 import CreateArea from "@/components/areas-comps/create/create-area";
-import { fetchAreaById, fetchTasks } from "@/lib/db/stats";
-import { TArea } from "@/lib/types";
+import { currentUser, fetchAreaById, fetchTasks } from "@/lib/db/stats";
+import { TArea, TUser } from "@/lib/types";
 import InitializeSD from "@/components/areas-comps/create/initialize";
-// import { stackServerApp } from "@/stack";
 
 export type AreasPageProps = { params: { areaId: string } };
 
@@ -25,22 +24,16 @@ export const generateMetadata = async ({
 
 export default async function AreasPage(props: AreasPageProps) {
   const { areaId } = props.params;
-  // const user = await stackServerApp.getUser();
+  const { _id: userId }: TUser = await currentUser();
 
-  const user = {
-    id: "user_id21",
-  };
-
-  // if (user) {
   if (areaId === "create") {
     const data = await fetchTasks();
     return !data?.length ? (
-      <InitializeSD userId={user.id} />
+      <InitializeSD userId={userId?.toString() as string} />
     ) : (
-      <CreateArea userId={user.id} />
+      <CreateArea userId={userId?.toString() as string} />
     );
   }
 
   return <ShowTasks areaId={areaId} />;
-  // }
 }

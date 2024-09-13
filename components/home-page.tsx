@@ -8,7 +8,7 @@ export default function HomePage() {
         <SDIconWithTitle />
         <nav className="ml-auto flex gap-4 sm:gap-6">
           <Link
-            href="/sign-up"
+            href="/sign-in"
             className="text-sm font-medium text-muted-foreground underline-offset-4 hover:underline"
             prefetch={false}
           >
@@ -108,7 +108,7 @@ export function SignUpButton() {
   return (
     <div className="flex flex-col gap-2 min-[400px]:flex-row">
       <Link
-        href="/sign-up"
+        href="/sign-in"
         className="inline-flex h-10 items-center justify-center rounded-md border border-muted bg-foreground/70 px-8 text-sm font-medium text-background shadow-sm transition-colors hover:bg-background hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
         prefetch={false}
       >

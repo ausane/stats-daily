@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CircleAlert, Pencil, Trash, ChevronDown } from "lucide-react";
 import { RenameAreaDialog } from "@/components/dialogs";
-// import { UserButton } from "@stackframe/stack";
+import UserProfile from "@/components/user";
 
 export default function AreaHeader(props: { areaId: string; area: string }) {
   const { areaId, area } = props;
@@ -105,9 +105,7 @@ export default function AreaHeader(props: { areaId: string; area: string }) {
 
         <div className="z-20 flex gap-4">
           <ModeToggle />
-          <span className="flex-center bbn h-10 w-10 rounded-md hover:bg-accent hover:text-accent-foreground">
-            {/* <UserButton aria-label="User Button Icon" /> */}
-          </span>
+          <UserProfile />
         </div>
       </div>
 
@@ -171,14 +169,20 @@ export function TaskItemCompo(props: TaskItemCompoProps) {
             <ChevronDown size={18} className="w-5 opacity-50" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-20">
-          <DropdownMenuItem onClick={openRenameAreaDialog}>
+        <DropdownMenuContent className="w-32">
+          <DropdownMenuItem
+            onClick={openRenameAreaDialog}
+            className="max-sm:p-2"
+          >
             <Pencil className="mr-2 h-4 w-4" aria-hidden="true" />
             <span>Rename</span>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setDeleteDialog(true)}>
-            <Trash className="mr-2 h-4 w-4" aria-hidden="true" />
-            <span>Delete</span>
+          <DropdownMenuItem
+            onClick={() => setDeleteDialog(true)}
+            className="max-sm:p-2"
+          >
+            <Trash className="mr-2 h-4 w-4 text-red-500" aria-hidden="true" />
+            <span className="text-red-500">Delete</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

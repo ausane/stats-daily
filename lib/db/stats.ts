@@ -1,15 +1,22 @@
 import connectToDatabase from "@/lib/db/mongodb";
 import { Area } from "@/models/task.model";
-// import { stackServerApp } from "@/stack";
+import { getServerSession } from "next-auth";
 import { Types } from "mongoose";
+import { User } from "@/models/user.model";
+import { TUser } from "../types";
+
+export const currentUser = async () => {
+  const session = await getServerSession();
+  return await User.findOne({ email: session?.user?.email });
+};
 
 export const fetchTasks = async () => {
   await connectToDatabase();
 
   try {
-    // const user = await stackServerApp.getUser();
+    const user: TUser = await currentUser();
 
-    const response = await Area.find({}).sort({
+    const response = await Area.find({ userId: user._id }).sort({
       updatedAt: -1,
     });
     if (!response) throw new Error("Area not found!");

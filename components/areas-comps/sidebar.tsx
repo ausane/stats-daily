@@ -32,7 +32,7 @@ export default function Sidebar({ data }: { data: TSC[] }) {
     <>
       <Sheet open={isSidebarOpen} onOpenChange={setSidebarState}>
         <SheetTrigger
-          className={`flex-center bbn fixed left-4 top-4 z-50 h-10 w-10 rounded-md bg-background hover:bg-accent hover:text-accent-foreground max-md:flex md:hidden ${isSidebarOpen && "hidden"}`}
+          className={`flex-center bbn fixed left-4 top-4 z-50 h-10 w-10 rounded-lg bg-background hover:bg-accent hover:text-accent-foreground max-md:flex md:hidden ${isSidebarOpen && "hidden"}`}
           onClick={toggleSidebar}
           aria-labelledby="open-sidebar-btn"
         >
@@ -76,17 +76,17 @@ export function SidebarContent(props: SidebarContentProps) {
 
   return (
     <>
-      <div className="sticky top-20 h-[calc(100%-6rem)] w-full overflow-auto px-2">
+      <div className="sticky top-20 h-[calc(100%-8rem)] w-full overflow-auto px-2">
         {areas?.map((item, index) => (
           <div
             key={index}
-            className={`flex-start my-2 box-border w-[calc(100%-2px)] rounded-md hover:bg-secondary ${item.areaId === areaId ? "bg-secondary" : "bg-background"}`}
+            className={`flex-start my-2 box-border w-[calc(100%-2px)] rounded-lg hover:bg-secondary ${item.areaId === areaId ? "bg-secondary" : "bg-background"}`}
           >
             <button
               onClick={() => handleAreaNavigation(item.areaId)}
               className="flex-start box-border w-full gap-4"
             >
-              <span className="flex-center bbn h-10 w-10 rounded-md">
+              <span className="flex-center bbn h-10 w-10 rounded-lg">
                 {index + 1}
               </span>
               <p className="flex-start w-[calc(100%-4rem)] truncate">
@@ -107,12 +107,12 @@ export function CreateAreaLink({
 }) {
   return (
     <Link
-      className="flex-between mx-2 h-10 w-full rounded-lg pr-4 opacity-80 transition-transform duration-200 hover:bg-accent hover:text-accent-foreground active:scale-95"
+      className="flex-between mx-2 h-10 rounded-lg pr-4 opacity-80 transition-transform duration-200 hover:bg-accent hover:text-accent-foreground active:scale-95"
       onClick={() => setSidebarState(false)}
       href={`/areas/create`}
     >
       <h2 className="flex-start gap-4 text-lg">
-        <code className="bbn flex-center bold h-10 w-10 rounded-md text-2xl">
+        <code className="bbn flex-center bold h-10 w-10 rounded-lg text-2xl">
           SD
         </code>
         <span>StatsDaily</span>

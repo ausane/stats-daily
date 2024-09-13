@@ -1,11 +1,11 @@
 import { PieChartProps } from "@/components/charts/pie-chart";
-import { Document } from "mongoose";
+import { Document, Schema } from "mongoose";
 import { ImageProps } from "next/image";
 import React, { ButtonHTMLAttributes, InputHTMLAttributes } from "react";
 
 // Stats Schema Type
 export type TStats = {
-  userId: string;
+  userId: Schema.Types.ObjectId;
   note?: string;
   taskStats: taskStats[];
   updatedAt?: Date;
@@ -22,7 +22,7 @@ export type taskStats = {
 
 // Stat Schema Type
 export type TArea = {
-  userId: string;
+  userId: Schema.Types.ObjectId;
   area: string;
   note?: string;
   tasks: TTask[];
@@ -35,6 +35,13 @@ export type TTask = {
   completed: boolean;
   updatedAt?: Date;
   createdAt?: Date;
+} & Document;
+
+// User Schema Type
+export type TUser = {
+  email: string;
+  name: string;
+  image: string;
 } & Document;
 
 // TSC Type
