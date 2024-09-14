@@ -257,7 +257,7 @@ export function TaskOptionsUI({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 rounded-full p-0"
+                className="size-8 p-0"
                 aria-label="Task Options Button"
               >
                 <Ellipsis size={15} aria-hidden="true" />

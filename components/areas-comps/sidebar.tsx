@@ -6,7 +6,7 @@ import { TSC, SetState, SidebarContentProps } from "@/lib/types";
 import { useParams, useRouter } from "next/navigation";
 import { insertAllAreas } from "@/features/area-slice";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { Menu, SquarePen } from "lucide-react";
+import { BarChart2, Menu, SquarePen } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -15,6 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Button } from "../ui/button";
 
 export default function Sidebar({ data }: { data: TSC[] }) {
   const dispatch = useAppDispatch();
@@ -53,7 +54,7 @@ export default function Sidebar({ data }: { data: TSC[] }) {
       </Sheet>
 
       <div className="box-border h-full w-1/4 overflow-auto border-r px-2 max-lg:w-2/5 max-md:hidden">
-        <div className="flex-start sticky top-4 mb-4 box-border w-full bg-background">
+        <div className="my-4 box-border">
           <CreateAreaLink setSidebarState={setSidebarState} />
         </div>
         <SidebarContent areas={areas} />
@@ -76,7 +77,7 @@ export function SidebarContent(props: SidebarContentProps) {
 
   return (
     <>
-      <div className="sticky top-20 h-[calc(100%-8rem)] w-full overflow-auto px-2">
+      <div className="sticky top-20 h-[calc(100%-10rem)] w-full overflow-auto px-2">
         {areas?.map((item, index) => (
           <div
             key={index}
@@ -106,19 +107,34 @@ export function CreateAreaLink({
   setSidebarState: SetState<boolean>;
 }) {
   return (
-    <Link
-      className="flex-between mx-2 h-10 rounded-lg pr-4 opacity-80 transition-transform duration-200 hover:bg-accent hover:text-accent-foreground active:scale-95"
-      onClick={() => setSidebarState(false)}
-      href={`/areas/create`}
-    >
-      <h2 className="flex-start gap-4 text-lg">
-        <code className="bbn flex-center bold h-10 w-10 rounded-lg text-2xl">
-          SD
-        </code>
-        <span>StatsDaily</span>
-      </h2>
-      <SquarePen size={20} aria-hidden="true" />
-      <span className="sr-only">Create new area</span>
-    </Link>
+    <div className="flex flex-col gap-2">
+      <Link
+        className="flex-between link-click-effect group mx-2 h-10 rounded-lg pr-4 opacity-80"
+        onClick={() => setSidebarState(false)}
+        href={`/areas/create`}
+      >
+        <span className="flex-start gap-4 text-lg">
+          <code className="bbn flex-center bold h-10 w-10 rounded-lg text-2xl">
+            SD
+          </code>
+          <h2>StatsDaily</h2>
+        </span>
+        <SquarePen
+          size={20}
+          className="opacity-0 transition-opacity group-hover:opacity-100"
+          aria-hidden="true"
+        />
+        <span className="sr-only">Create new area</span>
+      </Link>
+      <Link
+        href={"/stats"}
+        className="flex-start link-click-effect mx-2 h-10 gap-4 rounded-lg pr-4 opacity-80"
+      >
+        <Button variant="ghost" className="bbn size-10 p-0">
+          <BarChart2 size={24} />
+        </Button>
+        <h2 className="text-lg">Stats</h2>
+      </Link>
+    </div>
   );
 }

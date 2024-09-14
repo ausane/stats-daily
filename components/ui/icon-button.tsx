@@ -24,7 +24,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         variant={variant}
         size="icon"
         className={clsx(
-          "flex-center h-8 w-8",
+          "flex-center size-8",
           circle && "rounded-full",
           className,
         )}

@@ -84,7 +84,7 @@ export default function HomePage() {
 
 export function SDIcon() {
   return (
-    <code className="bbn flex-center bold h-10 w-10 rounded-md border-border text-2xl font-bold text-muted-foreground">
+    <code className="bbn flex-center bold bbn h-10 w-10 rounded-md text-2xl font-bold text-foreground/75">
       SD
     </code>
   );
@@ -94,9 +94,7 @@ export function SDIconWithTitle() {
   return (
     <Link href="/" className="flex-center gap-4" prefetch={false}>
       <SDIcon />
-      <span className="text-2xl font-bold text-muted-foreground">
-        StatsDaily
-      </span>
+      <span className="text-3xl font-bold text-foreground/75">StatsDaily</span>
       <span className="sr-only">
         StatsDaily - Daily Tasks Completion Tracker
       </span>
@@ -120,7 +118,7 @@ export function SignUpButton() {
 
 export function PageFooter() {
   return (
-    <footer className="flex-between w-full shrink-0 border-t border-muted px-4 py-6 sm:flex-row md:px-6">
+    <footer className="flex-between h-16 w-full shrink-0 border-t border-muted px-4 sm:flex-row md:px-6">
       <p className="text-xs text-muted-foreground">
         Copyright &copy; 2024 StatsDaily
         <span className="max-sm:hidden">

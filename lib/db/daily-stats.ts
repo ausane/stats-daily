@@ -2,7 +2,7 @@ import { Area } from "@/models/task.model";
 import connectToDatabase from "./mongodb";
 import { Stats } from "@/models/stats.model";
 import { TArea, TStats, OmitDocument, taskStats, TTask } from "../types";
-import { Schema } from "mongoose";
+import { User } from "@/models/user.model";
 
 export const dailyStats = async () => {
   await connectToDatabase();
@@ -46,10 +46,7 @@ export const statsdaily = async (userId: string, count: number) => {
   }
 };
 
-export const taskStatsArray = (
-  stats: TArea[],
-  userId: Schema.Types.ObjectId,
-) => {
+export const taskStatsArray = (stats: TArea[], userId: string) => {
   const userStats = stats.filter((item) => item.userId === userId);
 
   const taskStats: taskStats[] = userStats.map((item) => {
@@ -76,6 +73,7 @@ export async function cleanTask() {
   try {
     await Area.deleteMany();
     await Stats.deleteMany();
+    // await User.deleteMany();
   } catch (error) {
     console.error(error);
   }

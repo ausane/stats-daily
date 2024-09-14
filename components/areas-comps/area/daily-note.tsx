@@ -5,8 +5,9 @@ import { updateNote } from "@/lib/services/handle-update";
 import { X, Check, Pencil } from "lucide-react";
 import IconButton from "@/components/ui/icon-button";
 import { ValidationAlertDialog } from "@/components/dialogs";
+import { DailyNoteProps } from "@/lib/types";
 
-export default function DailyNote({ id, note }: { id: string; note: string }) {
+export default function DailyNote({ areaId, note }: DailyNoteProps) {
   const tRef = useRef<HTMLTextAreaElement>(null);
 
   const [inputNote, setInputNote] = useState(false);
@@ -15,16 +16,25 @@ export default function DailyNote({ id, note }: { id: string; note: string }) {
   const [alertDialog, setAlertDialog] = useState(false);
 
   useEffect(() => {
-    if (inputNote && tRef.current) {
-      tRef.current.focus();
+    const textarea = tRef.current;
+    if (inputNote && textarea) {
+      textarea.focus();
       // Move the cursor to the end of the text
-      tRef.current.setSelectionRange(
-        tRef.current.value.length,
-        tRef.current.value.length,
-      );
+      textarea.setSelectionRange(textarea.value.length, textarea.value.length);
       // Scroll to the end of the text
-      tRef.current.scrollTop = tRef.current.scrollHeight;
+      textarea.scrollTop = textarea.scrollHeight;
     }
+
+    const adjustHeight = () => {
+      if (window.innerWidth <= 640 && textarea) {
+        textarea.style.height = "auto"; // Reset the height
+        textarea.style.height = `${textarea.scrollHeight}px`; // Set it to the scroll height
+      }
+    };
+
+    adjustHeight(); // Call it once on initial render
+    window.addEventListener("resize", adjustHeight); // Adjust on window resize
+    return () => window.removeEventListener("resize", adjustHeight); // Clean up listener
   }, [inputNote]);
 
   const handleNoteChange = async () => {
@@ -36,7 +46,7 @@ export default function DailyNote({ id, note }: { id: string; note: string }) {
     setInputNote(false);
     setNoteState(noteInput);
 
-    await updateNote(id, noteInput);
+    await updateNote(areaId, noteInput);
   };
 
   const handleInputNoteClose = () => {
@@ -45,8 +55,8 @@ export default function DailyNote({ id, note }: { id: string; note: string }) {
   };
 
   return (
-    <div className="bbn box-border h-[calc(100%-10rem)] rounded-lg px-4 py-2">
-      <div className="flex-between h-10">
+    <>
+      <div className="flex-between sm:h-10">
         <h2 className="font-bold">Note</h2>
         {inputNote ? (
           <span className="flex gap-2">
@@ -77,8 +87,9 @@ export default function DailyNote({ id, note }: { id: string; note: string }) {
           ref={tRef}
           name="note"
           value={noteInput}
-          className="bbn h-[calc(100%-40px)] w-full resize-none rounded-md bg-transparent p-1"
+          className="bbn w-full rounded-md bg-transparent p-1 sm:h-[calc(100%-40px)] sm:resize-none"
           onChange={(e) => setNoteInput(e.target.value)}
+          // style={{ minHeight: "40px" }}
           role="textbox"
           aria-label="Edit Note Textarea"
         />
@@ -93,6 +104,6 @@ export default function DailyNote({ id, note }: { id: string; note: string }) {
         alertDialog={alertDialog}
         setAlertDialog={setAlertDialog}
       />
-    </div>
+    </>
   );
 }

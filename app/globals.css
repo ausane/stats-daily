@@ -141,3 +141,7 @@ input {
 .div-bg-image {
   @apply bbn relative aspect-video w-full rounded-lg bg-contain bg-center bg-no-repeat;
 }
+
+.link-click-effect {
+  @apply transition-transform duration-200 hover:bg-accent hover:text-accent-foreground active:scale-95;
+}

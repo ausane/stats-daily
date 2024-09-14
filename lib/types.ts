@@ -5,7 +5,7 @@ import React, { ButtonHTMLAttributes, InputHTMLAttributes } from "react";
 
 // Stats Schema Type
 export type TStats = {
-  userId: Schema.Types.ObjectId;
+  userId: string;
   note?: string;
   taskStats: taskStats[];
   updatedAt?: Date;
@@ -22,7 +22,7 @@ export type taskStats = {
 
 // Stat Schema Type
 export type TArea = {
-  userId: Schema.Types.ObjectId;
+  userId: string;
   area: string;
   note?: string;
   tasks: TTask[];
@@ -209,4 +209,17 @@ export type MainContentProps = {
 export type SidebarContentProps = {
   areas: TSC[];
   setSidebarState?: SetState<boolean>;
+};
+
+// Area Header Props Type
+export type AreaHeaderProps = {
+  areaId: string;
+  area: string;
+  user: TUser;
+};
+
+// Daily Note Props Type
+export type DailyNoteProps = {
+  areaId: string;
+  note: string;
 };

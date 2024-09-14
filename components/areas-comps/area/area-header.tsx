@@ -8,7 +8,12 @@ import { removeAreaById, setCurrentArea } from "@/features/area-slice";
 import Input from "@/components/ui/input";
 import { updateAreaName } from "@/lib/services/handle-update";
 import { ConfirmDeletionDialog } from "@/components/dialogs";
-import { InputChangeEvent, TaskItemCompoProps } from "@/lib/types";
+import {
+  AreaHeaderProps,
+  InputChangeEvent,
+  TaskItemCompoProps,
+  TUser,
+} from "@/lib/types";
 import { ModeToggle } from "@/components/theme-provider";
 import { handleKeyDownEnter } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -16,14 +21,21 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CircleAlert, Pencil, Trash, ChevronDown } from "lucide-react";
+import {
+  CircleAlert,
+  Pencil,
+  Trash,
+  ChevronDown,
+  StickyNote,
+} from "lucide-react";
 import { RenameAreaDialog } from "@/components/dialogs";
-import UserProfile from "@/components/user-profile";
+import UserProfile from "@/components/user-icon";
 
-export default function AreaHeader(props: { areaId: string; area: string }) {
-  const { areaId, area } = props;
+export default function AreaHeader(props: AreaHeaderProps) {
+  const { areaId, area, user } = props;
 
   const areaRef = useRef<HTMLInputElement>(null);
 
@@ -105,7 +117,7 @@ export default function AreaHeader(props: { areaId: string; area: string }) {
 
         <div className="z-20 flex gap-4">
           <ModeToggle />
-          <UserProfile />
+          <UserProfile user={user} />
         </div>
       </div>
 
@@ -166,10 +178,22 @@ export function TaskItemCompo(props: TaskItemCompoProps) {
             <h2 className="truncate text-xl opacity-80 max-md:text-lg">
               {areaName}
             </h2>
-            <ChevronDown size={18} className="w-5 opacity-50" />
+            <ChevronDown
+              size={18}
+              className="w-5 opacity-50"
+              aria-hidden="true"
+            />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-32">
+          <DropdownMenuItem
+            onClick={() => router.push(`/areas/${areaId}/note`)}
+            className="max-sm:p-2"
+          >
+            <StickyNote className="mr-2 h-4 w-4" aria-hidden="true" />
+            <span>Note</span>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={openRenameAreaDialog}
             className="max-sm:p-2"
