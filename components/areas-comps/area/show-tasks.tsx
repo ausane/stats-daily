@@ -2,23 +2,20 @@ import { TArea, TUser } from "@/lib/types";
 import { currentUser, fetchAreaById } from "@/lib/db/stats";
 import TaskList from "../task-list";
 import AreaHeader from "./area-header";
+import { ps } from "@/lib/utils";
 
 export default async function ShowTasks({ areaId }: { areaId: string }) {
-  type TSearchedData = TArea | void | null | undefined;
-  const searchedData: TSearchedData = await fetchAreaById(areaId);
-  const serializableData: TArea = JSON.parse(JSON.stringify(searchedData));
+  const searchedData: TArea | undefined = await fetchAreaById(areaId);
 
-  if (serializableData) {
+  if (searchedData) {
+    const serializableData: TArea = ps(searchedData);
     const { _id: areaId, area } = serializableData;
+
     const user: TUser = await currentUser();
 
     return (
       <div className="main-content flex flex-col gap-4 overflow-auto p-4 pt-0 max-md:w-full">
-        <AreaHeader
-          areaId={areaId as string}
-          area={area}
-          user={JSON.parse(JSON.stringify(user))}
-        />
+        <AreaHeader areaId={areaId as string} area={area} user={ps(user)} />
         <TaskList data={serializableData} />
       </div>
     );

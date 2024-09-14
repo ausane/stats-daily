@@ -210,11 +210,13 @@ export function ShowCompletedTasks({
         {completedTasks?.map((item, index) => (
           <div key={index} className="flex-between w-full border-b px-2 py-3">
             <TaskStatus>
-              <button
-                onClick={() => handleUndoTask(index)}
-                className="status-button border-red-700 bg-red-700 hover:bg-red-800"
-                aria-label="Undo Task"
-              ></button>
+              <TooltipCompo tip="Undo">
+                <button
+                  onClick={() => handleUndoTask(index)}
+                  className="status-button border-red-700 bg-red-700 hover:bg-red-800"
+                  aria-label="Undo Task"
+                ></button>
+              </TooltipCompo>
             </TaskStatus>
 
             <TaskContent>

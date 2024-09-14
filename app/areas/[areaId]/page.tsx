@@ -11,15 +11,11 @@ export const generateMetadata = async ({
   params,
 }: AreasPageProps): Promise<Metadata> => {
   const { areaId } = params;
-  const isCreateArea = areaId === "create";
-  const areaItem: TArea = isCreateArea || (await fetchAreaById(areaId));
-  const title = isCreateArea
-    ? "Create Area"
-    : areaItem?.area || "Area Not Found";
 
-  return {
-    title: title,
-  };
+  if (areaId === "create") return { title: "Create Area" };
+
+  const areaItem = await fetchAreaById(areaId);
+  return { title: areaItem?.area ?? "Area Not Found" };
 };
 
 export default async function AreasPage(props: AreasPageProps) {

@@ -188,12 +188,12 @@ export function TaskItemCompo(props: TaskItemCompoProps) {
         <DropdownMenuContent className="w-32">
           <DropdownMenuItem
             onClick={() => router.push(`/areas/${areaId}/note`)}
-            className="max-sm:p-2"
+            className="max-sm:p-2 sm:hidden"
           >
             <StickyNote className="mr-2 h-4 w-4" aria-hidden="true" />
             <span>Note</span>
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
+          <DropdownMenuSeparator className="sm:hidden" />
           <DropdownMenuItem
             onClick={openRenameAreaDialog}
             className="max-sm:p-2"
