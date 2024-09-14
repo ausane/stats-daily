@@ -26,7 +26,7 @@ export const st = (a: TTask, b: TTask) => {
   );
 };
 
-// Task Updating object function
+// Task updating object function
 export const ntf = (
   task: string | TTask,
   completed: boolean,
@@ -36,3 +36,6 @@ export const ntf = (
   completed,
   achieved,
 });
+
+// Parse stringify object function
+export const ps = (obj: object) => JSON.parse(JSON.stringify(obj));

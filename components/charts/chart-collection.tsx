@@ -32,6 +32,7 @@ export function ChartCollection({ data }: { data: TStats[] }) {
     return (
       <>
         <ChartHeader
+          statsLength={false}
           selectedValue={selectedValue}
           setSelectedValue={setSelectedValue}
         />
@@ -49,6 +50,7 @@ export function ChartCollection({ data }: { data: TStats[] }) {
   return (
     <>
       <ChartHeader
+        statsLength={true}
         selectedValue={selectedValue}
         setSelectedValue={setSelectedValue}
       />
@@ -64,11 +66,15 @@ export function ChartCollection({ data }: { data: TStats[] }) {
 }
 
 // Chart Collection Component Header
-export function ChartHeader({ selectedValue, setSelectedValue }: HeaderProps) {
+export function ChartHeader({
+  statsLength,
+  selectedValue,
+  setSelectedValue,
+}: HeaderProps) {
   return (
     <header className="flex-between sticky top-0 z-40 h-16 border-b bg-background px-4 lg:px-6">
       <SDIconWithTitle />
-      <div>
+      <div className={statsLength ? "block" : "hidden"}>
         <Select
           value={selectedValue}
           onValueChange={setSelectedValue}

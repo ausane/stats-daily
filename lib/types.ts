@@ -46,8 +46,8 @@ export type TUser = {
 
 // TSC Type
 export type TSC = {
-  areaId: string;
-  areaName: string;
+  areaId?: string;
+  areaName?: string;
 };
 
 // Input Props Type
@@ -193,6 +193,7 @@ export type RangeChartProps = {
 
 // Stats Page Header Props Type
 export type HeaderProps = {
+  statsLength: boolean;
   selectedValue: string;
   setSelectedValue: SetState<string>;
 };

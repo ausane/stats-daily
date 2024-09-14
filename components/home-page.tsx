@@ -92,9 +92,9 @@ export function SDIcon() {
 
 export function SDIconWithTitle() {
   return (
-    <Link href="/" className="flex-center gap-4" prefetch={false}>
+    <Link href="/" className="flex-center gap-2.5" prefetch={false}>
       <SDIcon />
-      <span className="text-3xl font-bold text-foreground/75">StatsDaily</span>
+      <span className="text-2xl font-bold text-foreground/75">StatsDaily</span>
       <span className="sr-only">
         StatsDaily - Daily Tasks Completion Tracker
       </span>

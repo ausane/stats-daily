@@ -6,7 +6,7 @@ import { TSC } from "@/lib/types";
 export const metadata: Metadata = {
   title: {
     default: "StatsDaily Area",
-    template: "%s - StatsDaily",
+    template: "%s — StatsDaily",
   },
 };
 

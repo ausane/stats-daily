@@ -15,12 +15,12 @@ import { TUser } from "@/lib/types";
 
 export default function UserProfile({ user }: { user: TUser }) {
   return (
-    <div className="flex-center bbn h-10 w-10 rounded-full hover:bg-accent hover:text-accent-foreground">
+    <div className="flex-center bbn h-10 w-10 rounded-lg hover:bg-accent hover:text-accent-foreground">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className="rounded-full p-0"
+            className="rounded-lg p-0"
             aria-label="User Icon"
           >
             <Image
@@ -29,7 +29,7 @@ export default function UserProfile({ user }: { user: TUser }) {
               alt="user profile picture"
               height={24}
               width={24}
-              className="size-full rounded-full"
+              className="size-full rounded-lg"
             />
           </Button>
         </DropdownMenuTrigger>
@@ -55,7 +55,7 @@ export default function UserProfile({ user }: { user: TUser }) {
             aria-label="SignOut"
           >
             <LogOut className="mr-2 h-4 w-4" aria-hidden="true" />
-            <span>SignOut</span>
+            <span>Sign Out</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

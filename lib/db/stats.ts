@@ -3,13 +3,15 @@ import { Area } from "@/models/task.model";
 import { getServerSession } from "next-auth";
 import { Types } from "mongoose";
 import { User } from "@/models/user.model";
-import { TUser } from "../types";
+import { TArea, TUser } from "../types";
 
+// To Get Current User
 export const currentUser = async () => {
   const session = await getServerSession();
   return await User.findOne({ email: session?.user?.email });
 };
 
+// To Get All Areas of Current User
 export const fetchTasks = async () => {
   await connectToDatabase();
 
@@ -17,24 +19,25 @@ export const fetchTasks = async () => {
     const user: TUser = await currentUser();
     const userId = user?._id?.toString() as string;
 
-    const response = await Area.find({ userId }).sort({
+    const areas = await Area.find({ userId }).sort({
       updatedAt: -1,
     });
-    if (!response) throw new Error("Area not found!");
+    if (!areas.length) throw new Error("Area not found!");
 
-    return response;
+    return areas;
   } catch (error) {
     consoleError(error);
   }
 };
 
+// To Get Areas for Sidebar Content
 export const fetchAreas = async () => {
-  const response = await fetchTasks();
+  const response: TArea[] | undefined = await fetchTasks();
 
   if (response) {
     const tasks = response.map((task) => {
       return {
-        areaId: task._id.toString(),
+        areaId: task._id?.toString(),
         areaName: task.area,
       };
     });
@@ -46,6 +49,7 @@ export const fetchAreas = async () => {
   }
 };
 
+// To Get Area by Id of Current User
 export const fetchAreaById = async (areaId: string) => {
   await connectToDatabase();
   const isValidObjectId = Types.ObjectId.isValid(areaId);
@@ -54,10 +58,11 @@ export const fetchAreaById = async (areaId: string) => {
     // Throw an error if id is invalid
     if (!isValidObjectId) throw new Error("Invalid id!");
 
-    const response = await Area.findById(areaId);
-    if (!response) throw new Error("Area not found!");
+    const user = await currentUser();
+    const areas: TArea[] = await Area.find({ userId: user._id });
 
-    return response;
+    if (!areas.length) throw new Error("Area not found!");
+    return areas.find((area) => area._id?.toString() === areaId);
   } catch (error) {
     consoleError(error);
   }

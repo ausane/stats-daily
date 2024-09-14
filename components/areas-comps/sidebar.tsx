@@ -10,12 +10,12 @@ import { BarChart2, Menu, SquarePen } from "lucide-react";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "../ui/button";
+import { TooltipCompo } from "../ui/tooltip";
 
 export default function Sidebar({ data }: { data: TSC[] }) {
   const dispatch = useAppDispatch();
@@ -47,7 +47,6 @@ export default function Sidebar({ data }: { data: TSC[] }) {
             <SheetTitle className="my-8">
               <CreateAreaLink setSidebarState={setSidebarState} />
             </SheetTitle>
-            <SheetDescription></SheetDescription>
           </SheetHeader>
           <SidebarContent areas={areas} setSidebarState={setSidebarState} />
         </SheetContent>
@@ -84,7 +83,7 @@ export function SidebarContent(props: SidebarContentProps) {
             className={`flex-start my-2 box-border w-[calc(100%-2px)] rounded-lg hover:bg-secondary ${item.areaId === areaId ? "bg-secondary" : "bg-background"}`}
           >
             <button
-              onClick={() => handleAreaNavigation(item.areaId)}
+              onClick={() => handleAreaNavigation(item.areaId as string)}
               className="flex-start box-border w-full gap-4"
             >
               <span className="flex-center bbn h-10 w-10 rounded-lg">
@@ -109,7 +108,7 @@ export function CreateAreaLink({
   return (
     <div className="flex flex-col gap-2">
       <Link
-        className="flex-between link-click-effect group mx-2 h-10 rounded-lg pr-4 opacity-80"
+        className="flex-between link-click-effect mx-2 h-10 rounded-lg pr-4 opacity-80"
         onClick={() => setSidebarState(false)}
         href={`/areas/create`}
       >
@@ -119,11 +118,9 @@ export function CreateAreaLink({
           </code>
           <h2>StatsDaily</h2>
         </span>
-        <SquarePen
-          size={20}
-          className="opacity-0 transition-opacity group-hover:opacity-100"
-          aria-hidden="true"
-        />
+        <TooltipCompo tip="New Area">
+          <SquarePen size={20} aria-hidden="true" />
+        </TooltipCompo>
         <span className="sr-only">Create new area</span>
       </Link>
       <Link

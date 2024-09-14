@@ -2,7 +2,6 @@ import { Area } from "@/models/task.model";
 import connectToDatabase from "./mongodb";
 import { Stats } from "@/models/stats.model";
 import { TArea, TStats, OmitDocument, taskStats, TTask } from "../types";
-import { User } from "@/models/user.model";
 
 export const dailyStats = async () => {
   await connectToDatabase();
@@ -67,14 +66,3 @@ export const calcAchieved = (tasks: TTask[]) => {
   const totalAchieved = tasks?.reduce((t, i) => t + i.achieved, 0);
   return Math.floor(totalAchieved / tasks.length);
 };
-
-export async function cleanTask() {
-  await connectToDatabase();
-  try {
-    await Area.deleteMany();
-    await Stats.deleteMany();
-    // await User.deleteMany();
-  } catch (error) {
-    console.error(error);
-  }
-}
