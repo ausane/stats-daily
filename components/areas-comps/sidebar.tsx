@@ -83,7 +83,7 @@ export function SidebarContent(props: SidebarContentProps) {
             className={`flex-start my-2 box-border w-[calc(100%-2px)] rounded-lg hover:bg-secondary ${item.areaId === areaId ? "bg-secondary" : "bg-background"}`}
           >
             <button
-              onClick={() => handleAreaNavigation(item.areaId)}
+              onClick={() => handleAreaNavigation(item.areaId as string)}
               className="flex-start box-border w-full gap-4"
             >
               <span className="flex-center bbn h-10 w-10 rounded-lg">
