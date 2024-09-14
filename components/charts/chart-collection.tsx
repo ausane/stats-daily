@@ -66,7 +66,7 @@ export function ChartCollection({ data }: { data: TStats[] }) {
 // Chart Collection Component Header
 export function ChartHeader({ selectedValue, setSelectedValue }: HeaderProps) {
   return (
-    <header className="flex-between sticky top-0 z-40 h-14 border-b bg-background px-4 lg:px-6">
+    <header className="flex-between sticky top-0 z-40 h-16 border-b bg-background px-4 lg:px-6">
       <SDIconWithTitle />
       <div>
         <Select
@@ -121,7 +121,7 @@ export function NoStatsFound({ info }: { info: "tnc" | "nsf" }) {
       : "Please wait at least a day to get started!";
 
   return (
-    <div className="flex-center h-[calc(100vh-8rem)] flex-col">
+    <div className="flex-center h-[calc(100dvh-8rem)] flex-col">
       <div className="flex items-center space-x-2">
         <InfoIcon size={24} aria-hidden="true" />
         <h1 className="text-xl font-semibold">{title}</h1>

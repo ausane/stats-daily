@@ -15,8 +15,9 @@ export const fetchTasks = async () => {
 
   try {
     const user: TUser = await currentUser();
+    const userId = user?._id?.toString() as string;
 
-    const response = await Area.find({ userId: user._id }).sort({
+    const response = await Area.find({ userId }).sort({
       updatedAt: -1,
     });
     if (!response) throw new Error("Area not found!");

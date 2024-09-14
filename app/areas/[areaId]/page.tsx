@@ -24,14 +24,16 @@ export const generateMetadata = async ({
 
 export default async function AreasPage(props: AreasPageProps) {
   const { areaId } = props.params;
-  const { _id: userId }: TUser = await currentUser();
+  const { _id }: TUser = await currentUser();
 
   if (areaId === "create") {
     const data = await fetchTasks();
+    const userId = _id?.toString() as string;
+
     return !data?.length ? (
-      <InitializeSD userId={userId?.toString() as string} />
+      <InitializeSD userId={userId} />
     ) : (
-      <CreateArea userId={userId?.toString() as string} />
+      <CreateArea userId={userId} />
     );
   }
 

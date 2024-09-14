@@ -1,4 +1,4 @@
-import { ChartCollection } from "@/components/charts/collection";
+import { ChartCollection } from "@/components/charts/chart-collection";
 import { statsdaily, cleanTask } from "@/lib/db/daily-stats";
 import { TStats, TUser } from "@/lib/types";
 import { currentUser } from "@/lib/db/stats";

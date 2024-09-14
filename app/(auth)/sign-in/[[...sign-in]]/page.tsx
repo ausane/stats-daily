@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { SDIcon } from "@/components/home-page";
+import { SDIcon, SDIconWithTitle } from "@/components/home-page";
 
 export default function SignUpPage() {
   const searchParams = useSearchParams();
@@ -27,8 +27,7 @@ export default function SignUpPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="flex flex-col items-center space-y-1">
           <CardTitle className="flex-center gap-4">
-            <SDIcon />
-            <span className="text-center text-3xl font-bold">StatsDaily</span>
+            <SDIconWithTitle />
           </CardTitle>
           <CardDescription className="text-center">
             Your Daily Tasks Completion Tracker

@@ -23,7 +23,7 @@ export function isValidObjectId(id: string) {
 // Utility function to check if an area already exists in the database
 export async function checkForDuplicateArea(area: string) {
   const { _id: userId }: TUser = await currentUser();
-  return await Area.findOne({ userId: userId, area });
+  return await Area.findOne({ userId, area });
 }
 
 // Utility function to update the area field of a Task document
