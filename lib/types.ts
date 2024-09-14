@@ -46,8 +46,8 @@ export type TUser = {
 
 // TSC Type
 export type TSC = {
-  areaId: string;
-  areaName: string;
+  areaId?: string;
+  areaName?: string;
 };
 
 // Input Props Type
