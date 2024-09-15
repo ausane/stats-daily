@@ -16,7 +16,13 @@ export default function InitializeSD({ userId }: { userId: string }) {
     router.refresh();
   };
 
-  const images = ["/area1.png", "/area2.png", "/area3.png", "/area4.png"];
+  const images = [
+    "/area1.png",
+    "/area2.png",
+    "/area3.png",
+    "/area4.png",
+    "/area5.png",
+  ];
 
   return (
     <div className="flex-start box-border size-full flex-col overflow-x-hidden">
@@ -66,7 +72,7 @@ export const handleInit = async (
     const { rid, success, error } = await response.json();
 
     if (success) {
-      console.log("Initialization successful");
+      console.log("Initialization successful!");
       return rid;
     } else {
       console.error("Initialization failed:", error || "Unknown error");
