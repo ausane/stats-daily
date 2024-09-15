@@ -138,9 +138,9 @@ export default function TaskList({ data }: { data: TArea }) {
               </div>
             ))
           ) : (
-            <span className="flex-center size-full italic opacity-50">
-              empty
-            </span>
+            <div className="flex-center size-full italic opacity-50">
+              <p>empty</p>
+            </div>
           )}
         </div>
         <ShowCompletedTasks
@@ -230,7 +230,9 @@ export function ShowCompletedTasks({
             </div>
           ))
         ) : (
-          <span className="flex-center size-full italic opacity-50">empty</span>
+          <div className="flex-center size-full italic opacity-50">
+            <p>empty</p>
+          </div>
         )}
       </div>
     </div>
