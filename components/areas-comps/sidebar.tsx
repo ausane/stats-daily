@@ -13,6 +13,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetDescription,
 } from "@/components/ui/sheet";
 import { Button } from "../ui/button";
 import { TooltipCompo } from "../ui/tooltip";
@@ -47,6 +48,7 @@ export default function Sidebar({ data }: { data: TSC[] }) {
             <SheetTitle className="my-8">
               <CreateAreaLink setSidebarState={setSidebarState} />
             </SheetTitle>
+            <SheetDescription></SheetDescription>
           </SheetHeader>
           <SidebarContent areas={areas} setSidebarState={setSidebarState} />
         </SheetContent>

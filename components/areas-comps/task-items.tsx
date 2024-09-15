@@ -7,7 +7,7 @@ export function TaskStatus({ children }: { children: ReactNode }) {
 
 export function TaskContent({ children }: { children: ReactNode }) {
   return (
-    <span className="flex-start relative h-auto w-[calc(100%-8rem)] max-sm:w-[calc(100%-4rem)]">
+    <span className="flex-start relative h-auto w-[calc(100%-8rem)] max-sm:w-[calc(100%-5.5rem)]">
       {children}
     </span>
   );

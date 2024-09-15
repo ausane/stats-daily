@@ -91,11 +91,8 @@ export default function TaskList({ data }: { data: TArea }) {
     <div className="flex-between box-border size-full grow gap-4 overflow-hidden">
       <div className="bbn relative box-border h-full w-8/12 overflow-auto rounded-lg max-lg:w-full">
         <div className="flex-between sticky top-0 box-border h-12 w-full border-b px-2 pr-4">
-          <span
-            className="flex-center w-12 text-muted-foreground"
-            aria-hidden="true"
-          >
-            <Circle />
+          <span className="flex-center w-12 text-muted-foreground">
+            <Circle aria-hidden="true" />
           </span>
           <p className="flex-center h-full font-medium text-muted-foreground">
             {incompleteTasks.length === 0
@@ -180,11 +177,8 @@ export function ShowCompletedTasks({
       className={`duration-400 absolute bottom-0 left-0 w-full overflow-hidden bg-background transition-all ease-in-out ${open ? "h-full" : "h-12 border-t"}`}
     >
       <div className="flex-between sticky left-0 top-0 h-12 w-full border-b px-2 pr-4">
-        <span
-          className="flex-center w-12 text-muted-foreground"
-          aria-hidden="true"
-        >
-          <CheckCircle2 />
+        <span className="flex-center w-12 text-muted-foreground">
+          <CheckCircle2 aria-hidden="true" />
         </span>
         <p className="flex-center h-full font-medium text-muted-foreground">
           {completedTasks.length === 0

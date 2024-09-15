@@ -35,6 +35,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
+import { TooltipCompo } from "../ui/tooltip";
 
 export default function TaskListItem(props: TaskListItemsProps) {
   const { index, areaId, taskItem, oita, nfaf } = props;
@@ -253,16 +254,13 @@ export function TaskOptionsUI({
       return (
         <span className="flex-end w-full pr-2">
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="size-8 p-0"
-                aria-label="Task Options Button"
-              >
-                <Ellipsis size={15} aria-hidden="true" />
-              </Button>
-            </DropdownMenuTrigger>
+            <TooltipCompo tip="Task Options">
+              <DropdownMenuTrigger asChild>
+                <IconButton variant="ghost" aria-label="Task Options">
+                  <Ellipsis size={15} />
+                </IconButton>
+              </DropdownMenuTrigger>
+            </TooltipCompo>
             <DropdownMenuContent className="w-24">
               <DropdownMenuItem onClick={handleEditClick} className="p-2">
                 <Pencil className="mr-2 h-4 w-4" aria-hidden="true" />
