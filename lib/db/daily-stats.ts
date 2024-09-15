@@ -37,7 +37,7 @@ export const statsdaily = async (userId: string, count: number) => {
   await connectToDatabase();
 
   try {
-    console.log((await Stats.find({ userId })).length);
+    // console.log((await Stats.find({ userId })).length);
     return await Stats.find({ userId }).sort({ createdAt: -1 }).limit(count);
   } catch (error) {
     console.error(error);
