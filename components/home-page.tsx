@@ -84,7 +84,7 @@ export default function HomePage() {
 
 export function SDIcon() {
   return (
-    <code className="bbn flex-center bold bbn h-10 w-10 rounded-md text-2xl font-bold text-foreground/75">
+    <code className="bbn flex-center bold bbn h-10 w-10 rounded-md text-2xl font-bold text-foreground/80">
       SD
     </code>
   );
@@ -94,7 +94,7 @@ export function SDIconWithTitle() {
   return (
     <Link href="/" className="flex-center gap-2.5" prefetch={false}>
       <SDIcon />
-      <span className="text-2xl font-bold text-foreground/75">StatsDaily</span>
+      <span className="text-2xl font-bold text-foreground/80">StatsDaily</span>
       <span className="sr-only">
         StatsDaily - Daily Tasks Completion Tracker
       </span>

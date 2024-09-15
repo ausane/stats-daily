@@ -125,17 +125,23 @@ export default function TaskList({ data }: { data: TArea }) {
             addTaskInput={addTaskInput}
             setAddTaskInput={setAddTaskInput}
           />
-          {incompleteTasks?.map((item, index) => (
-            <div key={index} className="w-full border-b p-2">
-              <TaskListItem
-                oita={oita[index]}
-                nfaf={nfaf}
-                areaId={areaId as string}
-                taskItem={item}
-                index={index}
-              />
+          {incompleteTasks.length ? (
+            incompleteTasks.map((item, index) => (
+              <div key={index} className="w-full border-b p-2">
+                <TaskListItem
+                  oita={oita[index]}
+                  nfaf={nfaf}
+                  areaId={String(areaId)}
+                  taskItem={item}
+                  index={index}
+                />
+              </div>
+            ))
+          ) : (
+            <div className="flex-center size-full italic opacity-50">
+              <p>empty</p>
             </div>
-          ))}
+          )}
         </div>
         <ShowCompletedTasks
           areaId={areaId as string}
@@ -201,27 +207,33 @@ export function ShowCompletedTasks({
       <div
         className={`h-[calc(100%-3rem)] flex-col overflow-auto ${open ? "flex" : "hidden"} `}
       >
-        {completedTasks?.map((item, index) => (
-          <div key={index} className="flex-between w-full border-b px-2 py-3">
-            <TaskStatus>
-              <TooltipCompo tip="Undo">
-                <button
-                  onClick={() => handleUndoTask(index)}
-                  className="status-button border-red-700 bg-red-700 hover:bg-red-800"
-                  aria-label="Undo Task"
-                ></button>
-              </TooltipCompo>
-            </TaskStatus>
+        {completedTasks.length ? (
+          completedTasks?.map((item, index) => (
+            <div key={index} className="flex-between w-full border-b px-2 py-3">
+              <TaskStatus>
+                <TooltipCompo tip="Undo">
+                  <button
+                    onClick={() => handleUndoTask(index)}
+                    className="status-button border-red-700 bg-red-700 hover:bg-red-800"
+                    aria-label="Undo Task"
+                  ></button>
+                </TooltipCompo>
+              </TaskStatus>
 
-            <TaskContent>
-              <p className="w-11/12 truncate">{item.task}</p>
-            </TaskContent>
+              <TaskContent>
+                <p className="w-11/12 truncate">{item.task}</p>
+              </TaskContent>
 
-            <TaskOptions>
-              <p>{item.achieved.toString()}%</p>
-            </TaskOptions>
+              <TaskOptions>
+                <p>{item.achieved.toString()}%</p>
+              </TaskOptions>
+            </div>
+          ))
+        ) : (
+          <div className="flex-center size-full italic opacity-50">
+            <p>empty</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

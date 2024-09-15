@@ -89,7 +89,6 @@ export default function DailyNote({ areaId, note }: DailyNoteProps) {
           value={noteInput}
           className="bbn w-full rounded-md bg-transparent p-1 sm:h-[calc(100%-40px)] sm:resize-none"
           onChange={(e) => setNoteInput(e.target.value)}
-          // style={{ minHeight: "40px" }}
           role="textbox"
           aria-label="Edit Note Textarea"
         />
