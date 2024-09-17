@@ -94,34 +94,6 @@
   @apply flex items-center justify-around;
 }
 
-.danger-button {
-  @apply btn bbn rounded bg-transparent px-2 hover:border-red-700 hover:text-red-500;
-}
-
-.contained-button {
-  @apply btn bg-violet-800 hover:bg-violet-700;
-}
-
-.circle-button {
-  @apply btn rounded-full border-none p-2 opacity-40 hover:bg-neutral-700 hover:opacity-100;
-}
-
-.rect-button {
-  @apply btn outlined-button rounded px-2 py-1;
-}
-
-.icon-button {
-  @apply btn outlined-button rounded p-1;
-}
-
-.outlined-button {
-  @apply btn border border-neutral-500 bg-transparent hover:border-neutral-200 hover:bg-neutral-700;
-}
-
-.btn {
-  @apply duration-100 ease-in disabled:cursor-not-allowed disabled:opacity-80;
-}
-
 input {
   @apply bbn h-8 w-full rounded-md bg-transparent p-2;
 }
