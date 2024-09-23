@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "daily-stats": "node -e 'require(\"./lib/db/daily-stats\").dailyStats()'"
+    "tsc:emit": "tsc --noEmit false",
+    "daily-stats": "node dist/lib/db/daily-stats.js"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.1",
