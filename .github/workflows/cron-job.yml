@@ -20,7 +20,7 @@ jobs:
         run: npm install
 
       - name: Compile TypeScript files
-        run: npm run tsc:emit -- --project tsconfig.prod.json
+        run: npm run tsc:emit
 
       - name: Run daily stats function
         run: npm run daily-stats
