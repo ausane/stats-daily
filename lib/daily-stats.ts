@@ -1,7 +1,7 @@
 import { Area } from "@/models/task.model";
-import connectToDatabase from "./mongodb";
+import connectToDatabase from "./db/mongodb";
 import { Stats } from "@/models/stats.model";
-import { TArea, TStats, OmitDocument, taskStats, TTask } from "../types";
+import { TArea, TStats, OmitDocument, taskStats, TTask } from "./types";
 
 export const dailyStats = async () => {
   await connectToDatabase();

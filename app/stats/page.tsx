@@ -1,5 +1,5 @@
 import { ChartCollection } from "@/components/charts/chart-collection";
-import { statsdaily } from "@/lib/db/daily-stats";
+import { statsdaily } from "@/lib/daily-stats";
 import { TStats, TUser } from "@/lib/types";
 import { currentUser } from "@/lib/db/stats";
 

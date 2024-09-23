@@ -1,5 +1,5 @@
 import cron from "node-cron";
-import { dailyStats } from "@/lib/db/daily-stats";
+import { dailyStats } from "@/lib/daily-stats";
 
 // Schedule a job to run daily at 12 AM
 cron.schedule("0 0 * * *", async () => {

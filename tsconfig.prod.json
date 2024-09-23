@@ -1,9 +1,12 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-      "noEmit": false,
-      "outDir": "./dist"
-    },
-    "include": ["lib/**/*.ts"]
-  }
-  
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["lib/*.ts", "models/*.ts"]
+}

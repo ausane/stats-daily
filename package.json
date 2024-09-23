@@ -2,13 +2,14 @@
   "name": "stats-daily",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "tsc:emit": "tsc --noEmit false",
-    "daily-stats": "node dist/lib/db/daily-stats.js"
+    "tsc:emit": "tsc --project tsconfig.prod.json",
+    "daily-stats": "node -r tsconfig-paths/register dist/lib/daily-stats.js"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.1",
@@ -29,7 +30,7 @@
     "lucide-react": "^0.416.0",
     "mongodb": "^6.8.0",
     "mongoose": "^8.4.3",
-    "next": "14.2.4",
+    "next": "^14.2.13",
     "next-auth": "^4.24.7",
     "next-themes": "^0.3.0",
     "node-cron": "^3.0.3",
@@ -41,6 +42,7 @@
     "tailwind-merge": "^2.4.0",
     "tailwindcss": "^3.4.10",
     "tailwindcss-animate": "^1.0.7",
+    "tsconfig-paths": "^4.2.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

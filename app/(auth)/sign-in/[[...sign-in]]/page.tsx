@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { SDIcon, SDIconWithTitle } from "@/components/home-page";
+import { SDIconWithTitle } from "@/components/home-page";
 
 export default function SignUpPage() {
   const searchParams = useSearchParams();
