@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { tasksArray } from "@/lib/constants";
 import { Area } from "@/models/task.model";
 import connectToDatabase from "@/lib/db/mongodb";
-import "@/lib/cron";
 
 export async function POST(request: Request) {
   await connectToDatabase();
