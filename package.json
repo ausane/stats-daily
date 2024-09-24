@@ -2,14 +2,11 @@
   "name": "stats-daily",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "tsc:emit": "tsc --project tsconfig.prod.json",
-    "daily-stats": "node -r tsconfig-paths/register dist/lib/daily-stats.js"
+    "lint": "next lint"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.1",
@@ -33,7 +30,6 @@
     "next": "^14.2.13",
     "next-auth": "^4.24.7",
     "next-themes": "^0.3.0",
-    "node-cron": "^3.0.3",
     "postcss": "^8.4.44",
     "react": "^18",
     "react-dom": "^18",

@@ -35,7 +35,6 @@ import {
   areaRenamedResponse,
   zodErrorResponse,
 } from "@/lib/route/response";
-import "@/lib/cron";
 
 // POST REQUEST HANDLER
 export async function POST(request: NextRequest) {
