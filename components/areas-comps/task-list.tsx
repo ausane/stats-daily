@@ -89,7 +89,7 @@ export default function TaskList({ data }: { data: TArea }) {
 
   return (
     <div className="flex-between box-border size-full grow gap-4 overflow-hidden">
-      <div className="bbn relative box-border h-full w-8/12 overflow-auto rounded-lg max-lg:w-full max-sm:rounded-none max-sm:border-x-0">
+      <div className="bbn relative box-border h-full w-8/12 overflow-auto rounded-lg max-lg:w-full max-sm:rounded-none max-sm:border-x-0 max-sm:border-b-0">
         <div className="flex-between sticky top-0 box-border h-12 w-full border-b px-2 pr-4 max-sm:h-14">
           <span className="flex-center w-12 text-muted-foreground">
             <Circle aria-hidden="true" />
