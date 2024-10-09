@@ -89,8 +89,8 @@ export default function TaskList({ data }: { data: TArea }) {
 
   return (
     <div className="flex-between box-border size-full grow gap-4 overflow-hidden">
-      <div className="bbn relative box-border h-full w-8/12 overflow-auto rounded-lg max-lg:w-full">
-        <div className="flex-between sticky top-0 box-border h-12 w-full border-b px-2 pr-4">
+      <div className="bbn relative box-border h-full w-8/12 overflow-auto rounded-lg max-lg:w-full max-sm:rounded-none max-sm:border-x-0">
+        <div className="flex-between sticky top-0 box-border h-12 w-full border-b px-2 pr-4 max-sm:h-14">
           <span className="flex-center w-12 text-muted-foreground">
             <Circle aria-hidden="true" />
           </span>
@@ -119,7 +119,7 @@ export default function TaskList({ data }: { data: TArea }) {
           </TooltipCompo>
         </div>
 
-        <div className="h-[calc(100%-6rem)] w-full overflow-auto overflow-x-hidden">
+        <div className="h-[calc(100%-6rem)] w-full overflow-auto overflow-x-hidden max-sm:h-[calc(100%-7rem)]">
           <AddNewTask
             areaId={areaId as string}
             addTaskInput={addTaskInput}
@@ -180,9 +180,9 @@ export function ShowCompletedTasks({
 
   return (
     <div
-      className={`duration-400 absolute bottom-0 left-0 w-full overflow-hidden bg-background transition-all ease-in-out ${open ? "h-full" : "h-12 border-t"}`}
+      className={`duration-400 absolute bottom-0 left-0 w-full overflow-hidden bg-background transition-all ease-in-out ${open ? "h-full" : "h-12 border-t max-sm:h-14"}`}
     >
-      <div className="flex-between sticky left-0 top-0 h-12 w-full border-b px-2 pr-4">
+      <div className="flex-between sticky left-0 top-0 h-12 w-full border-b px-2 pr-4 max-sm:h-14">
         <span className="flex-center w-12 text-muted-foreground">
           <CheckCircle2 aria-hidden="true" />
         </span>
@@ -205,7 +205,7 @@ export function ShowCompletedTasks({
         </TooltipCompo>
       </div>
       <div
-        className={`h-[calc(100%-3rem)] flex-col overflow-auto ${open ? "flex" : "hidden"} `}
+        className={`h-[calc(100%-3rem)] flex-col overflow-auto max-sm:h-[calc(100%-3.5rem)] ${open ? "flex" : "hidden"} `}
       >
         {completedTasks.length ? (
           completedTasks?.map((item, index) => (

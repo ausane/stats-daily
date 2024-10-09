@@ -105,7 +105,7 @@ export default function AreaHeader(props: AreaHeaderProps) {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full max-sm:px-4">
       <div className="flex-between relative w-full gap-4 overflow-x-hidden py-4 max-md:pl-14 max-sm:pl-10">
         <div className="flex-start max-w-[80%] max-sm:max-w-[60%]">
           <TaskItemCompo
