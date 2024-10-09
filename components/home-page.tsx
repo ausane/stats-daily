@@ -12,7 +12,7 @@ export default function HomePage() {
             className="text-sm font-medium text-muted-foreground underline-offset-4 hover:underline"
             prefetch={false}
           >
-            Sign up
+            Sign In
           </Link>
         </nav>
       </header>
@@ -21,7 +21,7 @@ export default function HomePage() {
           <div className="container relative z-10 px-4 sm:px-8 md:px-16">
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter text-muted-foreground sm:text-5xl xl:text-6xl/none">
+                <h1 className="text-3xl font-bold tracking-tighter text-foreground/80 sm:text-5xl xl:text-6xl/none">
                   Welcome to StatsDaily:
                   <br />
                   Your Task Tracking Companion
@@ -41,7 +41,7 @@ export default function HomePage() {
         <section className="relative flex w-full flex-col gap-8 py-12 md:py-24">
           <div className="space-y-4 px-4 sm:px-8 md:px-16">
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tighter text-muted-foreground sm:text-5xl xl:text-6xl/none">
+              <h1 className="text-3xl font-bold tracking-tighter text-foreground/80 sm:text-5xl xl:text-6xl/none">
                 Intuitive Streamlined and
                 <br />
                 User-Focused Design
@@ -61,10 +61,10 @@ export default function HomePage() {
           <div className="container px-4 sm:px-8 md:px-16">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm text-muted-foreground">
+                <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm text-foreground/80">
                   Get Started with StatsDaily
                 </div>
-                <h2 className="text-3xl font-bold tracking-tighter text-muted-foreground sm:text-5xl">
+                <h2 className="text-3xl font-bold tracking-tighter text-foreground/80 sm:text-5xl">
                   Boost Your Daily Productivity
                 </h2>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
@@ -107,7 +107,7 @@ export function SignUpButton() {
     <div className="flex flex-col gap-2 min-[400px]:flex-row">
       <Link
         href="/sign-in"
-        className="inline-flex h-10 items-center justify-center rounded-md border border-muted bg-foreground/70 px-8 text-sm font-medium text-background shadow-sm transition-colors hover:bg-background hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+        className="inline-flex h-10 items-center justify-center rounded-md border border-muted bg-foreground/80 px-8 text-sm font-medium text-background shadow-sm transition-colors hover:bg-background hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
         prefetch={false}
       >
         Sign Up

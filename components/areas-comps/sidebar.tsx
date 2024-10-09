@@ -34,7 +34,7 @@ export default function Sidebar({ data }: { data: TSC[] }) {
     <>
       <Sheet open={isSidebarOpen} onOpenChange={setSidebarState}>
         <SheetTrigger
-          className={`flex-center bbn fixed left-4 top-4 z-50 h-10 w-10 rounded-lg bg-background hover:bg-accent hover:text-accent-foreground max-md:flex md:hidden ${isSidebarOpen && "hidden"}`}
+          className={`flex-center bbn fixed left-4 top-4 z-50 h-10 w-10 rounded-lg bg-background hover:bg-accent hover:text-accent-foreground max-md:flex max-sm:left-2 md:hidden ${isSidebarOpen && "hidden"}`}
           onClick={toggleSidebar}
           aria-labelledby="open-sidebar-btn"
         >
