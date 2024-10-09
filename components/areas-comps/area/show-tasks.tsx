@@ -14,7 +14,7 @@ export default async function ShowTasks({ areaId }: { areaId: string }) {
     const user: TUser = await currentUser();
 
     return (
-      <div className="main-content flex flex-col gap-4 overflow-auto p-4 pt-0 max-md:w-full">
+      <div className="main-content flex flex-col gap-4 overflow-auto p-4 pt-0 max-md:w-full max-sm:px-2 max-sm:pb-2">
         <AreaHeader areaId={areaId as string} area={area} user={ps(user)} />
         <TaskList data={serializableData} />
       </div>
