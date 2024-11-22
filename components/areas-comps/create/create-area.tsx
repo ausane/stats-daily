@@ -16,6 +16,7 @@ import {
   handleEmptyTasks,
 } from "@/features/form-slice";
 import { InputChangeEvent, TSC } from "@/lib/types";
+import { areaNameLength, areaNoteLength } from "@/lib/constants";
 
 export default function CreateArea({ userId }: { userId: string }) {
   // Retrieve all required states from the store
@@ -69,14 +70,15 @@ export default function CreateArea({ userId }: { userId: string }) {
   const validateForm = () => {
     if (!areaName) setInputError("Area cannot be empty!");
     if (!tasks.length) dispatch(handleEmptyTasks("Tasks cannot be empty!"));
-    if (areaName.length > 20) setInputError("Only 20 characters allowed!");
-    if (note.length > 400) setNoteError(true);
+    if (areaName.length > areaNameLength)
+      setInputError(`Only ${areaNameLength} characters allowed!`);
+    if (note.length > areaNoteLength) setNoteError(true);
 
     return (
       areaName.length > 0 &&
       tasks.length > 0 &&
-      areaName.length <= 20 &&
-      note.length <= 400
+      areaName.length <= areaNameLength &&
+      note.length <= areaNoteLength
     );
   };
 
@@ -204,7 +206,7 @@ export default function CreateArea({ userId }: { userId: string }) {
                     className="flex-start -z-10 gap-1 text-sm text-[#f93a37] opacity-80"
                   >
                     <CircleAlert size={15} aria-hidden="true" />
-                    <span>Only 400 characters allowed!</span>
+                    <span>Only {areaNoteLength} characters allowed!</span>
                   </span>
                 )}
               </label>

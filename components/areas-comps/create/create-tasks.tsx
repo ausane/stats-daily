@@ -14,6 +14,7 @@ import {
   handleEmptyTasks,
   removeTask,
 } from "@/features/form-slice";
+import { taskLength } from "@/lib/constants";
 
 export default function CreateTasks() {
   // Retrieve all required states from the store
@@ -40,8 +41,8 @@ export default function CreateTasks() {
   const submitTask = () => {
     const trimmedTask = task.trim();
 
-    if (trimmedTask.length > 40) {
-      setTaskError("Only 40 characters allowed!");
+    if (trimmedTask.length > taskLength) {
+      setTaskError(`Only ${taskLength} characters allowed!`);
       return;
     }
 

@@ -5,6 +5,7 @@ import {
   CompletionDialogProps,
   ConfirmDialogProps,
   RenameAreaDialogProps,
+  ShowTaskDialogProps,
   ValidationAlertDialogProps,
 } from "@/lib/types";
 import {
@@ -29,6 +30,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { TooltipCompo } from "./ui/tooltip";
+import { areaNoteLength, taskLength } from "@/lib/constants";
 
 export function ConfirmDeletionDialog(props: ConfirmDialogProps) {
   const { onClick, deleteDialog, setDeleteDialog } = props;
@@ -136,8 +138,8 @@ export function ValidationAlertDialog(props: ValidationAlertDialogProps) {
           </AlertDialogTitle>
           <AlertDialogDescription>
             {category === "task"
-              ? `Your task description is too long. Please shorten it to 40 characters or fewer to proceed. This limit helps maintain clarity and consistency across all tasks.`
-              : `Your note is too long. Please shorten it to 400 characters or fewer to proceed. This limit helps maintain clarity and consistency across the note.`}
+              ? `Your task description is too long. Please shorten it to ${taskLength} characters or fewer to proceed. This limit helps maintain clarity and consistency across all tasks.`
+              : `Your note is too long. Please shorten it to ${areaNoteLength} characters or fewer to proceed. This limit helps maintain clarity and consistency across the note.`}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -145,5 +147,40 @@ export function ValidationAlertDialog(props: ValidationAlertDialogProps) {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
+  );
+}
+
+export function ShowTaskDialog(props: ShowTaskDialogProps) {
+  const {
+    task,
+    markAsDone,
+    taskOptions,
+    areaName,
+    showTaskState,
+    setShowTaskState,
+  } = props;
+
+  return (
+    <Dialog open={showTaskState} onOpenChange={setShowTaskState}>
+      <DialogTrigger
+        className="w-11/12 truncate text-start"
+        aria-live="polite"
+        aria-relevant="additions"
+      >
+        {task}
+      </DialogTrigger>
+      <DialogContent className="gap-5">
+        <DialogHeader>
+          <DialogTitle className="leading-8">{areaName}</DialogTitle>
+          <DialogDescription>{task}</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <div className="flex-between w-full">
+            <div className="flex-center">{markAsDone}</div>
+            <div className="flex-end gap-2">{taskOptions}</div>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -245,3 +245,7 @@ export const tasksArray = [
     ],
   },
 ];
+
+export const areaNameLength = 40;
+export const taskLength = 200;
+export const areaNoteLength = 500;

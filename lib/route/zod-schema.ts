@@ -1,17 +1,18 @@
 import { z } from "zod";
+import { areaNameLength, areaNoteLength, taskLength } from "../constants";
 
 // Define schema for `area`
 export const areaNameZodSchema = z
   .string()
   .trim()
   .min(1, "Area cannot be empty!")
-  .max(20, "Area cannot exceed 20 characters!");
+  .max(areaNameLength, `Area cannot exceed ${areaNameLength} characters!`);
 
 // Define schema for `note`
 export const noteZodSchema = z
   .string()
   .trim()
-  .max(400, "Area note cannot exceed 400 characters!")
+  .max(areaNoteLength, `Area note cannot exceed ${areaNoteLength} characters!`)
   .optional();
 
 // Zod schema for individual task
@@ -20,7 +21,7 @@ export const taskZodSchema = z.object({
     .string()
     .trim()
     .min(1, "Task cannot be empty!")
-    .max(40, "Task cannot exceed 40 characters!"),
+    .max(taskLength, `Task cannot exceed ${taskLength} characters!`),
   achieved: z.number().min(0).default(0),
   completed: z.boolean().default(false),
 });

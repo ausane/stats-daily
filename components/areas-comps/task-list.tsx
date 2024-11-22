@@ -33,9 +33,10 @@ import {
   setCompleteTasks,
   undoTaskCompletion,
 } from "@/features/task-slice";
+import { taskLength } from "@/lib/constants";
 
 export default function TaskList({ data }: { data: TArea }) {
-  const { _id: areaId, tasks, note } = data;
+  const { _id: areaId, tasks, note, area } = data;
   const dispatch = useAppDispatch();
 
   const [ctp, setCtp] = useState(0);
@@ -134,6 +135,7 @@ export default function TaskList({ data }: { data: TArea }) {
                   areaId={String(areaId)}
                   taskItem={item}
                   index={index}
+                  areaName={area}
                 />
               </div>
             ))
@@ -287,7 +289,7 @@ export function AddNewTask(props: AddNewTaskProps) {
       return false;
     }
 
-    if (newTask.length > 40) {
+    if (newTask.length > taskLength) {
       setAlertDialog(true);
       setLoading(false);
       return false;

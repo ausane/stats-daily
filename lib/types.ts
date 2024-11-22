@@ -1,5 +1,5 @@
 import { PieChartProps } from "@/components/charts/pie-chart";
-import { Document, Schema } from "mongoose";
+import { Document } from "mongoose";
 import { ImageProps } from "next/image";
 import React, { ButtonHTMLAttributes, InputHTMLAttributes } from "react";
 
@@ -156,6 +156,7 @@ export type TaskStatusPCProps = {
   index: number;
   openInputTask: boolean;
   taskItem: TTask;
+  setShowTaskState: SetState<boolean>;
 };
 
 // Task List Items Props Type
@@ -165,6 +166,7 @@ export type TaskListItemsProps = {
   taskItem: TTask;
   oita: boolean;
   nfaf: (s: boolean, i: number) => void;
+  areaName: string;
 };
 
 // Validation Alert Dialog Props Type
@@ -182,6 +184,7 @@ export type TaskOptionsUIProps = {
   handleDeleteTask: () => void;
   handleEditClick: () => void;
   nfaf: (s: boolean, i: number) => void;
+  showTaskState: boolean;
 };
 
 //  Range Chart Component Props Type
@@ -223,4 +226,14 @@ export type AreaHeaderProps = {
 export type DailyNoteProps = {
   areaId: string;
   note: string;
+};
+
+// Show Task Dialog Props Type
+export type ShowTaskDialogProps = {
+  task: string;
+  areaName: string;
+  showTaskState: boolean;
+  setShowTaskState: SetState<boolean>;
+  markAsDone: React.ReactNode;
+  taskOptions: React.ReactNode;
 };
