@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 import { RenameAreaDialog } from "@/components/dialogs";
 import UserProfile from "@/components/user-icon";
+import { areaNameLength } from "@/lib/constants";
 
 export default function AreaHeader(props: AreaHeaderProps) {
   const { areaId, area, user } = props;
@@ -91,8 +92,8 @@ export default function AreaHeader(props: AreaHeaderProps) {
       return false;
     }
 
-    if (tAreaInput.length > 20) {
-      setInputError("Only 20 characters allowed!");
+    if (tAreaInput.length > areaNameLength) {
+      setInputError(`Only ${areaNameLength} characters allowed!`);
       return false;
     }
 

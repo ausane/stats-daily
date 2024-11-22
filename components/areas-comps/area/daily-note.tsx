@@ -6,6 +6,7 @@ import { X, Check, Pencil } from "lucide-react";
 import IconButton from "@/components/ui/icon-button";
 import { ValidationAlertDialog } from "@/components/dialogs";
 import { DailyNoteProps } from "@/lib/types";
+import { areaNoteLength } from "@/lib/constants";
 
 export default function DailyNote({ areaId, note }: DailyNoteProps) {
   const tRef = useRef<HTMLTextAreaElement>(null);
@@ -38,7 +39,7 @@ export default function DailyNote({ areaId, note }: DailyNoteProps) {
   }, [inputNote]);
 
   const handleNoteChange = async () => {
-    if (noteInput.trim().length > 400) {
+    if (noteInput.trim().length > areaNoteLength) {
       setAlertDialog(true);
       return;
     }

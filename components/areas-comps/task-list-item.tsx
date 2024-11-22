@@ -2,7 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "@/store/hooks";
-import { TaskCompletionDialog, ValidationAlertDialog } from "../dialogs";
+import {
+  ShowTaskDialog,
+  TaskCompletionDialog,
+  ValidationAlertDialog,
+} from "../dialogs";
 import { Slider } from "../ui/slider";
 import { updateTask } from "@/lib/services/handle-update";
 import IconButton from "../ui/icon-button";
@@ -34,11 +38,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "../ui/button";
 import { TooltipCompo } from "../ui/tooltip";
+import { taskLength } from "@/lib/constants";
 
 export default function TaskListItem(props: TaskListItemsProps) {
-  const { index, areaId, taskItem, oita, nfaf } = props;
+  const { index, areaId, taskItem, oita, nfaf, areaName } = props;
 
   const task = taskItem.task;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -46,6 +50,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
   const [inputTask, setInputTask] = useState(task);
   const [alertDialog, setAlertDialog] = useState(false);
   const [emptyInputAlert, setEmptyInputAlert] = useState(false);
+  const [showTaskState, setShowTaskState] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -57,6 +62,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
     setEmptyInputAlert(false);
     nfaf(true, index);
     setInputTask(task);
+    setShowTaskState(false);
   };
 
   const handleEditTask = async () => {
@@ -79,7 +85,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
       return false;
     }
 
-    if (editedTask.length > 40) {
+    if (editedTask.length > taskLength) {
       setAlertDialog(true);
       return false;
     }
@@ -94,6 +100,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
   };
 
   const handleDeleteTask = async () => {
+    setShowTaskState(false);
     dispatch(removeTaskById(taskItem._id as string));
     await deleteTask(areaId, taskItem._id as string);
   };
@@ -114,60 +121,79 @@ export default function TaskListItem(props: TaskListItemsProps) {
       />
 
       <div className="flex-between w-full">
-        <>
-          <TaskStatus>
-            <TaskStatusPC
-              index={index}
-              areaId={areaId}
-              openInputTask={oita}
-              taskItem={taskItem}
-            />
-          </TaskStatus>
+        <TaskStatus>
+          <TaskStatusPC
+            index={index}
+            areaId={areaId}
+            openInputTask={oita}
+            taskItem={taskItem}
+            setShowTaskState={setShowTaskState}
+          />
+        </TaskStatus>
 
-          <TaskContent>
-            {oita ? (
-              <>
-                <Input
-                  ref={inputRef}
-                  type="text"
-                  name="task"
-                  labelClasses="w-5/6"
-                  value={inputTask}
-                  onChange={handleEditInputChange}
-                  onKeyDown={(e) => handleKeyDownEnter(e, handleEditTask)}
-                  onBlur={(e) => handleOnBlur(e)}
+        <TaskContent>
+          {oita ? (
+            <>
+              <Input
+                ref={inputRef}
+                type="text"
+                name="task"
+                labelClasses="w-5/6"
+                value={inputTask}
+                onChange={handleEditInputChange}
+                onKeyDown={(e) => handleKeyDownEnter(e, handleEditTask)}
+                onBlur={(e) => handleOnBlur(e)}
+              />
+              {emptyInputAlert && <InputRequiredAlert />}
+            </>
+          ) : (
+            <ShowTaskDialog
+              task={task}
+              areaName={areaName}
+              showTaskState={showTaskState}
+              setShowTaskState={setShowTaskState}
+              markAsDone={
+                <TaskStatusPC
+                  index={index}
+                  areaId={areaId}
+                  openInputTask={oita}
+                  taskItem={taskItem}
+                  setShowTaskState={setShowTaskState}
                 />
-                {emptyInputAlert && <InputRequiredAlert />}
-              </>
-            ) : (
-              <p
-                className="w-11/12 truncate"
-                aria-live="polite"
-                aria-relevant="additions"
-              >
-                {task}
-              </p>
-            )}
-          </TaskContent>
-
-          <TaskOptions>
-            <TaskOptionsUI
-              oita={oita}
-              index={index}
-              nfaf={nfaf}
-              handleEditTask={handleEditTask}
-              handleDeleteTask={handleDeleteTask}
-              handleEditClick={handleEditClick}
+              }
+              taskOptions={
+                <TaskOptionsUI
+                  oita={oita}
+                  index={index}
+                  nfaf={nfaf}
+                  handleEditTask={handleEditTask}
+                  handleDeleteTask={handleDeleteTask}
+                  handleEditClick={handleEditClick}
+                  showTaskState={showTaskState}
+                />
+              }
             />
-          </TaskOptions>
-        </>
+          )}
+        </TaskContent>
+
+        <TaskOptions>
+          <TaskOptionsUI
+            oita={oita}
+            index={index}
+            nfaf={nfaf}
+            handleEditTask={handleEditTask}
+            handleDeleteTask={handleDeleteTask}
+            handleEditClick={handleEditClick}
+            showTaskState={showTaskState}
+          />
+        </TaskOptions>
       </div>
     </>
   );
 }
 
 export function TaskStatusPC(props: TaskStatusPCProps) {
-  const { areaId, index, openInputTask, taskItem } = props;
+  const { areaId, index, openInputTask, taskItem, setShowTaskState } = props;
 
   const [openDialog, setOpenDialog] = useState(false);
   const dispatch = useAppDispatch();
@@ -181,6 +207,7 @@ export function TaskStatusPC(props: TaskStatusPCProps) {
     dispatch(setTaskCompletion({ index, achieved: value[0] }));
 
     setOpenDialog(false);
+    setShowTaskState(false);
     await updateTask(areaId, taskObj as TTask);
   };
 
@@ -218,6 +245,7 @@ export function TaskOptionsUI({
   handleEditTask,
   handleDeleteTask,
   handleEditClick,
+  showTaskState,
 }: TaskOptionsUIProps) {
   const [windowWidth, setWindowWidth] = useState(0);
 
@@ -250,7 +278,7 @@ export function TaskOptionsUI({
       </>
     );
   } else {
-    if (windowWidth < 640) {
+    if (windowWidth < 640 && !showTaskState) {
       return (
         <span className="flex-end w-full pr-2">
           <DropdownMenu>
