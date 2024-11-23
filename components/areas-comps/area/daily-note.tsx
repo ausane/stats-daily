@@ -7,6 +7,7 @@ import IconButton from "@/components/ui/icon-button";
 import { ValidationAlertDialog } from "@/components/dialogs";
 import { DailyNoteProps } from "@/lib/types";
 import { areaNoteLength } from "@/lib/constants";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function DailyNote({ areaId, note }: DailyNoteProps) {
   const tRef = useRef<HTMLTextAreaElement>(null);
@@ -94,9 +95,9 @@ export default function DailyNote({ areaId, note }: DailyNoteProps) {
           aria-label="Edit Note Textarea"
         />
       ) : (
-        <div className="h-[calc(100%-40px)] w-full overflow-auto overflow-x-hidden text-ellipsis">
+        <ScrollArea className="h-[calc(100%-40px)] w-full overflow-auto overflow-x-hidden text-ellipsis">
           <p>{noteState || <span className="italic opacity-50">empty</span>}</p>
-        </div>
+        </ScrollArea>
       )}
 
       <ValidationAlertDialog
