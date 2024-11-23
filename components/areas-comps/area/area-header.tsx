@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { deleteArea } from "@/lib/services/handle-delete";
 import { useAppDispatch } from "@/store/hooks";
 import { removeAreaById, setCurrentArea } from "@/features/area-slice";
@@ -30,6 +30,7 @@ import {
   Trash,
   ChevronDown,
   StickyNote,
+  List,
 } from "lucide-react";
 import { RenameAreaDialog } from "@/components/dialogs";
 import UserProfile from "@/components/user-icon";
@@ -157,8 +158,10 @@ export default function AreaHeader(props: AreaHeaderProps) {
 
 export function TaskItemCompo(props: TaskItemCompoProps) {
   const { areaId, areaName, openRenameAreaDialog } = props;
+
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const pathname = usePathname();
 
   const [deleteDialog, setDeleteDialog] = useState(false);
 
@@ -167,6 +170,9 @@ export function TaskItemCompo(props: TaskItemCompoProps) {
     dispatch(removeAreaById(areaId));
     router.push("/areas/create");
   };
+
+  const matcher = /^\/areas\/[0-9a-f]{24}\/note$/;
+  const showTask = matcher.test(pathname);
 
   return (
     <>
@@ -187,13 +193,23 @@ export function TaskItemCompo(props: TaskItemCompoProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-32">
-          <DropdownMenuItem
-            onClick={() => router.push(`/areas/${areaId}/note`)}
-            className="max-md:hidden max-sm:flex max-sm:p-2 lg:hidden"
-          >
-            <StickyNote className="mr-2 h-4 w-4" aria-hidden="true" />
-            <span>Note</span>
-          </DropdownMenuItem>
+          {showTask ? (
+            <DropdownMenuItem
+              onClick={() => router.push(`/areas/${areaId}`)}
+              className="max-md:hidden max-sm:flex max-sm:p-2 lg:hidden"
+            >
+              <List className="mr-2 h-4 w-4" aria-hidden="true" />
+              <span>Tasks</span>
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem
+              onClick={() => router.push(`/areas/${areaId}/note`)}
+              className="max-md:hidden max-sm:flex max-sm:p-2 lg:hidden"
+            >
+              <StickyNote className="mr-2 h-4 w-4" aria-hidden="true" />
+              <span>Note</span>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuSeparator className="max-md:hidden max-sm:flex lg:hidden" />
           <DropdownMenuItem
             onClick={openRenameAreaDialog}

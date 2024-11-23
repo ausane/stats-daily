@@ -34,6 +34,7 @@ import {
   undoTaskCompletion,
 } from "@/features/task-slice";
 import { taskLength } from "@/lib/constants";
+import { ScrollArea } from "../ui/scroll-area";
 
 export default function TaskList({ data }: { data: TArea }) {
   const { _id: areaId, tasks, note, area } = data;
@@ -120,7 +121,7 @@ export default function TaskList({ data }: { data: TArea }) {
           </TooltipCompo>
         </div>
 
-        <div className="h-[calc(100%-6rem)] w-full overflow-auto overflow-x-hidden max-sm:h-[calc(100%-7rem)]">
+        <ScrollArea className="h-[calc(100%-6rem)] w-full overflow-auto overflow-x-hidden max-sm:h-[calc(100%-7rem)]">
           <AddNewTask
             areaId={areaId as string}
             addTaskInput={addTaskInput}
@@ -140,11 +141,11 @@ export default function TaskList({ data }: { data: TArea }) {
               </div>
             ))
           ) : (
-            <div className="flex-center size-full italic opacity-50">
+            <div className="flex-center pt-20 italic opacity-50">
               <p>empty</p>
             </div>
           )}
-        </div>
+        </ScrollArea>
         <ShowCompletedTasks
           areaId={areaId as string}
           completedTasks={completedTasks}

@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "../ui/button";
 import { TooltipCompo } from "../ui/tooltip";
+import { ScrollArea } from "../ui/scroll-area";
 
 export default function Sidebar({ data }: { data: TSC[] }) {
   const dispatch = useAppDispatch();
@@ -77,28 +78,24 @@ export function SidebarContent(props: SidebarContentProps) {
   };
 
   return (
-    <>
-      <div className="sticky top-20 h-[calc(100%-10rem)] w-full overflow-auto px-2">
-        {areas?.map((item, index) => (
-          <div
-            key={index}
-            className={`flex-start my-2 box-border w-[calc(100%-2px)] rounded-lg hover:bg-secondary ${item.areaId === areaId ? "bg-secondary" : "bg-background"}`}
+    <ScrollArea className="h-[calc(100%-10rem)] w-full overflow-x-hidden px-2">
+      {areas?.map((item, index) => (
+        <div
+          key={index}
+          className={`my-2 box-border w-[calc(100%-8px)] rounded-lg hover:bg-secondary ${item.areaId === areaId ? "bg-secondary" : "bg-background"}`}
+        >
+          <button
+            onClick={() => handleAreaNavigation(item?.areaId as string)}
+            className="flex-start box-border w-full gap-4"
           >
-            <button
-              onClick={() => handleAreaNavigation(item.areaId as string)}
-              className="flex-start box-border w-full gap-4"
-            >
-              <span className="flex-center bbn h-10 w-10 rounded-lg">
-                {index + 1}
-              </span>
-              <p className="flex-start w-[calc(100%-4rem)] truncate">
-                {item.areaName}
-              </p>
-            </button>
-          </div>
-        ))}
-      </div>
-    </>
+            <span className="flex-center bbn h-10 w-10 rounded-lg">
+              {index + 1}
+            </span>
+            <p className="w-40 flex-1 truncate text-start">{item.areaName}</p>
+          </button>
+        </div>
+      ))}
+    </ScrollArea>
   );
 }
 

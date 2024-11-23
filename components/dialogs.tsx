@@ -163,16 +163,16 @@ export function ShowTaskDialog(props: ShowTaskDialogProps) {
   return (
     <Dialog open={showTaskState} onOpenChange={setShowTaskState}>
       <DialogTrigger
-        className="w-11/12 truncate text-start"
+        className="w-1 flex-1 truncate text-start"
         aria-live="polite"
         aria-relevant="additions"
       >
         {task}
       </DialogTrigger>
-      <DialogContent className="gap-5">
+      <DialogContent className="gap-8">
         <DialogHeader>
           <DialogTitle className="leading-8">{areaName}</DialogTitle>
-          <DialogDescription>{task}</DialogDescription>
+          <DialogDescription className="text-base">{task}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <div className="flex-between w-full">

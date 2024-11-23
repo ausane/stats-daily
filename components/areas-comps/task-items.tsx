@@ -14,7 +14,7 @@ export function TaskContent({ children }: { children: ReactNode }) {
 }
 
 export function TaskOptions({ children }: { children: ReactNode }) {
-  return <span className="flex-around w-20 max-sm:w-10">{children}</span>;
+  return <span className="flex-end w-20 gap-2 max-sm:w-10">{children}</span>;
 }
 
 export function InputRequiredAlert() {
