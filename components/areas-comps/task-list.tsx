@@ -141,7 +141,7 @@ export default function TaskList({ data }: { data: TArea }) {
               </div>
             ))
           ) : (
-            <div className="flex-center size-full italic opacity-50">
+            <div className="flex-center pt-20 italic opacity-50">
               <p>empty</p>
             </div>
           )}
