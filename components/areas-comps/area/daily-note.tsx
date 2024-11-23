@@ -28,7 +28,11 @@ export default function DailyNote({ areaId, note }: DailyNoteProps) {
     }
 
     const adjustHeight = () => {
-      if (window.innerWidth <= 640 && textarea) {
+      const resize =
+        window.innerWidth < 640 ||
+        (window.innerWidth > 768 && window.innerWidth < 1024);
+
+      if (resize && textarea) {
         textarea.style.height = "auto"; // Reset the height
         textarea.style.height = `${textarea.scrollHeight}px`; // Set it to the scroll height
       }
@@ -37,7 +41,7 @@ export default function DailyNote({ areaId, note }: DailyNoteProps) {
     adjustHeight(); // Call it once on initial render
     window.addEventListener("resize", adjustHeight); // Adjust on window resize
     return () => window.removeEventListener("resize", adjustHeight); // Clean up listener
-  }, [inputNote]);
+  }, [inputNote, noteInput]);
 
   const handleNoteChange = async () => {
     if (noteInput.trim().length > areaNoteLength) {
@@ -89,7 +93,7 @@ export default function DailyNote({ areaId, note }: DailyNoteProps) {
           ref={tRef}
           name="note"
           value={noteInput}
-          className="bbn w-full rounded-md bg-transparent p-1 sm:h-[calc(100%-40px)] sm:resize-none"
+          className="bbn w-full rounded-md bg-transparent p-1 max-md:h-[calc(100%-40px)] max-md:resize-none max-sm:max-h-72 max-sm:resize-y lg:h-[calc(100%-40px)] lg:resize-none"
           onChange={(e) => setNoteInput(e.target.value)}
           role="textbox"
           aria-label="Edit Note Textarea"
