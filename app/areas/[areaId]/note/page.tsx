@@ -16,7 +16,7 @@ export default async function AreaNotePage({
   return (
     <div className="size-full overflow-hidden p-4 pt-0 md:w-3/4">
       <AreaHeader areaId={areaId} area={area as string} user={ps(user)} />
-      <div className="bbn box-border flex flex-col gap-4 rounded-lg p-4">
+      <div className="bbn mt-4 box-border flex flex-col gap-4 rounded-lg p-4">
         <DailyNote areaId={areaId as string} note={note as string} />
       </div>
     </div>

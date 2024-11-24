@@ -64,16 +64,16 @@ export function TaskCompletionDialog(props: CompletionDialogProps) {
   const { task, children, onClick, openDialog, setOpenDialog } = props;
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-      <TooltipCompo tip="Mark as Done">
-        <DialogTrigger asChild>
-          <Button
-            role="button"
-            tabIndex={0}
-            className="status-button border-primary bg-transparent hover:border-yellow-400 hover:bg-yellow-400"
-            aria-label="Mark as Done"
-          ></Button>
-        </DialogTrigger>
-      </TooltipCompo>
+      {/* <TooltipCompo tip="Mark as Done"> */}
+      <DialogTrigger asChild>
+        <Button
+          role="button"
+          tabIndex={0}
+          className="status-button border-primary bg-transparent hover:border-yellow-400 hover:bg-yellow-400"
+          aria-label="Mark as Done"
+        ></Button>
+      </DialogTrigger>
+      {/* </TooltipCompo> */}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="flex-start mb-2">
@@ -171,7 +171,7 @@ export function ShowTaskDialog(props: ShowTaskDialogProps) {
       </DialogTrigger>
       <DialogContent className="gap-8">
         <DialogHeader>
-          <DialogTitle className="leading-8">{areaName}</DialogTitle>
+          <DialogTitle>{areaName}</DialogTitle>
           <DialogDescription className="text-base">{task}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
