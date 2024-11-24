@@ -330,6 +330,7 @@ export function AddNewTask(props: AddNewTaskProps) {
             ref={inputRef}
             type="text"
             name="task"
+            className="rounded-none border-0 pl-0 outline-none"
             labelClasses="w-5/6"
             value={newTaskValue}
             onChange={handleNewTaskInputChange}
