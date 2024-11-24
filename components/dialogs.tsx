@@ -33,7 +33,7 @@ import { TooltipCompo } from "./ui/tooltip";
 import { areaNoteLength, taskLength } from "@/lib/constants";
 
 export function ConfirmDeletionDialog(props: ConfirmDialogProps) {
-  const { onClick, deleteDialog, setDeleteDialog } = props;
+  const { onClick, deleteDialog, setDeleteDialog, deleting } = props;
 
   return (
     <AlertDialog open={deleteDialog} onOpenChange={setDeleteDialog}>
@@ -52,7 +52,7 @@ export function ConfirmDeletionDialog(props: ConfirmDialogProps) {
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             onClick={onClick}
           >
-            Delete
+            {deleting ? "Deleting..." : "Delete"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
