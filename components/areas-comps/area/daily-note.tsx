@@ -34,7 +34,7 @@ export default function DailyNote({ areaId, note }: DailyNoteProps) {
 
       if (resize && textarea) {
         textarea.style.height = "auto"; // Reset the height
-        textarea.style.height = `${textarea.scrollHeight}px`; // Set it to the scroll height
+        textarea.style.height = `${textarea.scrollHeight + 2}px`; // Set it to the scroll height
       }
     };
 
