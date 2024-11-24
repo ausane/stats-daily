@@ -122,6 +122,7 @@ export type CompletionDialogProps = {
 
 // Confirm Dialog Props Type
 export type ConfirmDialogProps = {
+  deleting: boolean;
   deleteDialog: boolean;
   setDeleteDialog: SetState<boolean>;
   onClick: () => void;

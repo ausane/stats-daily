@@ -164,11 +164,20 @@ export function TaskItemCompo(props: TaskItemCompoProps) {
   const pathname = usePathname();
 
   const [deleteDialog, setDeleteDialog] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const handleDelete = async () => {
-    await deleteArea(areaId);
-    dispatch(removeAreaById(areaId));
-    router.push("/areas/create");
+    try {
+      setDeleteDialog(true);
+      setDeleting(true);
+      await deleteArea(areaId);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setDeleting(false);
+      dispatch(removeAreaById(areaId));
+      router.push("/areas/create");
+    }
   };
 
   const matcher = /^\/areas\/[0-9a-f]{24}\/note$/;
@@ -230,6 +239,7 @@ export function TaskItemCompo(props: TaskItemCompoProps) {
 
       {/* Confirm Delete Dialog Component */}
       <ConfirmDeletionDialog
+        deleting={deleting}
         deleteDialog={deleteDialog}
         setDeleteDialog={setDeleteDialog}
         onClick={handleDelete}

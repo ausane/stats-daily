@@ -207,12 +207,12 @@ export function ShowCompletedTasks({
           </IconButton>
         </TooltipCompo>
       </div>
-      <div
+      <ScrollArea
         className={`h-[calc(100%-3rem)] flex-col overflow-auto max-sm:h-[calc(100%-3.5rem)] ${open ? "flex" : "hidden"} `}
       >
         {completedTasks.length ? (
           completedTasks?.map((item, index) => (
-            <div key={index} className="flex-between w-full border-b px-2 py-3">
+            <div key={index} className="flex-between h-12 w-full border-b p-2">
               <TaskStatus>
                 <TooltipCompo tip="Undo">
                   <button
@@ -233,11 +233,11 @@ export function ShowCompletedTasks({
             </div>
           ))
         ) : (
-          <div className="flex-center size-full italic opacity-50">
+          <div className="flex-center size-full pt-20 italic opacity-50">
             <p>empty</p>
           </div>
         )}
-      </div>
+      </ScrollArea>
     </div>
   );
 }
@@ -330,6 +330,7 @@ export function AddNewTask(props: AddNewTaskProps) {
             ref={inputRef}
             type="text"
             name="task"
+            className="rounded-none border-0 pl-0 outline-none"
             labelClasses="w-5/6"
             value={newTaskValue}
             onChange={handleNewTaskInputChange}

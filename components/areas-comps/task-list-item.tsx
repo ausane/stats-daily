@@ -138,6 +138,7 @@ export default function TaskListItem(props: TaskListItemsProps) {
                 ref={inputRef}
                 type="text"
                 name="task"
+                className="rounded-none border-0 pl-0 outline-none"
                 labelClasses="w-5/6"
                 value={inputTask}
                 onChange={handleEditInputChange}

@@ -24,16 +24,16 @@ export default function SignUpPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="flex flex-col items-center space-y-1">
-          <CardTitle className="flex-center gap-4">
+      <Card className="w-full max-w-md rounded-3xl p-8">
+        <CardHeader className="flex flex-col items-center space-y-1 p-0">
+          <CardTitle className="flex-center mb-1 gap-4">
             <SDIconWithTitle />
           </CardTitle>
           <CardDescription className="text-center">
             Your Daily Tasks Completion Tracker
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="mt-4 space-y-4 p-0">
           <div className="space-y-2 text-center">
             <p className="text-sm text-muted-foreground">
               Sign in to start boosting your productivity
