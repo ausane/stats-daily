@@ -48,12 +48,9 @@ export function ConfirmDeletionDialog(props: ConfirmDialogProps) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            onClick={onClick}
-          >
+          <Button variant="destructive" onClick={onClick} disabled={deleting}>
             {deleting ? "Deleting..." : "Delete"}
-          </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

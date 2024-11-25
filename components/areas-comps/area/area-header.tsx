@@ -168,15 +168,14 @@ export function TaskItemCompo(props: TaskItemCompoProps) {
 
   const handleDelete = async () => {
     try {
-      setDeleteDialog(true);
       setDeleting(true);
       await deleteArea(areaId);
+      dispatch(removeAreaById(areaId));
+      router.push("/areas/create");
     } catch (error) {
       console.error(error);
     } finally {
       setDeleting(false);
-      dispatch(removeAreaById(areaId));
-      router.push("/areas/create");
     }
   };
 
