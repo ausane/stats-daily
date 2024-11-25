@@ -48,12 +48,9 @@ export function ConfirmDeletionDialog(props: ConfirmDialogProps) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            onClick={onClick}
-          >
+          <Button variant="destructive" onClick={onClick} disabled={deleting}>
             {deleting ? "Deleting..." : "Delete"}
-          </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -171,8 +168,12 @@ export function ShowTaskDialog(props: ShowTaskDialogProps) {
       </DialogTrigger>
       <DialogContent className="gap-8">
         <DialogHeader>
-          <DialogTitle>{areaName}</DialogTitle>
-          <DialogDescription className="text-base">{task}</DialogDescription>
+          <DialogDescription className="text-base text-foreground">
+            {task}
+          </DialogDescription>
+          <p className="mt-2 text-end text-sm text-muted-foreground">
+            — {areaName}
+          </p>
         </DialogHeader>
         <DialogFooter>
           <div className="flex-between w-full">
