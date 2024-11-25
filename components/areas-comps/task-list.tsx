@@ -228,7 +228,7 @@ export function ShowCompletedTasks({
               </TaskContent>
 
               <TaskOptions>
-                <p>{item.achieved.toString()}%</p>
+                <p className="max-sm:pr-2">{item.achieved.toString()}%</p>
               </TaskOptions>
             </div>
           ))
