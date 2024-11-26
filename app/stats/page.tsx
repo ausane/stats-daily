@@ -1,15 +1,10 @@
-import { ChartCollection } from "@/components/charts/chart-collection";
+import { StatsComponent } from "@/components/charts/stats-component";
 import { statsdaily } from "@/lib/daily-stats";
-import { TStats, TUser } from "@/lib/types";
-import { currentUser } from "@/lib/db/stats";
+import { TStats } from "@/lib/types";
+import { ps } from "@/lib/utils";
 
 export default async function StatsPage() {
-  const { _id: userId }: TUser = await currentUser();
+  const stats: TStats[] = await statsdaily(60);
 
-  const stats: TStats[] = await statsdaily(userId?.toString() as string, 60);
-
-  const d1 = JSON.stringify(stats);
-  const d2: TStats[] = JSON.parse(d1);
-
-  return <ChartCollection data={d2} />;
+  return <StatsComponent data={ps(stats)} />;
 }

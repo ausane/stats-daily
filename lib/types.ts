@@ -204,10 +204,8 @@ export type HeaderProps = {
 
 // Stats Page Main Content Props Type
 export type MainContentProps = {
-  PieChartData: PieChartProps[];
-  lineChartData: RangeChartProps[];
-  achievedPercentage: number;
-  degree: number;
+  stats: TStats[];
+  selectedValue: string;
 };
 
 // Sidebar Content Props Type
