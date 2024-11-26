@@ -1,4 +1,3 @@
-import { PieChartProps } from "@/components/charts/pie-chart";
 import { Document } from "mongoose";
 import { ImageProps } from "next/image";
 import React, { ButtonHTMLAttributes, InputHTMLAttributes } from "react";

@@ -1,4 +1,4 @@
-"use client"; // This ensures the component is a client component
+"use client";
 
 import { Provider } from "react-redux";
 import store from "@/store/store";

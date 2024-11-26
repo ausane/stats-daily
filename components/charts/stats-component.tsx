@@ -24,21 +24,19 @@ export function StatsComponent({ data }: { data: TStats[] }) {
     setStats(data.slice(0, count));
   }, [selectedValue, data]);
 
-  // const tasksCompleted: boolean = isTasksCompleted(stats);
-  // if (!stats.length || !tasksCompleted) {
-  //   const info = stats.length ? "tnc" : "nsf";
-  //   return (
-  //     <>
-  //       <ChartHeader
-  //         statsLength={false}
-  //         selectedValue={selectedValue}
-  //         setSelectedValue={setSelectedValue}
-  //       />
-  //       <NoStatsFound info={info} />
-  //       <PageFooter />
-  //     </>
-  //   );
-  // }
+  if (!stats.length) {
+    return (
+      <>
+        <ChartHeader
+          statsLength={false}
+          selectedValue={selectedValue}
+          setSelectedValue={setSelectedValue}
+        />
+        <NoStatsFound />
+        <PageFooter />
+      </>
+    );
+  }
 
   return (
     <>
@@ -96,20 +94,16 @@ export function ChartMainContent({ stats, selectedValue }: MainContentProps) {
   );
 }
 
-export function NoStatsFound({ info }: { info: "tnc" | "nsf" }) {
-  const title = info === "tnc" ? "Tasks Not Completed!" : "No Stats Found!";
-  const message =
-    info === "tnc"
-      ? "You haven't completed any tasks yet!"
-      : "Please wait at least a day to get started!";
-
+export function NoStatsFound() {
   return (
     <div className="flex-center h-[calc(100dvh-8rem)] flex-col">
       <div className="flex items-center space-x-2">
         <InfoIcon size={24} aria-hidden="true" />
-        <h1 className="text-xl font-semibold">{title}</h1>
+        <h1 className="text-xl font-semibold">No Stats Found!</h1>
       </div>
-      <p className="mt-2 text-muted-foreground">{message}</p>
+      <p className="mt-2 text-muted-foreground">
+        Please wait at least a day to get started!
+      </p>
     </div>
   );
 }

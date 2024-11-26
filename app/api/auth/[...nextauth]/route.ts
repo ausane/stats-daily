@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { User } from "@/models/user.model"; // import your MongoDB model
-import connectToDatabase from "@/lib/db/mongodb"; // function to connect to your database
+import { User } from "@/models/user.model";
+import connectToDatabase from "@/lib/db/mongodb";
 
 const handler = NextAuth({
   providers: [
