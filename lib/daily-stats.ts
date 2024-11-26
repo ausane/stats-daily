@@ -2,6 +2,7 @@ import { Area } from "@/models/task.model";
 import connectToDatabase from "./db/mongodb";
 import { Stats } from "@/models/stats.model";
 import { TArea, TStats, OmitDocument, taskStats, TTask } from "./types";
+import { currentUser } from "./db/stats";
 
 export const dailyStats = async () => {
   await connectToDatabase();
@@ -33,11 +34,11 @@ export const dailyStats = async () => {
   }
 };
 
-export const statsdaily = async (userId: string, count: number) => {
+export const statsdaily = async (count: number) => {
   await connectToDatabase();
 
   try {
-    // console.log((await Stats.find({ userId })).length);
+    const { _id: userId } = await currentUser();
     return await Stats.find({ userId }).sort({ createdAt: -1 }).limit(count);
   } catch (error) {
     console.error(error);

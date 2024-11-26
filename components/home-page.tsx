@@ -126,7 +126,7 @@ export function PageFooter() {
           - Daily Tasks Completion Tracker.
         </span>
       </p>
-      <Link href="https://github.com/ausane/stats-daily" target="_blank">
+      <Link href="https://github.com/snvshal/stats-daily" target="_blank">
         <Image
           className="h-6 w-6"
           src="/github.svg"

@@ -1,4 +1,3 @@
-import { PieChartProps } from "@/components/charts/pie-chart";
 import { Document } from "mongoose";
 import { ImageProps } from "next/image";
 import React, { ButtonHTMLAttributes, InputHTMLAttributes } from "react";
@@ -204,10 +203,8 @@ export type HeaderProps = {
 
 // Stats Page Main Content Props Type
 export type MainContentProps = {
-  PieChartData: PieChartProps[];
-  lineChartData: RangeChartProps[];
-  achievedPercentage: number;
-  degree: number;
+  stats: TStats[];
+  selectedValue: string;
 };
 
 // Sidebar Content Props Type
