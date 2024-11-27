@@ -196,7 +196,6 @@ export type RangeChartProps = {
 
 // Stats Page Header Props Type
 export type HeaderProps = {
-  statsLength: boolean;
   selectedValue: string;
   setSelectedValue: SetState<string>;
 };

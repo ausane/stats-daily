@@ -2,7 +2,7 @@
 
 import { HeaderProps, TStats, MainContentProps } from "@/lib/types";
 import { useEffect, useState } from "react";
-import { PageFooter, SDIconWithTitle } from "@/components/home-page";
+import { PageFooter, SDIcon } from "@/components/home-page";
 import { InfoIcon } from "lucide-react";
 import {
   Select,
@@ -14,6 +14,7 @@ import {
   SelectLabel,
 } from "@/components/ui/select";
 import { RadarChartComponent } from "./radar-chart";
+import Link from "next/link";
 
 export function StatsComponent({ data }: { data: TStats[] }) {
   const [selectedValue, setSelectedValue] = useState<string>("1");
@@ -28,7 +29,6 @@ export function StatsComponent({ data }: { data: TStats[] }) {
     return (
       <>
         <ChartHeader
-          statsLength={false}
           selectedValue={selectedValue}
           setSelectedValue={setSelectedValue}
         />
@@ -41,7 +41,6 @@ export function StatsComponent({ data }: { data: TStats[] }) {
   return (
     <>
       <ChartHeader
-        statsLength={true}
         selectedValue={selectedValue}
         setSelectedValue={setSelectedValue}
       />
@@ -52,14 +51,15 @@ export function StatsComponent({ data }: { data: TStats[] }) {
 }
 
 // Chart Collection Component Header
-export function ChartHeader({
-  statsLength,
-  selectedValue,
-  setSelectedValue,
-}: HeaderProps) {
+export function ChartHeader({ selectedValue, setSelectedValue }: HeaderProps) {
   return (
     <header className="flex-between sticky top-0 z-40 h-16 border-b bg-background px-4 lg:px-6">
-      <SDIconWithTitle />
+      <Link href="/" className="flex-center gap-2.5" prefetch={false}>
+        <SDIcon />
+        <span className="text-2xl font-bold text-foreground/90 max-sm:hidden">
+          StatsDaily
+        </span>
+      </Link>
       <Select
         value={selectedValue}
         onValueChange={setSelectedValue}
@@ -88,7 +88,7 @@ export function ChartHeader({
 // Chart Collection Component Main Content
 export function ChartMainContent({ stats, selectedValue }: MainContentProps) {
   return (
-    <main className="p-8">
+    <main className="p-4 sm:p-8">
       <RadarChartComponent stats={stats} days={selectedValue} />
     </main>
   );
