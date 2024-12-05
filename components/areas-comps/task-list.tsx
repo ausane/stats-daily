@@ -35,6 +35,7 @@ import {
 } from "@/features/task-slice";
 import { taskLength } from "@/lib/constants";
 import { ScrollArea } from "../ui/scroll-area";
+import useKeyShortcut from "@/hooks/key-shortcut";
 
 export default function TaskList({ data }: { data: TArea }) {
   const { _id: areaId, tasks, note, area } = data;
@@ -181,6 +182,12 @@ export function ShowCompletedTasks({
     await updateTask(areaId, task as TTask);
   };
 
+  // Shortcut to open the completed tasks tab
+  useKeyShortcut({
+    key: "c",
+    action: () => setOpen((prev) => !prev),
+  });
+
   return (
     <div
       className={`duration-400 absolute bottom-0 left-0 w-full overflow-hidden bg-background transition-all ease-in-out ${open ? "h-full" : "h-12 border-t max-sm:h-14"}`}
@@ -260,7 +267,7 @@ export function AddNewTask(props: AddNewTaskProps) {
       setNewTaskValue("");
       setLoadingMessage("");
       setEmptyInputAlert(false);
-      inputRef.current?.focus();
+      setTimeout(() => inputRef.current?.focus(), 10);
     }
   }, [addTaskInput]);
 
@@ -313,6 +320,12 @@ export function AddNewTask(props: AddNewTaskProps) {
 
     if (!target || !nte.includes(target.id)) setAddTaskInput(false);
   };
+
+  // Shortcut to open the input
+  useKeyShortcut({
+    key: "t",
+    action: () => setAddTaskInput((prev) => !prev),
+  });
 
   if (addTaskInput) {
     return (

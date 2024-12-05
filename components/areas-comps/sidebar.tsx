@@ -18,6 +18,7 @@ import {
 import { Button } from "../ui/button";
 import { TooltipCompo } from "../ui/tooltip";
 import { ScrollArea } from "../ui/scroll-area";
+import useKeyShortcut from "@/hooks/key-shortcut";
 
 export default function Sidebar({ data }: { data: TSC[] }) {
   const dispatch = useAppDispatch();
@@ -76,6 +77,12 @@ export function SidebarContent(props: SidebarContentProps) {
     router.push(`/areas/${areaId}`);
     router.refresh();
   };
+
+  // Shortcut to create a new area
+  useKeyShortcut({
+    key: "a",
+    action: () => (areaId === "create" ? null : router.push(`/areas/create`)),
+  });
 
   return (
     <ScrollArea className="h-[calc(100%-10rem)] w-full overflow-x-hidden px-2">
