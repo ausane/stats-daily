@@ -168,6 +168,7 @@ export function ShowTaskDialog(props: ShowTaskDialogProps) {
       </DialogTrigger>
       <DialogContent className="gap-8">
         <DialogHeader>
+          <DialogTitle></DialogTitle>
           <DialogDescription className="text-base text-foreground">
             {task}
           </DialogDescription>
