@@ -107,29 +107,33 @@ export function CreateAreaLink({
   return (
     <div className="flex flex-col gap-2">
       <Link
-        className="flex-between link-click-effect mx-2 h-10 rounded-lg pr-4 opacity-80"
+        className="flex-between link-click-effect mx-2 h-10 rounded-lg pr-4"
         onClick={() => setSidebarState(false)}
         href={`/areas/create`}
       >
-        <span className="flex-start gap-4 text-lg">
-          <code className="bbn flex-center bold h-10 w-10 rounded-lg text-2xl">
+        <span className="flex-start gap-4">
+          <code className="bbn flex-center h-10 w-10 rounded-lg text-2xl">
             SD
           </code>
           <h2>StatsDaily</h2>
         </span>
         <TooltipCompo tip="New Area">
-          <SquarePen size={20} aria-hidden="true" />
+          <SquarePen
+            size={20}
+            aria-hidden="true"
+            className="text-muted-foreground"
+          />
         </TooltipCompo>
         <span className="sr-only">Create new area</span>
       </Link>
       <Link
         href={"/stats"}
-        className="flex-start link-click-effect mx-2 h-10 gap-4 rounded-lg pr-4 opacity-80"
+        className="flex-start link-click-effect mx-2 h-10 gap-4 rounded-lg pr-4"
       >
         <Button variant="ghost" className="bbn size-10 p-0">
           <BarChart2 size={24} />
         </Button>
-        <h2 className="text-lg">Stats</h2>
+        <h2>Stats</h2>
       </Link>
     </div>
   );
