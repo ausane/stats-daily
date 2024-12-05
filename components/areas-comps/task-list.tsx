@@ -224,11 +224,13 @@ export function ShowCompletedTasks({
               </TaskStatus>
 
               <TaskContent>
-                <p className="w-11/12 truncate">{item.task}</p>
+                <p className="w-1 flex-1 truncate text-start max-sm:pr-2">
+                  {item.task}
+                </p>
               </TaskContent>
 
               <TaskOptions>
-                <p className="max-sm:pr-2">{item.achieved.toString()}%</p>
+                <p className="pr-1">{item.achieved.toString()}%</p>
               </TaskOptions>
             </div>
           ))
