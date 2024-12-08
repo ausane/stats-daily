@@ -185,6 +185,7 @@ export function ShowCompletedTasks({
   // Shortcut to open the completed tasks tab
   useKeyShortcut({
     key: "c",
+    modifiers: ["altKey"],
     action: () => setOpen((prev) => !prev),
   });
 
@@ -324,6 +325,7 @@ export function AddNewTask(props: AddNewTaskProps) {
   // Shortcut to open the input
   useKeyShortcut({
     key: "t",
+    modifiers: ["altKey"],
     action: () => setAddTaskInput((prev) => !prev),
   });
 
