@@ -81,6 +81,7 @@ export function SidebarContent(props: SidebarContentProps) {
   // Shortcut to create a new area
   useKeyShortcut({
     key: "a",
+    modifiers: ["altKey"],
     action: () => (areaId === "create" ? null : router.push(`/areas/create`)),
   });
 

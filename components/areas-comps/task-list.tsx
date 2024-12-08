@@ -152,7 +152,7 @@ export default function TaskList({ data }: { data: TArea }) {
           completedTasks={completedTasks}
         />
       </div>
-      <div className="flex h-full w-1/3 flex-col gap-4 max-lg:flex max-lg:hidden max-md:flex max-sm:hidden">
+      <div className="flex h-full w-1/3 flex-col gap-4 max-lg:hidden max-md:flex max-sm:hidden">
         <CircularProgress progress={progress} ctp={ctp} />
         <div className="bbn box-border h-[calc(100%-10rem)] rounded-lg px-4 py-2">
           <DailyNote areaId={areaId as string} note={note as string} />
@@ -185,6 +185,7 @@ export function ShowCompletedTasks({
   // Shortcut to open the completed tasks tab
   useKeyShortcut({
     key: "c",
+    modifiers: ["altKey"],
     action: () => setOpen((prev) => !prev),
   });
 
@@ -324,6 +325,7 @@ export function AddNewTask(props: AddNewTaskProps) {
   // Shortcut to open the input
   useKeyShortcut({
     key: "t",
+    modifiers: ["altKey"],
     action: () => setAddTaskInput((prev) => !prev),
   });
 

@@ -100,7 +100,9 @@ export default function DailyNote({ areaId, note }: DailyNoteProps) {
         />
       ) : (
         <ScrollArea className="h-[calc(100%-40px)] w-full overflow-auto overflow-x-hidden text-ellipsis">
-          <p>{noteState || <span className="italic opacity-50">empty</span>}</p>
+          <p className="whitespace-pre-wrap">
+            {noteState || <span className="italic opacity-50">empty</span>}
+          </p>
         </ScrollArea>
       )}
 
