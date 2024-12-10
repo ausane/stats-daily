@@ -103,7 +103,7 @@ export default function TaskList({ data }: { data: TArea }) {
               : `${incompleteTasks.length} Incomplete`}{" "}
             {incompleteTasks.length === 1 ? "Task" : "Tasks"}
           </p>
-          <TooltipCompo tip={`${addTaskInput ? "Close" : "Add Task"}`}>
+          <TooltipCompo content={`${addTaskInput ? "Close" : "Add Task"}`}>
             <IconButton
               id="cancel-button"
               variant="ghost"
@@ -203,7 +203,7 @@ export function ShowCompletedTasks({
             : `${completedTasks.length} Completed`}{" "}
           {completedTasks.length === 1 ? "Task" : "Tasks"}
         </p>
-        <TooltipCompo tip={`${open ? "Close" : "Open"}`}>
+        <TooltipCompo content={`${open ? "Close" : "Open"}`}>
           <IconButton
             variant="ghost"
             circle={true}
@@ -222,7 +222,7 @@ export function ShowCompletedTasks({
           completedTasks?.map((item, index) => (
             <div key={index} className="flex-between h-12 w-full border-b p-2">
               <TaskStatus>
-                <TooltipCompo tip="Undo">
+                <TooltipCompo content="Undo">
                   <button
                     onClick={() => handleUndoTask(index)}
                     className="status-button border-red-700 bg-red-700 hover:bg-red-800"

@@ -14,7 +14,7 @@ export default function CircularProgress(props: CircularProgressProps) {
 
   return (
     <div className="flex-between relative h-36 w-full gap-4">
-      <TooltipCompo tip="Performance">
+      <TooltipCompo content="Performance">
         <div
           className="bbn flex-center relative h-full w-3/5 rounded-lg"
           role="progressbar"
@@ -60,7 +60,7 @@ export default function CircularProgress(props: CircularProgressProps) {
         aria-valuemin={0}
         aria-valuemax={100}
       >
-        <TooltipCompo tip="Tasks Completed">
+        <TooltipCompo content="Tasks Completed">
           <div className="relative flex h-[108px] w-12">
             <div className="absolute h-full w-full rounded-lg bg-secondary"></div>
             <div

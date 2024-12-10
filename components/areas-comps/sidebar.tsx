@@ -125,7 +125,7 @@ export function CreateAreaLink({
           </code>
           <h2>StatsDaily</h2>
         </span>
-        <TooltipCompo tip="New Area">
+        <TooltipCompo content="New Area">
           <SquarePen
             size={20}
             aria-hidden="true"
