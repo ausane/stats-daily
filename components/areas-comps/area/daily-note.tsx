@@ -21,11 +21,13 @@ export default function DailyNote({ areaId, note }: DailyNoteProps) {
     const textarea = tRef.current;
     if (inputNote && textarea) {
       textarea.focus();
-      // Move the cursor to the end of the text
       textarea.setSelectionRange(textarea.value.length, textarea.value.length);
-      // Scroll to the end of the text
       textarea.scrollTop = textarea.scrollHeight;
     }
+  }, [inputNote]);
+
+  useEffect(() => {
+    const textarea = tRef.current;
 
     const adjustHeight = () => {
       const resize =
@@ -33,15 +35,15 @@ export default function DailyNote({ areaId, note }: DailyNoteProps) {
         (window.innerWidth > 768 && window.innerWidth < 1024);
 
       if (resize && textarea) {
-        textarea.style.height = "auto"; // Reset the height
-        textarea.style.height = `${textarea.scrollHeight + 2}px`; // Set it to the scroll height
+        textarea.style.height = "auto";
+        textarea.style.height = `${textarea.scrollHeight + 2}px`;
       }
     };
 
-    adjustHeight(); // Call it once on initial render
-    window.addEventListener("resize", adjustHeight); // Adjust on window resize
-    return () => window.removeEventListener("resize", adjustHeight); // Clean up listener
-  }, [inputNote, noteInput]);
+    adjustHeight();
+    window.addEventListener("resize", adjustHeight);
+    return () => window.removeEventListener("resize", adjustHeight);
+  }, [inputNote]);
 
   const handleNoteChange = async () => {
     if (noteInput.trim().length > areaNoteLength) {

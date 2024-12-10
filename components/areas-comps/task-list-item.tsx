@@ -283,7 +283,7 @@ export function TaskOptionsUI({
       return (
         <span className="flex-end w-full pr-2">
           <DropdownMenu>
-            <TooltipCompo tip="Task Options">
+            <TooltipCompo content="Task Options">
               <DropdownMenuTrigger asChild>
                 <IconButton variant="ghost" aria-label="Task Options">
                   <Ellipsis size={15} />

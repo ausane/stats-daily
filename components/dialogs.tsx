@@ -61,7 +61,7 @@ export function TaskCompletionDialog(props: CompletionDialogProps) {
   const { task, children, onClick, openDialog, setOpenDialog } = props;
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-      {/* <TooltipCompo tip="Mark as Done"> */}
+      {/* <TooltipCompo content="Mark as Done"> */}
       <DialogTrigger asChild>
         <Button
           role="button"
