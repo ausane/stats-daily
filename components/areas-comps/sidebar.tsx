@@ -20,7 +20,13 @@ import { TooltipCompo } from "../ui/tooltip";
 import { ScrollArea } from "../ui/scroll-area";
 import useKeyShortcut from "@/hooks/key-shortcut";
 
-export default function Sidebar({ data }: { data: TSC[] }) {
+export default function Sidebar({
+  data,
+  children,
+}: {
+  data: TSC[];
+  children: React.ReactNode;
+}) {
   const dispatch = useAppDispatch();
   const areas = useAppSelector((state) => state.area.areas);
 
@@ -33,7 +39,7 @@ export default function Sidebar({ data }: { data: TSC[] }) {
   const toggleSidebar = () => setSidebarState((prev) => !prev);
 
   return (
-    <>
+    <div className="flex h-screen w-screen">
       <Sheet open={isSidebarOpen} onOpenChange={setSidebarState}>
         <SheetTrigger
           className={`flex-center bbn fixed left-4 top-4 z-50 h-10 w-10 rounded-lg bg-background hover:bg-accent hover:text-accent-foreground max-md:flex md:hidden ${isSidebarOpen && "hidden"}`}
@@ -45,10 +51,13 @@ export default function Sidebar({ data }: { data: TSC[] }) {
             Open Sidebar
           </span>
         </SheetTrigger>
-        <SheetContent side="left" className="w-2/3 p-2 max-sm:w-4/5">
+        <SheetContent side="left" className="w-4/5 min-w-64 p-2 md:hidden">
           <SheetHeader>
             <SheetTitle className="my-8">
-              <CreateAreaLink setSidebarState={setSidebarState} />
+              <CreateAreaLink
+                setSidebarState={setSidebarState}
+                isArea={data?.length > 0}
+              />
             </SheetTitle>
             <SheetDescription></SheetDescription>
           </SheetHeader>
@@ -56,13 +65,17 @@ export default function Sidebar({ data }: { data: TSC[] }) {
         </SheetContent>
       </Sheet>
 
-      <div className="box-border h-full w-1/4 overflow-auto border-r px-2 max-lg:w-2/5 max-md:hidden">
+      <div className="box-border h-full w-64 overflow-auto border-r px-2 max-md:hidden">
         <div className="my-4 box-border">
-          <CreateAreaLink setSidebarState={setSidebarState} />
+          <CreateAreaLink
+            setSidebarState={setSidebarState}
+            isArea={data?.length > 0}
+          />
         </div>
         <SidebarContent areas={areas} />
       </div>
-    </>
+      <div className="w-full md:w-[calc(100%-16rem)]">{children}</div>
+    </div>
   );
 }
 
@@ -109,8 +122,10 @@ export function SidebarContent(props: SidebarContentProps) {
 
 export function CreateAreaLink({
   setSidebarState,
+  isArea = false,
 }: {
   setSidebarState: SetState<boolean>;
+  isArea: boolean;
 }) {
   return (
     <div className="flex flex-col gap-2">
@@ -134,15 +149,17 @@ export function CreateAreaLink({
         </TooltipCompo>
         <span className="sr-only">Create new area</span>
       </Link>
-      <Link
-        href={"/stats"}
-        className="flex-start link-click-effect mx-2 h-10 gap-4 rounded-lg pr-4"
-      >
-        <Button variant="ghost" className="bbn size-10 p-0">
-          <BarChart2 size={24} />
-        </Button>
-        <h2>Stats</h2>
-      </Link>
+      {isArea && (
+        <Link
+          href={"/stats"}
+          className="flex-start link-click-effect mx-2 h-10 gap-4 rounded-lg pr-4"
+        >
+          <Button variant="ghost" className="bbn size-10 p-0">
+            <BarChart2 size={24} />
+          </Button>
+          <h2>Stats</h2>
+        </Link>
+      )}
     </div>
   );
 }

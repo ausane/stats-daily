@@ -4,6 +4,7 @@ import CreateArea from "@/components/areas-comps/create/create-area";
 import { currentUser, fetchAreaById, fetchTasks } from "@/lib/db/stats";
 import { TArea, TUser } from "@/lib/types";
 import InitializeSD from "@/components/areas-comps/create/initialize";
+import { redirect } from "next/navigation";
 
 export type AreasPageProps = { params: { areaId: string } };
 
@@ -20,16 +21,19 @@ export const generateMetadata = async ({
 
 export default async function AreasPage(props: AreasPageProps) {
   const { areaId } = props.params;
-  const { _id }: TUser = await currentUser();
+  const user: TUser = await currentUser();
+  const userId = user?._id?.toString() as string;
+  const data = (await fetchTasks()) ?? [];
+  const isArea = data?.length > 0;
 
-  if (areaId === "create") {
-    const data = await fetchTasks();
-    const userId = _id?.toString() as string;
+  if (areaId === "create")
+    return <CreateArea userId={userId} isArea={isArea} />;
 
-    return !data?.length ? (
-      <InitializeSD userId={userId} />
+  if (areaId === "init") {
+    return isArea ? (
+      redirect("/areas/create")
     ) : (
-      <CreateArea userId={userId} />
+      <InitializeSD userId={userId} />
     );
   }
 
