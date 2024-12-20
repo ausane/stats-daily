@@ -16,5 +16,5 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const data: TSC[] | undefined = await fetchAreas();
-  return <Sidebar data={data as TSC[]} children={children} />;
+  return <Sidebar data={data as TSC[]}>{children}</Sidebar>;
 }
