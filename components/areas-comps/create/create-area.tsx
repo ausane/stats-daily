@@ -18,7 +18,13 @@ import {
 import { InputChangeEvent, TSC } from "@/lib/types";
 import { areaNameLength, areaNoteLength } from "@/lib/constants";
 
-export default function CreateArea({ userId }: { userId: string }) {
+export default function CreateArea({
+  userId,
+  isArea,
+}: {
+  userId: string;
+  isArea: boolean;
+}) {
   // Retrieve all required states from the store
   const area = useAppSelector((state) => state.form.area);
   const note = useAppSelector((state) => state.form.note);
@@ -127,7 +133,7 @@ export default function CreateArea({ userId }: { userId: string }) {
   };
 
   return (
-    <div className="h-full w-3/4 overflow-auto max-md:w-full">
+    <div className="h-full overflow-auto">
       <form
         onSubmit={submitForm}
         className="flex-between h-full w-full flex-col gap-4 max-sm:h-auto"
@@ -135,22 +141,30 @@ export default function CreateArea({ userId }: { userId: string }) {
         <div className="flex-start sticky top-0 z-40 w-full flex-col border-b bg-background max-md:pl-14">
           <div className="flex-between w-full p-4">
             <h2 className="text-xl opacity-80">Create Area</h2>
-            <Button
-              type="submit"
-              className="bg-green-700 text-[#fafafa] hover:bg-green-800"
-              disabled={isLoading}
-              role="button"
-              aria-label="Submit Area"
-              aria-disabled={isLoading}
-              aria-live="polite"
-            >
-              {isLoading ? "Creating..." : "Create"}
-            </Button>
-            <span
-              role="status"
-              aria-live="assertive"
-              className="absolute left-[-9999px]"
-            >
+            <div>
+              {isArea || (
+                <Button
+                  type="button"
+                  variant="link"
+                  onClick={() => router.push("/areas/init")}
+                >
+                  Initialize
+                </Button>
+              )}
+              <Button
+                type="submit"
+                className="bg-green-700 text-[#fafafa] hover:bg-green-800"
+                disabled={isLoading}
+                role="button"
+                aria-label="Submit Area"
+                aria-disabled={isLoading}
+                aria-live="polite"
+              >
+                {isLoading ? "Creating..." : "Create"}
+              </Button>
+            </div>
+
+            <span role="status" aria-live="assertive" className="sr-only">
               {loadingMessage}
             </span>
           </div>

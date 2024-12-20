@@ -14,7 +14,7 @@ export default async function AreaNotePage({
   const { area, note } = areaItem as TArea;
   const user = await currentUser();
   return (
-    <div className="size-full overflow-hidden p-4 pt-0 md:w-3/4">
+    <div className="size-full overflow-hidden p-4 pt-0">
       <AreaHeader areaId={areaId} area={area as string} user={ps(user)} />
       <div className="bbn mt-4 box-border flex flex-col gap-4 rounded-lg p-4">
         <DailyNote areaId={areaId as string} note={note as string} />
