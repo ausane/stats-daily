@@ -1,31 +1,44 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { format, isBefore } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import Cookies from "js-cookie";
 
-export default function Countdown({
-  targetDate: initialTargetDate,
-}: {
-  targetDate?: string;
-}) {
+export default function Countdown() {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
-  const [targetDate, setTargetDate] = useState<string | null>(null);
+
+  const [targetDate, setTargetDate] = useState<Date | null>(null);
 
   useEffect(() => {
-    const savedTargetDate = Cookies.get("targetDate") || initialTargetDate;
-    setTargetDate(savedTargetDate as string);
+    const currentYear = new Date().getFullYear();
+    const defaultTargetDate = new Date(currentYear + 1, 0, 1);
+    const savedTargetDate = Cookies.get("targetDate")
+      ? new Date(Cookies.get("targetDate")!)
+      : defaultTargetDate;
+
+    if (!targetDate || targetDate.getTime() !== savedTargetDate.getTime()) {
+      setTargetDate(savedTargetDate);
+    }
 
     const timer = setInterval(() => {
-      if (!savedTargetDate) return;
+      if (!targetDate) return;
 
       const now = new Date();
-      const target = new Date(savedTargetDate);
-      const difference = target.getTime() - now.getTime();
+      const difference = targetDate.getTime() - now.getTime();
 
       if (difference <= 0) {
         clearInterval(timer);
@@ -42,19 +55,13 @@ export default function Countdown({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [initialTargetDate, targetDate]);
+  }, [targetDate]);
 
-  const handleSetTargetDate = () => {
-    const userInput = prompt("Enter your target date (YYYY-MM-DD):");
-    if (userInput) {
-      const parsedDate = new Date(userInput);
-      if (!isNaN(parsedDate.getTime())) {
-        const isoDate = parsedDate.toISOString();
-        setTargetDate(isoDate);
-        Cookies.set("targetDate", isoDate, { expires: 365 });
-      } else {
-        alert("Invalid date format. Please try again.");
-      }
+  const handleSetTargetDate = (date: Date) => {
+    if (date && (!targetDate || targetDate.getTime() !== date.getTime())) {
+      const parsedDate = new Date(date);
+      setTargetDate(parsedDate);
+      Cookies.set("targetDate", parsedDate.toISOString(), { expires: 365 });
     }
   };
 
@@ -65,11 +72,11 @@ export default function Countdown({
           <div key={i} className="border border-green-500"></div>
         ))}
       </div>
-      <h1 className="mb-8 text-center text-3xl font-bold md:text-5xl">
-        Countdown to{" "}
-        {targetDate
-          ? new Date(targetDate).toLocaleDateString()
-          : "your target date"}
+      <h1 className="mb-8 flex flex-col text-center text-3xl font-bold md:text-5xl">
+        <span>Countdown to</span>
+        <span>
+          {targetDate ? format(targetDate, "PPP") : "your target date"}
+        </span>
       </h1>
       <div className="grid grid-cols-1 gap-6 text-center max-sm:w-full max-sm:px-8 sm:grid-cols-2 md:grid-cols-4">
         {Object.entries(timeLeft).map(([unit, value]) => (
@@ -86,12 +93,50 @@ export default function Countdown({
           </div>
         ))}
       </div>
-      <button
-        onClick={handleSetTargetDate}
-        className="absolute bottom-4 right-4 rounded-full bg-green-600 px-4 py-2 text-white hover:bg-green-700"
-      >
-        Set
-      </button>
+      <DatePicker date={targetDate} onSelect={handleSetTargetDate} />
     </div>
+  );
+}
+
+export function DatePicker({
+  date,
+  onSelect,
+}: {
+  date: Date | null;
+  onSelect: (date: Date) => void;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant={"outline"}
+          size="icon"
+          className={cn("flex-center absolute bottom-4 right-4 rounded-full")}
+        >
+          <CalendarIcon className="h-4 w-4 text-green-400" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto items-center justify-center bg-gray-900 p-0 font-mono text-green-400 shadow-lg">
+        <Calendar
+          mode="single"
+          selected={date as Date}
+          onSelect={(e) => {
+            onSelect(e as Date);
+            setOpen(false);
+          }}
+          initialFocus
+          disabled={(date) => isBefore(date, new Date())}
+          classNames={{
+            day_selected: "bg-green-500 text-gray-100",
+            day_today: "bg-green-500 text-gray-100",
+            day: "h-9 w-9 rounded-none hover:bg-green-600 hover:text-gray-100",
+            nav_button:
+              "h-7 w-7 bg-gray-900 hover:bg-green-600 rounded-none hover:text-gray-100 flex-center",
+          }}
+        />
+      </PopoverContent>
+    </Popover>
   );
 }
