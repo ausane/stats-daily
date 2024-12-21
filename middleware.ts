@@ -7,7 +7,7 @@ export async function middleware(req: NextRequest) {
   const url = req.nextUrl.pathname;
 
   // Route types
-  const publicRoutes = ["/"];
+  const publicRoutes = ["/", "/countdown"];
   const authRoutes = ["/sign-in"];
 
   // Requested route type

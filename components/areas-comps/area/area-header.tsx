@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { deleteArea } from "@/lib/services/handle-delete";
 import { useAppDispatch } from "@/store/hooks";
 import { removeAreaById, setCurrentArea } from "@/features/area-slice";
@@ -12,7 +12,6 @@ import {
   AreaHeaderProps,
   InputChangeEvent,
   TaskItemCompoProps,
-  TUser,
 } from "@/lib/types";
 import { ModeToggle } from "@/components/theme-provider";
 import { handleKeyDownEnter } from "@/lib/utils";
