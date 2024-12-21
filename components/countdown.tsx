@@ -22,6 +22,7 @@ export default function Countdown() {
   });
 
   const [targetDate, setTargetDate] = useState<Date | null>(null);
+  const [completedMessage, setCompletedMessage] = useState(false);
 
   useEffect(() => {
     const currentYear = new Date().getFullYear();
@@ -43,8 +44,11 @@ export default function Countdown() {
       if (difference <= 0) {
         clearInterval(timer);
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        setCompletedMessage(true);
         return;
       }
+
+      setCompletedMessage(false);
 
       const days = Math.floor(difference / (1000 * 60 * 60 * 24));
       const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
@@ -66,33 +70,42 @@ export default function Countdown() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-900 p-4 font-mono text-green-400">
-      <div className="pointer-events-none absolute inset-0 grid grid-cols-12 grid-rows-12 opacity-5">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-900 py-6 font-mono text-green-400">
+      {/* <div className="pointer-events-none absolute inset-0 grid grid-cols-12 grid-rows-12 opacity-5">
         {[...Array(144)].map((_, i) => (
           <div key={i} className="border border-green-500"></div>
         ))}
-      </div>
-      <h1 className="mb-8 flex flex-col text-center text-3xl font-bold md:text-5xl">
-        <span>Countdown to</span>
-        <span>
-          {targetDate ? format(targetDate, "PPP") : "your target date"}
-        </span>
-      </h1>
-      <div className="grid grid-cols-1 gap-6 text-center max-sm:w-full max-sm:px-8 sm:grid-cols-2 md:grid-cols-4">
-        {Object.entries(timeLeft).map(([unit, value]) => (
-          <div
-            key={unit}
-            className="border border-green-500 bg-gray-800 p-8 shadow-lg"
-          >
-            <span className="block text-4xl font-bold tabular-nums">
-              {value.toString().padStart(2, "0")}
+      </div> */}
+
+      {completedMessage ? (
+        <div className="block text-center text-5xl font-bold text-green-500">
+          <p>Countdown Complete! 🎉</p>
+        </div>
+      ) : (
+        <>
+          <h1 className="mb-8 flex flex-col text-center text-3xl font-bold md:text-5xl">
+            <span>Countdown to</span>
+            <span>
+              {targetDate ? format(targetDate, "PPP") : "your target date"}
             </span>
-            <span className="mt-2 block text-lg capitalize text-green-300">
-              {unit}
-            </span>
+          </h1>
+          <div className="grid grid-cols-1 gap-6 text-center max-sm:w-full max-sm:px-6 sm:grid-cols-2 md:grid-cols-4">
+            {Object.entries(timeLeft).map(([unit, value]) => (
+              <div
+                key={unit}
+                className="border border-green-500 bg-gray-800 p-8 shadow-lg"
+              >
+                <span className="block text-4xl font-bold tabular-nums">
+                  {value.toString().padStart(2, "0")}
+                </span>
+                <span className="mt-2 block text-lg capitalize text-green-300">
+                  {unit}
+                </span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
       <DatePicker date={targetDate} onSelect={handleSetTargetDate} />
     </div>
   );
@@ -113,7 +126,7 @@ export function DatePicker({
         <Button
           variant={"outline"}
           size="icon"
-          className={cn("flex-center absolute bottom-4 right-4 rounded-full")}
+          className={cn("flex-center fixed bottom-4 right-4 rounded-full")}
         >
           <CalendarIcon className="h-4 w-4 text-green-400" />
         </Button>
