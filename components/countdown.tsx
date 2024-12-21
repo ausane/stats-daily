@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
-export default function YearCountdown({
+export default function Countdown({
   targetDate: initialTargetDate,
 }: {
   targetDate?: string;
