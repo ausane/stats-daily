@@ -70,7 +70,7 @@ export default function Countdown() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-900 py-6 font-mono text-green-400">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-900 py-6 font-mono text-green-500">
       {/* <div className="pointer-events-none absolute inset-0 grid grid-cols-12 grid-rows-12 opacity-5">
         {[...Array(144)].map((_, i) => (
           <div key={i} className="border border-green-500"></div>
@@ -78,8 +78,9 @@ export default function Countdown() {
       </div> */}
 
       {completedMessage ? (
-        <div className="block text-center text-5xl font-bold text-green-500">
-          <p>Countdown Complete! 🎉</p>
+        <div className="text-center font-bold text-green-500">
+          <p className="block text-2xl">{format(targetDate as Date, "PPP")}</p>
+          <p className="mt-4 block text-5xl">Countdown Complete!</p>
         </div>
       ) : (
         <>
@@ -143,7 +144,7 @@ export function DatePicker({
           disabled={(date) => isBefore(date, new Date())}
           classNames={{
             day_selected: "bg-green-500 text-gray-100",
-            day_today: "bg-green-500 text-gray-100",
+            day_today: "bg-green-600 text-white",
             day: "h-9 w-9 rounded-none hover:bg-green-600 hover:text-gray-100",
             nav_button:
               "h-7 w-7 bg-gray-900 hover:bg-green-600 rounded-none hover:text-gray-100 flex-center",
