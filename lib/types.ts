@@ -43,6 +43,15 @@ export type TUser = {
   image: string;
 } & Document;
 
+// Note Schema Type
+export type TNote = {
+  userId: string;
+  title: string;
+  content: string;
+  updatedAt?: Date;
+  createdAt?: Date;
+} & Document;
+
 // TSC Type
 export type TSC = {
   areaId?: string;
