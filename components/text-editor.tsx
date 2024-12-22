@@ -1,0 +1,492 @@
+"use client";
+
+import { useState, useCallback, useEffect } from "react";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import TextStyle from "@tiptap/extension-text-style";
+import Color from "@tiptap/extension-color";
+import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
+import FontFamily from "@tiptap/extension-font-family";
+import CharacterCount from "@tiptap/extension-character-count";
+import Underline from "@tiptap/extension-underline";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
+import { Extension, RawCommands } from "@tiptap/core";
+import debounce from "lodash/debounce";
+import { Button } from "@/components/ui/button";
+import Input from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  BoldIcon,
+  ItalicIcon,
+  UnderlineIcon,
+  AlignLeftIcon,
+  AlignCenterIcon,
+  AlignRightIcon,
+  ListIcon,
+  ListOrderedIcon,
+  LinkIcon,
+  TypeIcon,
+} from "lucide-react";
+import { ScrollArea } from "./ui/scroll-area";
+import { useRouter } from "next/navigation";
+
+const FontSize = Extension.create({
+  name: "fontSize",
+  addOptions() {
+    return {
+      types: ["textStyle"],
+    };
+  },
+  addGlobalAttributes() {
+    return [
+      {
+        types: this.options.types,
+        attributes: {
+          fontSize: {
+            default: null,
+            parseHTML: (element) => element.style.fontSize,
+            renderHTML: (attributes) => {
+              if (!attributes.fontSize) return {};
+              return {
+                style: `font-size: ${attributes.fontSize}`,
+              };
+            },
+          },
+        },
+      },
+    ];
+  },
+  addCommands() {
+    return {
+      setFontSize:
+        (fontSize: string) =>
+        ({ chain }: { chain: any }) => {
+          return chain().setMark("textStyle", { fontSize }).run();
+        },
+    } as Partial<RawCommands>;
+  },
+});
+
+export default function EditorPage({
+  title: pstitle,
+  content,
+  noteId,
+}: {
+  noteId: string | null;
+  title: string;
+  content: string;
+}) {
+  const [mounted, setMounted] = useState(false);
+  const [title, setTitle] = useState(pstitle);
+  const [linkUrl, setLinkUrl] = useState("");
+  const [linkText, setLinkText] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [isLinkPopoverOpen, setIsLinkPopoverOpen] = useState(false);
+  const [linkError, setLinkError] = useState("");
+
+  const router = useRouter();
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({
+        bulletList: false,
+        orderedList: false,
+      }),
+      TextStyle,
+      Color,
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          class: "text-blue-500 underline",
+        },
+      }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
+      FontFamily.configure({
+        types: ["textStyle"],
+      }),
+      CharacterCount,
+      Underline,
+      FontSize,
+      BulletList.configure({
+        keepMarks: true,
+        HTMLAttributes: {
+          class: "list-disc ml-4",
+        },
+      }),
+      OrderedList.configure({
+        keepMarks: true,
+        HTMLAttributes: {
+          class: "list-decimal ml-4",
+        },
+      }),
+    ],
+    editorProps: {
+      attributes: {
+        class: "prose max-w-none focus:outline-none",
+      },
+    },
+    content: content,
+    immediatelyRender: false,
+  });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const debouncedSave = useCallback(
+    debounce(async (title, content) => {
+      try {
+        const response = await fetch("/api/note", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ noteId, title, content }),
+        });
+        if (!response.ok) console.error("Error saving content");
+        return response.json();
+      } catch (error) {
+        console.error("Error saving content:", error);
+      }
+    }, 2000),
+    [],
+  );
+
+  useEffect(() => {
+    if (editor && title) {
+      const content = editor.getHTML();
+      debouncedSave(title, content);
+    }
+  }, [editor, title, debouncedSave]);
+
+  const validateUrl = (url: string) => {
+    if (!url) return false;
+    try {
+      const urlToCheck = url.match(/^https?:\/\//) ? url : `https://${url}`;
+      new URL(urlToCheck);
+      return urlToCheck;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const setLink = () => {
+    if (!linkUrl) {
+      setLinkError("Please enter a URL");
+      return;
+    }
+
+    const validatedUrl = validateUrl(linkUrl);
+    if (!validatedUrl) {
+      setLinkError(
+        "Please enter a valid URL (e.g., example.com or https://example.com)",
+      );
+      return;
+    }
+
+    const selectedText = editor?.state.doc.textBetween(
+      editor.state.selection.from,
+      editor.state.selection.to,
+    );
+
+    if (selectedText) {
+      editor?.chain().focus().setLink({ href: validatedUrl }).run();
+    } else if (linkText) {
+      editor
+        ?.chain()
+        .focus()
+        .insertContent([
+          {
+            type: "text",
+            marks: [{ type: "link", attrs: { href: validatedUrl } }],
+            text: linkText,
+          },
+        ])
+        .run();
+    } else {
+      editor
+        ?.chain()
+        .focus()
+        .insertContent([
+          {
+            type: "text",
+            marks: [{ type: "link", attrs: { href: validatedUrl } }],
+            text: validatedUrl,
+          },
+        ])
+        .run();
+    }
+
+    setLinkUrl("");
+    setLinkText("");
+    setLinkError("");
+    setIsLinkPopoverOpen(false);
+  };
+
+  const handleSave = async () => {
+    if (!editor || !title) {
+      alert("Please provide a title and content.");
+      return;
+    }
+    setSaving(true);
+    const content = editor.getHTML();
+    try {
+      await debouncedSave(title, content);
+      const date = new Date();
+      router.push(`/notes/${date.toISOString().split("T")[0]}`);
+    } catch (error) {
+      alert("Error saving note. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const fontFamilies = [
+    "Arial",
+    "Times New Roman",
+    "Courier New",
+    "Sans-serif",
+    "Georgia",
+    "Verdana",
+    "Lucida Console",
+    "Monospace",
+  ];
+
+  const fontSizes = [
+    "8px",
+    "10px",
+    "12px",
+    "14px",
+    "16px",
+    "18px",
+    "20px",
+    "24px",
+    "30px",
+    "36px",
+    "48px",
+    "60px",
+    "72px",
+  ];
+
+  if (!mounted) return null;
+
+  return (
+    <div className="min-h-screen bg-background p-6">
+      <div className="mx-auto max-w-4xl space-y-4">
+        <Input
+          type="text"
+          placeholder="Enter title"
+          className="h-10 font-semibold"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <div className="sticky top-4 z-40 flex flex-wrap items-center gap-2 rounded-lg border bg-card p-2 shadow-sm">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => editor?.chain().focus().toggleBold().run()}
+            className={editor?.isActive("bold") ? "bg-accent" : ""}
+          >
+            <BoldIcon className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => editor?.chain().focus().toggleItalic().run()}
+            className={editor?.isActive("italic") ? "bg-accent" : ""}
+          >
+            <ItalicIcon className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => editor?.chain().focus().toggleUnderline().run()}
+            className={editor?.isActive("underline") ? "bg-accent" : ""}
+          >
+            <UnderlineIcon className="h-4 w-4" />
+          </Button>
+          <Select
+            onValueChange={(value) =>
+              editor?.chain().focus().setFontFamily(value).run()
+            }
+          >
+            <SelectTrigger className="w-[180px]">
+              <TypeIcon className="mr-2 h-4 w-4" />
+              <SelectValue placeholder="Font Family" />
+            </SelectTrigger>
+            <SelectContent>
+              {fontFamilies.map((font) => (
+                <SelectItem key={font} value={font}>
+                  {font}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select
+            onValueChange={(value) =>
+              editor
+                ?.chain()
+                .focus()
+                .setMark("textStyle", { fontSize: value })
+                .run()
+            }
+          >
+            <SelectTrigger className="w-[100px]">
+              <SelectValue placeholder="Size" />
+            </SelectTrigger>
+            <SelectContent>
+              {fontSizes.map((size) => (
+                <SelectItem key={size} value={size}>
+                  {size}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Input
+            type="color"
+            onChange={(e) =>
+              editor?.chain().focus().setColor(e.target.value).run()
+            }
+            className="size-10 cursor-pointer"
+          />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => editor?.chain().focus().setTextAlign("left").run()}
+            className={
+              editor?.isActive({ textAlign: "left" }) ? "bg-accent" : ""
+            }
+          >
+            <AlignLeftIcon className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => editor?.chain().focus().setTextAlign("center").run()}
+            className={
+              editor?.isActive({ textAlign: "center" }) ? "bg-accent" : ""
+            }
+          >
+            <AlignCenterIcon className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => editor?.chain().focus().setTextAlign("right").run()}
+            className={
+              editor?.isActive({ textAlign: "right" }) ? "bg-accent" : ""
+            }
+          >
+            <AlignRightIcon className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => editor?.chain().focus().toggleBulletList().run()}
+            className={editor?.isActive("bulletList") ? "bg-accent" : ""}
+          >
+            <ListIcon className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+            className={editor?.isActive("orderedList") ? "bg-accent" : ""}
+          >
+            <ListOrderedIcon className="h-4 w-4" />
+          </Button>
+          <Popover open={isLinkPopoverOpen} onOpenChange={setIsLinkPopoverOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  setIsLinkPopoverOpen(true);
+                  setLinkError("");
+                  const selectedText = editor?.state.doc.textBetween(
+                    editor.state.selection.from,
+                    editor.state.selection.to,
+                  );
+                  if (selectedText) setLinkText(selectedText);
+                }}
+                className={editor?.isActive("link") ? "bg-accent" : ""}
+              >
+                <LinkIcon className="h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80">
+              <div className="flex flex-col space-y-2">
+                <Input
+                  type="text"
+                  placeholder="Enter link text (optional)"
+                  value={linkText}
+                  onChange={(e) => setLinkText(e.target.value)}
+                  className="h-10"
+                />
+                <Input
+                  type="text"
+                  placeholder="Enter URL (e.g., example.com)"
+                  value={linkUrl}
+                  onChange={(e) => {
+                    setLinkUrl(e.target.value);
+                    setLinkError("");
+                  }}
+                  className={`h-10 ${linkError ? "border-red-500" : ""}`}
+                />
+                {linkError && (
+                  <div className="text-sm text-red-500">{linkError}</div>
+                )}
+                <div className="flex justify-end space-x-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setIsLinkPopoverOpen(false);
+                      setLinkError("");
+                      setLinkUrl("");
+                      setLinkText("");
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button onClick={setLink}>Add Link</Button>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+        <ScrollArea className="h-[300px] rounded-lg border bg-card">
+          <EditorContent
+            editor={editor}
+            className="size-full p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          />
+        </ScrollArea>
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">
+            {editor?.storage.characterCount.words() ?? 0} words
+          </div>
+          <div className="space-x-2">
+            <Button variant="outline" onClick={() => router.back()}>
+              Cancel
+            </Button>
+            <Button onClick={handleSave} disabled={saving}>
+              {saving ? "Saving..." : "Save"}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
