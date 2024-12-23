@@ -138,7 +138,7 @@ export function CreateAreaLink({
           <code className="bbn flex-center h-10 w-10 rounded-lg text-2xl">
             SD
           </code>
-          <h2>StatsDaily</h2>
+          <p>StatsDaily</p>
         </span>
         <TooltipCompo content="New Area">
           <SquarePen
@@ -157,7 +157,7 @@ export function CreateAreaLink({
           <Button variant="ghost" className="bbn size-10 p-0">
             <BarChart2 size={24} />
           </Button>
-          <h2>Stats</h2>
+          <p>Stats</p>
         </Link>
       )}
     </div>

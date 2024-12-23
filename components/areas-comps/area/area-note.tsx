@@ -5,11 +5,11 @@ import { updateNote } from "@/lib/services/handle-update";
 import { X, Check, Pencil } from "lucide-react";
 import IconButton from "@/components/ui/icon-button";
 import { ValidationAlertDialog } from "@/components/dialogs";
-import { DailyNoteProps } from "@/lib/types";
+import { AreaNoteProps } from "@/lib/types";
 import { areaNoteLength } from "@/lib/constants";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-export default function DailyNote({ areaId, note }: DailyNoteProps) {
+export default function AreaNote({ areaId, note }: AreaNoteProps) {
   const tRef = useRef<HTMLTextAreaElement>(null);
 
   const [inputNote, setInputNote] = useState(false);

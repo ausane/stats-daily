@@ -1,5 +1,5 @@
 import AreaHeader from "@/components/areas-comps/area/area-header";
-import DailyNote from "@/components/areas-comps/area/daily-note";
+import AreaNote from "@/components/areas-comps/area/area-note";
 import { currentUser, fetchAreaById } from "@/lib/db/stats";
 import { TArea } from "@/lib/types";
 import { ps } from "@/lib/utils";
@@ -17,7 +17,7 @@ export default async function AreaNotePage({
     <div className="size-full overflow-hidden p-4 pt-0">
       <AreaHeader areaId={areaId} area={area as string} user={ps(user)} />
       <div className="bbn mt-4 box-border flex flex-col gap-4 rounded-lg p-4">
-        <DailyNote areaId={areaId as string} note={note as string} />
+        <AreaNote areaId={areaId as string} note={note as string} />
       </div>
     </div>
   );
