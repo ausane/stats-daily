@@ -43,6 +43,7 @@ import {
 import { ScrollArea } from "./ui/scroll-area";
 import { useRouter } from "next/navigation";
 import Heading from "@tiptap/extension-heading";
+import { TooltipComponent } from "./ui/tooltip";
 
 const FontSize = Extension.create({
   name: "fontSize",
@@ -89,7 +90,6 @@ export default function EditorPage({
   content: string;
 }) {
   const [mounted, setMounted] = useState(false);
-
   const [saving, setSaving] = useState(false);
 
   const lastSavedContentRef = useRef(content);
@@ -197,7 +197,8 @@ export default function EditorPage({
     setSaving(true);
     try {
       await debouncedSave(content);
-      router.back();
+      const today = new Date();
+      router.push(`/notes/${today.toISOString().split("T")[0]}`);
     } catch (error) {
       alert("Error saving note. Please try again.");
     } finally {
@@ -335,60 +336,81 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
 
   return (
     <div className="sticky top-4 z-40 flex flex-wrap items-center gap-2 rounded-lg border bg-card p-2 shadow-sm">
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => editor?.chain().focus().toggleBold().run()}
-        className={editor?.isActive("bold") ? "bg-accent" : ""}
-      >
-        <BoldIcon className="h-4 w-4" />
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => editor?.chain().focus().toggleItalic().run()}
-        className={editor?.isActive("italic") ? "bg-accent" : ""}
-      >
-        <ItalicIcon className="h-4 w-4" />
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => editor?.chain().focus().toggleUnderline().run()}
-        className={editor?.isActive("underline") ? "bg-accent" : ""}
-      >
-        <UnderlineIcon className="h-4 w-4" />
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() =>
-          editor?.chain().focus().toggleHeading({ level: 1 }).run()
-        }
-        className={editor?.isActive("heading", { level: 1 }) ? "bg-accent" : ""}
-      >
-        <span>H1</span>
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() =>
-          editor?.chain().focus().toggleHeading({ level: 2 }).run()
-        }
-        className={editor?.isActive("heading", { level: 2 }) ? "bg-accent" : ""}
-      >
-        <span>H2</span>
-      </Button>
+      <TooltipComponent content="Bold">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => editor?.chain().focus().toggleBold().run()}
+          className={editor?.isActive("bold") ? "bg-accent" : ""}
+        >
+          <BoldIcon className="h-4 w-4" />
+        </Button>
+      </TooltipComponent>
+
+      <TooltipComponent content="Italic">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => editor?.chain().focus().toggleItalic().run()}
+          className={editor?.isActive("italic") ? "bg-accent" : ""}
+        >
+          <ItalicIcon className="h-4 w-4" />
+        </Button>
+      </TooltipComponent>
+
+      <TooltipComponent content="Underline">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => editor?.chain().focus().toggleUnderline().run()}
+          className={editor?.isActive("underline") ? "bg-accent" : ""}
+        >
+          <UnderlineIcon className="h-4 w-4" />
+        </Button>
+      </TooltipComponent>
+
+      <TooltipComponent content="Heading Level 1">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() =>
+            editor?.chain().focus().toggleHeading({ level: 1 }).run()
+          }
+          className={
+            editor?.isActive("heading", { level: 1 }) ? "bg-accent" : ""
+          }
+        >
+          <span>H1</span>
+        </Button>
+      </TooltipComponent>
+
+      <TooltipComponent content="Heading Level 2">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() =>
+            editor?.chain().focus().toggleHeading({ level: 2 }).run()
+          }
+          className={
+            editor?.isActive("heading", { level: 2 }) ? "bg-accent" : ""
+          }
+        >
+          <span>H2</span>
+        </Button>
+      </TooltipComponent>
+
       <Select
         onValueChange={(value) =>
           editor?.chain().focus().setFontFamily(value).run()
         }
         defaultValue="Default"
       >
-        <SelectTrigger className="w-[180px]">
-          <TypeIcon className="h-4 w-4" />
-          <SelectValue placeholder="Font Family" />
-        </SelectTrigger>
+        <TooltipComponent content="Font Family">
+          <SelectTrigger className="w-[180px]">
+            <TypeIcon className="h-4 w-4" />
+            <SelectValue placeholder="Font Family" />
+          </SelectTrigger>
+        </TooltipComponent>
         <SelectContent>
           {fontFamilies.map((font) => (
             <SelectItem key={font} value={font}>
@@ -397,6 +419,7 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
           ))}
         </SelectContent>
       </Select>
+
       <Select
         onValueChange={(value) =>
           editor
@@ -407,9 +430,11 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
         }
         defaultValue="16px"
       >
-        <SelectTrigger className="w-[100px]">
-          <SelectValue placeholder="Size" />
-        </SelectTrigger>
+        <TooltipComponent content="Font Size">
+          <SelectTrigger className="w-[100px]">
+            <SelectValue placeholder="Size" />
+          </SelectTrigger>
+        </TooltipComponent>
         <SelectContent>
           {fontSizes.map(({ label, value }) => (
             <SelectItem key={value} value={value}>
@@ -418,85 +443,118 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
           ))}
         </SelectContent>
       </Select>
-      <Input
-        type="color"
-        defaultValue="#ffffff"
-        onChange={(e) => editor?.chain().focus().setColor(e.target.value).run()}
-        className="size-10 cursor-pointer"
-      />
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => editor?.chain().focus().setHardBreak().run()}
-      >
-        <span>BR</span>
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => editor?.chain().focus().setHorizontalRule().run()}
-      >
-        <span>—</span>
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => editor?.chain().focus().setTextAlign("left").run()}
-        className={editor?.isActive({ textAlign: "left" }) ? "bg-accent" : ""}
-      >
-        <AlignLeftIcon className="h-4 w-4" />
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => editor?.chain().focus().setTextAlign("center").run()}
-        className={editor?.isActive({ textAlign: "center" }) ? "bg-accent" : ""}
-      >
-        <AlignCenterIcon className="h-4 w-4" />
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => editor?.chain().focus().setTextAlign("right").run()}
-        className={editor?.isActive({ textAlign: "right" }) ? "bg-accent" : ""}
-      >
-        <AlignRightIcon className="h-4 w-4" />
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => editor?.chain().focus().toggleBulletList().run()}
-        className={editor?.isActive("bulletList") ? "bg-accent" : ""}
-      >
-        <ListIcon className="h-4 w-4" />
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-        className={editor?.isActive("orderedList") ? "bg-accent" : ""}
-      >
-        <ListOrderedIcon className="h-4 w-4" />
-      </Button>
+
+      <TooltipComponent content="Text Color">
+        <Input
+          type="color"
+          defaultValue="#ffffff"
+          onChange={(e) =>
+            editor?.chain().focus().setColor(e.target.value).run()
+          }
+          className="size-10 cursor-pointer"
+        />
+      </TooltipComponent>
+
+      <TooltipComponent content="Insert Line Break">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => editor?.chain().focus().setHardBreak().run()}
+        >
+          <span>BR</span>
+        </Button>
+      </TooltipComponent>
+
+      <TooltipComponent content="Insert Horizontal Line">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => editor?.chain().focus().setHorizontalRule().run()}
+        >
+          <span>—</span>
+        </Button>
+      </TooltipComponent>
+
+      <TooltipComponent content="Align Left">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => editor?.chain().focus().setTextAlign("left").run()}
+          className={editor?.isActive({ textAlign: "left" }) ? "bg-accent" : ""}
+        >
+          <AlignLeftIcon className="h-4 w-4" />
+        </Button>
+      </TooltipComponent>
+
+      <TooltipComponent content="Align Center">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => editor?.chain().focus().setTextAlign("center").run()}
+          className={
+            editor?.isActive({ textAlign: "center" }) ? "bg-accent" : ""
+          }
+        >
+          <AlignCenterIcon className="h-4 w-4" />
+        </Button>
+      </TooltipComponent>
+
+      <TooltipComponent content="Align Right">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => editor?.chain().focus().setTextAlign("right").run()}
+          className={
+            editor?.isActive({ textAlign: "right" }) ? "bg-accent" : ""
+          }
+        >
+          <AlignRightIcon className="h-4 w-4" />
+        </Button>
+      </TooltipComponent>
+
+      <TooltipComponent content="Bullet List">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => editor?.chain().focus().toggleBulletList().run()}
+          className={editor?.isActive("bulletList") ? "bg-accent" : ""}
+        >
+          <ListIcon className="h-4 w-4" />
+        </Button>
+      </TooltipComponent>
+
+      <TooltipComponent content="Ordered List">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+          className={editor?.isActive("orderedList") ? "bg-accent" : ""}
+        >
+          <ListOrderedIcon className="h-4 w-4" />
+        </Button>
+      </TooltipComponent>
+
       <Popover open={isLinkPopoverOpen} onOpenChange={setIsLinkPopoverOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => {
-              setIsLinkPopoverOpen(true);
-              setLinkError("");
-              const selectedText = editor?.state.doc.textBetween(
-                editor.state.selection.from,
-                editor.state.selection.to,
-              );
-              if (selectedText) setLinkText(selectedText);
-            }}
-            className={editor?.isActive("link") ? "bg-accent" : ""}
-          >
-            <LinkIcon className="h-4 w-4" />
-          </Button>
-        </PopoverTrigger>
+        <TooltipComponent content="Insert Link">
+          <PopoverTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => {
+                setIsLinkPopoverOpen(true);
+                setLinkError("");
+                const selectedText = editor?.state.doc.textBetween(
+                  editor.state.selection.from,
+                  editor.state.selection.to,
+                );
+                if (selectedText) setLinkText(selectedText);
+              }}
+              className={editor?.isActive("link") ? "bg-accent" : ""}
+            >
+              <LinkIcon className="h-4 w-4" />
+            </Button>
+          </PopoverTrigger>
+        </TooltipComponent>
         <PopoverContent className="w-80">
           <div className="flex flex-col space-y-2">
             <Input

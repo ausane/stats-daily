@@ -1,5 +1,5 @@
 import React from "react";
-import { TooltipCompo } from "@/components/ui/tooltip";
+import { TooltipComponent } from "@/components/ui/tooltip";
 import { SetState, TTask } from "@/lib/types";
 
 export type CircularProgressProps = { progress: number; ctp: number };
@@ -14,7 +14,7 @@ export default function CircularProgress(props: CircularProgressProps) {
 
   return (
     <div className="flex-between relative h-36 w-full gap-4">
-      <TooltipCompo content="Performance">
+      <TooltipComponent content="Performance">
         <div
           className="bbn flex-center relative h-full w-3/5 rounded-lg"
           role="progressbar"
@@ -50,7 +50,7 @@ export default function CircularProgress(props: CircularProgressProps) {
           </svg>
           <div className="flex-center absolute inset-0">{validProgress}%</div>
         </div>
-      </TooltipCompo>
+      </TooltipComponent>
 
       <div
         className="bbn flex-center h-full w-2/5 rounded-lg"
@@ -60,7 +60,7 @@ export default function CircularProgress(props: CircularProgressProps) {
         aria-valuemin={0}
         aria-valuemax={100}
       >
-        <TooltipCompo content="Tasks Completed">
+        <TooltipComponent content="Tasks Completed">
           <div className="relative flex h-[108px] w-12">
             <div className="absolute h-full w-full rounded-lg bg-secondary"></div>
             <div
@@ -73,7 +73,7 @@ export default function CircularProgress(props: CircularProgressProps) {
               <p className="rotate-[-90deg] text-primary">{ctp ? ctp : 0}%</p>
             </div>
           </div>
-        </TooltipCompo>
+        </TooltipComponent>
       </div>
     </div>
   );

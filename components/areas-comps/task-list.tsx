@@ -16,7 +16,7 @@ import CircularProgress, { progressCalculator } from "./area/progress";
 import { createNewTask } from "@/lib/services/handle-update";
 import IconButton from "../ui/icon-button";
 import { ValidationAlertDialog } from "../dialogs";
-import { TooltipCompo } from "../ui/tooltip";
+import { TooltipComponent } from "../ui/tooltip";
 import Input from "../ui/input";
 import { handleKeyDownEnter, ntf, st } from "@/lib/utils";
 import {
@@ -103,7 +103,7 @@ export default function TaskList({ data }: { data: TArea }) {
               : `${incompleteTasks.length} Incomplete`}{" "}
             {incompleteTasks.length === 1 ? "Task" : "Tasks"}
           </p>
-          <TooltipCompo content={`${addTaskInput ? "Close" : "Add Task"}`}>
+          <TooltipComponent content={`${addTaskInput ? "Close" : "Add Task"}`}>
             <IconButton
               id="cancel-button"
               variant="ghost"
@@ -119,7 +119,7 @@ export default function TaskList({ data }: { data: TArea }) {
             >
               <Plus />
             </IconButton>
-          </TooltipCompo>
+          </TooltipComponent>
         </div>
 
         <ScrollArea className="h-[calc(100%-6rem)] w-full overflow-auto overflow-x-hidden max-sm:h-[calc(100%-7rem)]">
@@ -203,7 +203,7 @@ export function ShowCompletedTasks({
             : `${completedTasks.length} Completed`}{" "}
           {completedTasks.length === 1 ? "Task" : "Tasks"}
         </p>
-        <TooltipCompo content={`${open ? "Close" : "Open"}`}>
+        <TooltipComponent content={`${open ? "Close" : "Open"}`}>
           <IconButton
             variant="ghost"
             circle={true}
@@ -213,7 +213,7 @@ export function ShowCompletedTasks({
           >
             <ArrowUp />
           </IconButton>
-        </TooltipCompo>
+        </TooltipComponent>
       </div>
       <ScrollArea
         className={`h-[calc(100%-3rem)] flex-col overflow-auto max-sm:h-[calc(100%-3.5rem)] ${open ? "flex" : "hidden"} `}
@@ -222,13 +222,13 @@ export function ShowCompletedTasks({
           completedTasks?.map((item, index) => (
             <div key={index} className="flex-between h-12 w-full border-b p-2">
               <TaskStatus>
-                <TooltipCompo content="Undo">
+                <TooltipComponent content="Undo">
                   <button
                     onClick={() => handleUndoTask(index)}
                     className="status-button border-red-700 bg-red-700 hover:bg-red-800"
                     aria-label="Undo Task"
                   ></button>
-                </TooltipCompo>
+                </TooltipComponent>
               </TaskStatus>
 
               <TaskContent>

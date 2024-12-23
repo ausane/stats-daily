@@ -31,7 +31,7 @@ TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };
 
 // Tool Tip Provider Component Props
-export type TooltipCompoProps = {
+export type TooltipComponentProps = {
   children: React.ReactNode;
   content: string;
   open?: boolean;
@@ -39,12 +39,12 @@ export type TooltipCompoProps = {
 };
 
 // Tool Tip Provider Component
-export function TooltipCompo({
+export function TooltipComponent({
   children,
   content,
   open,
   setOpen,
-}: TooltipCompoProps) {
+}: TooltipComponentProps) {
   return (
     <TooltipProvider>
       <Tooltip open={open} onOpenChange={setOpen}>
