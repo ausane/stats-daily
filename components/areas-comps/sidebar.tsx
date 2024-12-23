@@ -6,7 +6,7 @@ import { TSC, SetState, SidebarContentProps } from "@/lib/types";
 import { useParams, useRouter } from "next/navigation";
 import { insertAllAreas } from "@/features/area-slice";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { BarChart2, Menu, SquarePen } from "lucide-react";
+import { BarChart2, Menu, Notebook, SquarePen } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -16,7 +16,7 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import { Button } from "../ui/button";
-import { TooltipCompo } from "../ui/tooltip";
+import { TooltipComponent } from "../ui/tooltip";
 import { ScrollArea } from "../ui/scroll-area";
 import useKeyShortcut from "@/hooks/key-shortcut";
 
@@ -140,25 +140,36 @@ export function CreateAreaLink({
           </code>
           <p>StatsDaily</p>
         </span>
-        <TooltipCompo content="New Area">
+        <TooltipComponent content="New Area">
           <SquarePen
             size={20}
             aria-hidden="true"
             className="text-muted-foreground"
           />
-        </TooltipCompo>
+        </TooltipComponent>
         <span className="sr-only">Create new area</span>
       </Link>
       {isArea && (
-        <Link
-          href={"/stats"}
-          className="flex-start link-click-effect mx-2 h-10 gap-4 rounded-lg pr-4"
-        >
-          <Button variant="ghost" className="bbn size-10 p-0">
-            <BarChart2 size={24} />
-          </Button>
-          <p>Stats</p>
-        </Link>
+        <>
+          <Link
+            href={"/stats"}
+            className="flex-start link-click-effect mx-2 h-10 gap-4 rounded-lg pr-4"
+          >
+            <Button variant="ghost" className="bbn size-10 p-0">
+              <BarChart2 size={24} />
+            </Button>
+            <p>Stats</p>
+          </Link>
+          <Link
+            href={"/notes/today"}
+            className="flex-start link-click-effect mx-2 h-10 gap-4 rounded-lg pr-4"
+          >
+            <Button variant="ghost" className="bbn size-10 p-0">
+              <Notebook size={24} />
+            </Button>
+            <p>Note</p>
+          </Link>
+        </>
       )}
     </div>
   );

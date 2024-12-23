@@ -79,8 +79,12 @@ export default function Countdown() {
 
       {completedMessage ? (
         <div className="text-center font-bold text-green-500">
-          <p className="block text-2xl">{format(targetDate as Date, "PPP")}</p>
-          <p className="mt-4 block text-5xl">Countdown Complete!</p>
+          <p className="block text-xl sm:text-2xl">
+            {format(targetDate as Date, "PPP")}
+          </p>
+          <p className="mt-2 block text-3xl sm:mt-4 sm:text-5xl">
+            Countdown Complete!
+          </p>
         </div>
       ) : (
         <>

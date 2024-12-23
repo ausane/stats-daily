@@ -1,16 +1,12 @@
-import React from "react";
 import { Note } from "@/models/note.model";
 import EditorPage from "@/components/text-editor";
 import connectToDatabase from "@/lib/db/mongodb";
-import { format, isValid, startOfDay, endOfDay } from "date-fns";
-import { Button } from "@/components/ui/button";
-import { Pencil, PlusIcon } from "lucide-react";
-import Link from "next/link";
+import { isValid, startOfDay, endOfDay } from "date-fns";
 import { currentUser } from "@/lib/db/stats";
 import { ps } from "@/lib/utils";
 import { DailyNote, InValidDate } from "@/components/daily-note";
 
-export default async function NotesPage({
+export default async function NotePage({
   params,
 }: {
   params: { date: string };

@@ -29,7 +29,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { TooltipCompo } from "./ui/tooltip";
+import { TooltipComponent } from "./ui/tooltip";
 import { areaNoteLength, taskLength } from "@/lib/constants";
 
 export function ConfirmDeletionDialog(props: ConfirmDialogProps) {
@@ -61,7 +61,7 @@ export function TaskCompletionDialog(props: CompletionDialogProps) {
   const { task, children, onClick, openDialog, setOpenDialog } = props;
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-      {/* <TooltipCompo content="Mark as Done"> */}
+      {/* <TooltipComponent content="Mark as Done"> */}
       <DialogTrigger asChild>
         <Button
           role="button"
@@ -70,7 +70,7 @@ export function TaskCompletionDialog(props: CompletionDialogProps) {
           aria-label="Mark as Done"
         ></Button>
       </DialogTrigger>
-      {/* </TooltipCompo> */}
+      {/* </TooltipComponent> */}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="flex-start mb-2">

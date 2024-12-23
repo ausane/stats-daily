@@ -1,9 +1,13 @@
-import React from "react";
+"use client";
+
+import { useEffect } from "react";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Pencil, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { TNote } from "@/lib/types";
+import { useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function DailyNote({
   note,
@@ -12,14 +16,21 @@ export function DailyNote({
   note: TNote;
   parsedDate: Date;
 }) {
+  const router = useRouter();
+
+  useEffect(() => {
+    // console.log("refreshing");
+    router.refresh();
+  }, [router]);
+
   const formattedDate = format(parsedDate, "MMMM d, yyyy");
   const isToday =
     format(new Date(), "yyyy-MM-dd") === format(parsedDate, "yyyy-MM-dd");
   return (
-    <div className="min-h-screen bg-background p-4 pb-24">
+    <div className="min-h-screen bg-background p-4 pb-8">
       <div className="mx-auto max-w-3xl">
-        <div className="my-6 flex h-10 items-center justify-between">
-          <h1 className="text-2xl font-bold">{formattedDate}</h1>
+        <div className="flex-between my-4 h-10">
+          <p className="text-2xl font-bold">{formattedDate}</p>
           {isToday && !note && (
             <Link href="/notes/today">
               <Button size="icon" variant="outline">
@@ -80,6 +91,39 @@ export function InValidDate() {
             Create Note
           </Button>
         </Link>
+      </div>
+    </div>
+  );
+}
+
+export function DailyNotes({ notes }: { notes: TNote[] }) {
+  const router = useRouter();
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="mb-8 text-center text-3xl font-bold">Daily Notes</h1>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {notes.map((note) => (
+          <Card
+            key={note._id as string}
+            className="cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg"
+            onClick={() =>
+              router.push(`/notes/${note.createdAt?.toString().split("T")[0]}`)
+            }
+          >
+            <CardHeader className="border-b text-xl font-bold">
+              <CardTitle className="text-sm text-primary">
+                {format(note.createdAt as Date, "MMMM d, yyyy")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-4">
+              <div
+                className="line-clamp-3 text-sm"
+                dangerouslySetInnerHTML={{ __html: note.content }}
+              />
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );
