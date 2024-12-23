@@ -46,7 +46,6 @@ export type TUser = {
 // Note Schema Type
 export type TNote = {
   userId: string;
-  title: string;
   content: string;
   updatedAt?: Date;
   createdAt?: Date;
@@ -229,7 +228,7 @@ export type AreaHeaderProps = {
 };
 
 // Daily Note Props Type
-export type DailyNoteProps = {
+export type AreaNoteProps = {
   areaId: string;
   note: string;
 };

@@ -8,9 +8,9 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { noteId, title, content } = body;
+    const { noteId, content } = body;
 
-    if (!title || !content) {
+    if (content.replace(/<[^>]*>/g, "").trim().length === 0) {
       return NextResponse.json(
         { message: "Title and content are required." },
         { status: 400 },
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     if (noteId) {
       note = await Note.findOneAndUpdate(
         { _id: noteId, userId: user._id },
-        { title, content },
+        { content },
         { new: true },
       );
 
@@ -57,13 +57,12 @@ export async function POST(request: Request) {
       if (existingNote) {
         note = await Note.findByIdAndUpdate(
           existingNote._id,
-          { title, content },
+          { content },
           { new: true },
         );
       } else {
         note = await Note.create({
           userId: user._id,
-          title,
           content,
         });
       }

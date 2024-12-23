@@ -42,6 +42,7 @@ import {
 } from "lucide-react";
 import { ScrollArea } from "./ui/scroll-area";
 import { useRouter } from "next/navigation";
+import Heading from "@tiptap/extension-heading";
 
 const FontSize = Extension.create({
   name: "fontSize",
@@ -81,16 +82,13 @@ const FontSize = Extension.create({
 });
 
 export default function EditorPage({
-  title: pstitle,
   content,
   noteId,
 }: {
   noteId: string | null;
-  title: string;
   content: string;
 }) {
   const [mounted, setMounted] = useState(false);
-  const [title, setTitle] = useState(pstitle);
   const [linkUrl, setLinkUrl] = useState("");
   const [linkText, setLinkText] = useState("");
   const [saving, setSaving] = useState(false);
@@ -102,6 +100,7 @@ export default function EditorPage({
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
+        heading: false,
         bulletList: false,
         orderedList: false,
       }),
@@ -118,6 +117,9 @@ export default function EditorPage({
       }),
       FontFamily.configure({
         types: ["textStyle"],
+      }),
+      Heading.configure({
+        levels: [1, 2],
       }),
       CharacterCount,
       Underline,
@@ -149,28 +151,34 @@ export default function EditorPage({
   }, []);
 
   const debouncedSave = useCallback(
-    debounce(async (title, content) => {
+    debounce(async (content) => {
+      if (!content || content.replace(/<[^>]*>/g, "").trim().length === 0) {
+        console.warn("Skipped saving due to empty content.");
+        return;
+      }
       try {
         const response = await fetch("/api/note", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ noteId, title, content }),
+          body: JSON.stringify({ noteId, content }),
         });
-        if (!response.ok) console.error("Error saving content");
+        if (!response.ok) {
+          console.error("Error saving content");
+        }
         return response.json();
       } catch (error) {
         console.error("Error saving content:", error);
       }
     }, 2000),
-    [],
+    [noteId],
   );
 
   useEffect(() => {
-    if (editor && title) {
+    if (editor) {
       const content = editor.getHTML();
-      debouncedSave(title, content);
+      debouncedSave(content);
     }
-  }, [editor, title, debouncedSave]);
+  }, [editor, debouncedSave]);
 
   const validateUrl = (url: string) => {
     if (!url) return false;
@@ -237,14 +245,18 @@ export default function EditorPage({
   };
 
   const handleSave = async () => {
-    if (!editor || !title) {
-      alert("Please provide a title and content.");
+    if (!editor) {
+      alert("Please provide content.");
+      return;
+    }
+    const content = editor.getHTML();
+    if (!content || content.replace(/<[^>]*>/g, "").trim().length === 0) {
+      alert("Please add some content before saving");
       return;
     }
     setSaving(true);
-    const content = editor.getHTML();
     try {
-      await debouncedSave(title, content);
+      await debouncedSave(content);
       const date = new Date();
       router.push(`/notes/${date.toISOString().split("T")[0]}`);
     } catch (error) {
@@ -286,13 +298,6 @@ export default function EditorPage({
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="mx-auto max-w-4xl space-y-4">
-        <Input
-          type="text"
-          placeholder="Enter title"
-          className="h-10 font-semibold"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
         <div className="sticky top-4 z-40 flex flex-wrap items-center gap-2 rounded-lg border bg-card p-2 shadow-sm">
           <Button
             variant="ghost"
@@ -317,6 +322,30 @@ export default function EditorPage({
             className={editor?.isActive("underline") ? "bg-accent" : ""}
           >
             <UnderlineIcon className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() =>
+              editor?.chain().focus().toggleHeading({ level: 1 }).run()
+            }
+            className={
+              editor?.isActive("heading", { level: 1 }) ? "bg-accent" : ""
+            }
+          >
+            <span className="font-medium">H1</span>
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() =>
+              editor?.chain().focus().toggleHeading({ level: 2 }).run()
+            }
+            className={
+              editor?.isActive("heading", { level: 2 }) ? "bg-accent" : ""
+            }
+          >
+            <span className="font-medium">H2</span>
           </Button>
           <Select
             onValueChange={(value) =>
@@ -357,6 +386,7 @@ export default function EditorPage({
           </Select>
           <Input
             type="color"
+            defaultValue="#ffffff"
             onChange={(e) =>
               editor?.chain().focus().setColor(e.target.value).run()
             }
@@ -481,7 +511,16 @@ export default function EditorPage({
             <Button variant="outline" onClick={() => router.back()}>
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={saving}>
+            <Button
+              onClick={handleSave}
+              disabled={
+                saving ||
+                editor
+                  ?.getHTML()
+                  .replace(/<[^>]*>/g, "")
+                  .trim().length === 0
+              }
+            >
               {saving ? "Saving..." : "Save"}
             </Button>
           </div>
