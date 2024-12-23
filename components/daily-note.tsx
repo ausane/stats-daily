@@ -16,10 +16,10 @@ export function DailyNote({
   const isToday =
     format(new Date(), "yyyy-MM-dd") === format(parsedDate, "yyyy-MM-dd");
   return (
-    <div className="min-h-screen bg-background p-4 pb-24">
+    <div className="min-h-screen bg-background p-4">
       <div className="mx-auto max-w-3xl">
-        <div className="my-6 flex h-10 items-center justify-between">
-          <h1 className="text-2xl font-bold">{formattedDate}</h1>
+        <div className="flex-between my-4 h-10">
+          <p className="text-2xl font-bold">{formattedDate}</p>
           {isToday && !note && (
             <Link href="/notes/today">
               <Button size="icon" variant="outline">

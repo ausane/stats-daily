@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
@@ -12,7 +12,7 @@ import CharacterCount from "@tiptap/extension-character-count";
 import Underline from "@tiptap/extension-underline";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
-import { Extension, RawCommands } from "@tiptap/core";
+import { Editor, Extension, RawCommands } from "@tiptap/core";
 import debounce from "lodash/debounce";
 import { Button } from "@/components/ui/button";
 import Input from "@/components/ui/input";
@@ -89,12 +89,10 @@ export default function EditorPage({
   content: string;
 }) {
   const [mounted, setMounted] = useState(false);
-  const [linkUrl, setLinkUrl] = useState("");
-  const [linkText, setLinkText] = useState("");
-  const [saving, setSaving] = useState(false);
-  const [isLinkPopoverOpen, setIsLinkPopoverOpen] = useState(false);
-  const [linkError, setLinkError] = useState("");
 
+  const [saving, setSaving] = useState(false);
+
+  const lastSavedContentRef = useRef(content);
   const router = useRouter();
 
   const editor = useEditor({
@@ -144,6 +142,12 @@ export default function EditorPage({
     },
     content: content,
     immediatelyRender: false,
+    onUpdate: ({ editor }) => {
+      const newContent = editor.getHTML();
+      if (newContent !== lastSavedContentRef.current) {
+        debouncedSave(newContent);
+      }
+    },
   });
 
   useEffect(() => {
@@ -180,22 +184,87 @@ export default function EditorPage({
     }
   }, [editor, debouncedSave]);
 
-  const validateUrl = (url: string) => {
-    if (!url) return false;
+  const handleSave = async () => {
+    if (!editor) {
+      alert("Please provide content.");
+      return;
+    }
+    const content = editor.getHTML();
+    if (!content || content.replace(/<[^>]*>/g, "").trim().length === 0) {
+      alert("Please add some content before saving");
+      return;
+    }
+    setSaving(true);
     try {
-      const urlToCheck = url.match(/^https?:\/\//) ? url : `https://${url}`;
-      new URL(urlToCheck);
-      return urlToCheck;
+      await debouncedSave(content);
+      router.back();
     } catch (error) {
-      return false;
+      alert("Error saving note. Please try again.");
+    } finally {
+      setSaving(false);
     }
   };
+
+  if (!mounted) return null;
+
+  return (
+    <div className="min-h-screen bg-background p-6">
+      <div className="mx-auto max-w-4xl space-y-4">
+        <EditorToolBar editor={editor as Editor} />
+        <ScrollArea className="h-[300px] rounded-lg border bg-card">
+          <EditorContent
+            editor={editor}
+            className="size-full p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          />
+        </ScrollArea>
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">
+            {editor?.storage.characterCount.words() ?? 0} words
+          </div>
+          <div className="space-x-2">
+            <Button variant="outline" onClick={() => router.back()}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSave}
+              disabled={
+                saving ||
+                editor
+                  ?.getHTML()
+                  .replace(/<[^>]*>/g, "")
+                  .trim().length === 0
+              }
+            >
+              {saving ? "Saving..." : "Save"}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function EditorToolBar({ editor }: { editor: Editor }) {
+  const [linkError, setLinkError] = useState("");
+  const [linkUrl, setLinkUrl] = useState("");
+  const [linkText, setLinkText] = useState("");
+  const [isLinkPopoverOpen, setIsLinkPopoverOpen] = useState(false);
 
   const setLink = () => {
     if (!linkUrl) {
       setLinkError("Please enter a URL");
       return;
     }
+    const validateUrl = (url: string) => {
+      if (!url) return false;
+      try {
+        const urlToCheck = url.match(/^https?:\/\//) ? url : `https://${url}`;
+        new URL(urlToCheck);
+        return urlToCheck;
+      } catch (error) {
+        return false;
+      }
+    };
 
     const validatedUrl = validateUrl(linkUrl);
     if (!validatedUrl) {
@@ -244,29 +313,8 @@ export default function EditorPage({
     setIsLinkPopoverOpen(false);
   };
 
-  const handleSave = async () => {
-    if (!editor) {
-      alert("Please provide content.");
-      return;
-    }
-    const content = editor.getHTML();
-    if (!content || content.replace(/<[^>]*>/g, "").trim().length === 0) {
-      alert("Please add some content before saving");
-      return;
-    }
-    setSaving(true);
-    try {
-      await debouncedSave(content);
-      const date = new Date();
-      router.push(`/notes/${date.toISOString().split("T")[0]}`);
-    } catch (error) {
-      alert("Error saving note. Please try again.");
-    } finally {
-      setSaving(false);
-    }
-  };
-
   const fontFamilies = [
+    "Default",
     "Arial",
     "Times New Roman",
     "Courier New",
@@ -278,254 +326,216 @@ export default function EditorPage({
   ];
 
   const fontSizes = [
-    "8px",
-    "10px",
-    "12px",
-    "14px",
-    "16px",
-    "18px",
-    "20px",
-    "24px",
-    "30px",
-    "36px",
-    "48px",
-    "60px",
-    "72px",
+    { label: "Smaller", value: "12px" },
+    { label: "Small", value: "14px" },
+    { label: "Medium", value: "16px" },
+    { label: "Large", value: "18px" },
+    { label: "Larger", value: "20px" },
   ];
 
-  if (!mounted) return null;
-
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="mx-auto max-w-4xl space-y-4">
-        <div className="sticky top-4 z-40 flex flex-wrap items-center gap-2 rounded-lg border bg-card p-2 shadow-sm">
+    <div className="sticky top-4 z-40 flex flex-wrap items-center gap-2 rounded-lg border bg-card p-2 shadow-sm">
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => editor?.chain().focus().toggleBold().run()}
+        className={editor?.isActive("bold") ? "bg-accent" : ""}
+      >
+        <BoldIcon className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => editor?.chain().focus().toggleItalic().run()}
+        className={editor?.isActive("italic") ? "bg-accent" : ""}
+      >
+        <ItalicIcon className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => editor?.chain().focus().toggleUnderline().run()}
+        className={editor?.isActive("underline") ? "bg-accent" : ""}
+      >
+        <UnderlineIcon className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() =>
+          editor?.chain().focus().toggleHeading({ level: 1 }).run()
+        }
+        className={editor?.isActive("heading", { level: 1 }) ? "bg-accent" : ""}
+      >
+        <span>H1</span>
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() =>
+          editor?.chain().focus().toggleHeading({ level: 2 }).run()
+        }
+        className={editor?.isActive("heading", { level: 2 }) ? "bg-accent" : ""}
+      >
+        <span>H2</span>
+      </Button>
+      <Select
+        onValueChange={(value) =>
+          editor?.chain().focus().setFontFamily(value).run()
+        }
+        defaultValue="Default"
+      >
+        <SelectTrigger className="w-[180px]">
+          <TypeIcon className="h-4 w-4" />
+          <SelectValue placeholder="Font Family" />
+        </SelectTrigger>
+        <SelectContent>
+          {fontFamilies.map((font) => (
+            <SelectItem key={font} value={font}>
+              {font}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Select
+        onValueChange={(value) =>
+          editor
+            ?.chain()
+            .focus()
+            .setMark("textStyle", { fontSize: value })
+            .run()
+        }
+        defaultValue="16px"
+      >
+        <SelectTrigger className="w-[100px]">
+          <SelectValue placeholder="Size" />
+        </SelectTrigger>
+        <SelectContent>
+          {fontSizes.map(({ label, value }) => (
+            <SelectItem key={value} value={value}>
+              {label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Input
+        type="color"
+        defaultValue="#ffffff"
+        onChange={(e) => editor?.chain().focus().setColor(e.target.value).run()}
+        className="size-10 cursor-pointer"
+      />
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => editor?.chain().focus().setHardBreak().run()}
+      >
+        <span>BR</span>
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => editor?.chain().focus().setHorizontalRule().run()}
+      >
+        <span>—</span>
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => editor?.chain().focus().setTextAlign("left").run()}
+        className={editor?.isActive({ textAlign: "left" }) ? "bg-accent" : ""}
+      >
+        <AlignLeftIcon className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => editor?.chain().focus().setTextAlign("center").run()}
+        className={editor?.isActive({ textAlign: "center" }) ? "bg-accent" : ""}
+      >
+        <AlignCenterIcon className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => editor?.chain().focus().setTextAlign("right").run()}
+        className={editor?.isActive({ textAlign: "right" }) ? "bg-accent" : ""}
+      >
+        <AlignRightIcon className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => editor?.chain().focus().toggleBulletList().run()}
+        className={editor?.isActive("bulletList") ? "bg-accent" : ""}
+      >
+        <ListIcon className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+        className={editor?.isActive("orderedList") ? "bg-accent" : ""}
+      >
+        <ListOrderedIcon className="h-4 w-4" />
+      </Button>
+      <Popover open={isLinkPopoverOpen} onOpenChange={setIsLinkPopoverOpen}>
+        <PopoverTrigger asChild>
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => editor?.chain().focus().toggleBold().run()}
-            className={editor?.isActive("bold") ? "bg-accent" : ""}
+            onClick={() => {
+              setIsLinkPopoverOpen(true);
+              setLinkError("");
+              const selectedText = editor?.state.doc.textBetween(
+                editor.state.selection.from,
+                editor.state.selection.to,
+              );
+              if (selectedText) setLinkText(selectedText);
+            }}
+            className={editor?.isActive("link") ? "bg-accent" : ""}
           >
-            <BoldIcon className="h-4 w-4" />
+            <LinkIcon className="h-4 w-4" />
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => editor?.chain().focus().toggleItalic().run()}
-            className={editor?.isActive("italic") ? "bg-accent" : ""}
-          >
-            <ItalicIcon className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => editor?.chain().focus().toggleUnderline().run()}
-            className={editor?.isActive("underline") ? "bg-accent" : ""}
-          >
-            <UnderlineIcon className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() =>
-              editor?.chain().focus().toggleHeading({ level: 1 }).run()
-            }
-            className={
-              editor?.isActive("heading", { level: 1 }) ? "bg-accent" : ""
-            }
-          >
-            <span className="font-medium">H1</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() =>
-              editor?.chain().focus().toggleHeading({ level: 2 }).run()
-            }
-            className={
-              editor?.isActive("heading", { level: 2 }) ? "bg-accent" : ""
-            }
-          >
-            <span className="font-medium">H2</span>
-          </Button>
-          <Select
-            onValueChange={(value) =>
-              editor?.chain().focus().setFontFamily(value).run()
-            }
-          >
-            <SelectTrigger className="w-[180px]">
-              <TypeIcon className="mr-2 h-4 w-4" />
-              <SelectValue placeholder="Font Family" />
-            </SelectTrigger>
-            <SelectContent>
-              {fontFamilies.map((font) => (
-                <SelectItem key={font} value={font}>
-                  {font}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select
-            onValueChange={(value) =>
-              editor
-                ?.chain()
-                .focus()
-                .setMark("textStyle", { fontSize: value })
-                .run()
-            }
-          >
-            <SelectTrigger className="w-[100px]">
-              <SelectValue placeholder="Size" />
-            </SelectTrigger>
-            <SelectContent>
-              {fontSizes.map((size) => (
-                <SelectItem key={size} value={size}>
-                  {size}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Input
-            type="color"
-            defaultValue="#ffffff"
-            onChange={(e) =>
-              editor?.chain().focus().setColor(e.target.value).run()
-            }
-            className="size-10 cursor-pointer"
-          />
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => editor?.chain().focus().setTextAlign("left").run()}
-            className={
-              editor?.isActive({ textAlign: "left" }) ? "bg-accent" : ""
-            }
-          >
-            <AlignLeftIcon className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => editor?.chain().focus().setTextAlign("center").run()}
-            className={
-              editor?.isActive({ textAlign: "center" }) ? "bg-accent" : ""
-            }
-          >
-            <AlignCenterIcon className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => editor?.chain().focus().setTextAlign("right").run()}
-            className={
-              editor?.isActive({ textAlign: "right" }) ? "bg-accent" : ""
-            }
-          >
-            <AlignRightIcon className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => editor?.chain().focus().toggleBulletList().run()}
-            className={editor?.isActive("bulletList") ? "bg-accent" : ""}
-          >
-            <ListIcon className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-            className={editor?.isActive("orderedList") ? "bg-accent" : ""}
-          >
-            <ListOrderedIcon className="h-4 w-4" />
-          </Button>
-          <Popover open={isLinkPopoverOpen} onOpenChange={setIsLinkPopoverOpen}>
-            <PopoverTrigger asChild>
+        </PopoverTrigger>
+        <PopoverContent className="w-80">
+          <div className="flex flex-col space-y-2">
+            <Input
+              type="text"
+              placeholder="Enter link text (optional)"
+              value={linkText}
+              onChange={(e) => setLinkText(e.target.value)}
+              className="h-10"
+            />
+            <Input
+              type="text"
+              placeholder="Enter URL (e.g., example.com)"
+              value={linkUrl}
+              onChange={(e) => {
+                setLinkUrl(e.target.value);
+                setLinkError("");
+              }}
+              className={`h-10 ${linkError ? "border-red-500" : ""}`}
+            />
+            {linkError && (
+              <div className="text-sm text-red-500">{linkError}</div>
+            )}
+            <div className="flex justify-end space-x-2">
               <Button
-                variant="ghost"
-                size="icon"
+                variant="outline"
                 onClick={() => {
-                  setIsLinkPopoverOpen(true);
+                  setIsLinkPopoverOpen(false);
                   setLinkError("");
-                  const selectedText = editor?.state.doc.textBetween(
-                    editor.state.selection.from,
-                    editor.state.selection.to,
-                  );
-                  if (selectedText) setLinkText(selectedText);
+                  setLinkUrl("");
+                  setLinkText("");
                 }}
-                className={editor?.isActive("link") ? "bg-accent" : ""}
               >
-                <LinkIcon className="h-4 w-4" />
+                Cancel
               </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80">
-              <div className="flex flex-col space-y-2">
-                <Input
-                  type="text"
-                  placeholder="Enter link text (optional)"
-                  value={linkText}
-                  onChange={(e) => setLinkText(e.target.value)}
-                  className="h-10"
-                />
-                <Input
-                  type="text"
-                  placeholder="Enter URL (e.g., example.com)"
-                  value={linkUrl}
-                  onChange={(e) => {
-                    setLinkUrl(e.target.value);
-                    setLinkError("");
-                  }}
-                  className={`h-10 ${linkError ? "border-red-500" : ""}`}
-                />
-                {linkError && (
-                  <div className="text-sm text-red-500">{linkError}</div>
-                )}
-                <div className="flex justify-end space-x-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setIsLinkPopoverOpen(false);
-                      setLinkError("");
-                      setLinkUrl("");
-                      setLinkText("");
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button onClick={setLink}>Add Link</Button>
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
-        </div>
-        <ScrollArea className="h-[300px] rounded-lg border bg-card">
-          <EditorContent
-            editor={editor}
-            className="size-full p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          />
-        </ScrollArea>
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-muted-foreground">
-            {editor?.storage.characterCount.words() ?? 0} words
+              <Button onClick={setLink}>Add Link</Button>
+            </div>
           </div>
-          <div className="space-x-2">
-            <Button variant="outline" onClick={() => router.back()}>
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSave}
-              disabled={
-                saving ||
-                editor
-                  ?.getHTML()
-                  .replace(/<[^>]*>/g, "")
-                  .trim().length === 0
-              }
-            >
-              {saving ? "Saving..." : "Save"}
-            </Button>
-          </div>
-        </div>
-      </div>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }
