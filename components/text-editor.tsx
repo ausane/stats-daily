@@ -44,6 +44,7 @@ import { ScrollArea } from "./ui/scroll-area";
 import { useRouter } from "next/navigation";
 import Heading from "@tiptap/extension-heading";
 import { TooltipComponent } from "./ui/tooltip";
+import { handleKeyDownEnter } from "@/lib/utils";
 
 const FontSize = Extension.create({
   name: "fontSize",
@@ -82,7 +83,7 @@ const FontSize = Extension.create({
   },
 });
 
-export default function EditorPage({
+export default function EditorComponent({
   content,
   noteId,
 }: {
@@ -250,6 +251,7 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
   const [linkUrl, setLinkUrl] = useState("");
   const [linkText, setLinkText] = useState("");
   const [isLinkPopoverOpen, setIsLinkPopoverOpen] = useState(false);
+  const linkInputRef = useRef<HTMLInputElement>(null);
 
   const setLink = () => {
     if (!linkUrl) {
@@ -308,10 +310,18 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
         .run();
     }
 
-    setLinkUrl("");
-    setLinkText("");
-    setLinkError("");
-    setIsLinkPopoverOpen(false);
+    handleLinkPopoverOpen(false);
+  };
+
+  const handleLinkPopoverOpen = (open: boolean) => {
+    if (open) {
+      setIsLinkPopoverOpen(true);
+    } else {
+      setLinkUrl("");
+      setLinkText("");
+      setLinkError("");
+      setIsLinkPopoverOpen(false);
+    }
   };
 
   const fontFamilies = [
@@ -333,6 +343,8 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
     { label: "Large", value: "18px" },
     { label: "Larger", value: "20px" },
   ];
+
+  const focusLinkInput = () => linkInputRef.current?.focus();
 
   return (
     <div className="sticky top-4 z-40 flex flex-wrap items-center gap-2 rounded-lg border bg-card p-2 shadow-sm">
@@ -534,7 +546,7 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
         </Button>
       </TooltipComponent>
 
-      <Popover open={isLinkPopoverOpen} onOpenChange={setIsLinkPopoverOpen}>
+      <Popover open={isLinkPopoverOpen} onOpenChange={handleLinkPopoverOpen}>
         <TooltipComponent content="Insert Link">
           <PopoverTrigger asChild>
             <Button
@@ -549,7 +561,7 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
                 );
                 if (selectedText) setLinkText(selectedText);
               }}
-              className={editor?.isActive("link") ? "bg-accent" : ""}
+              className={isLinkPopoverOpen ? "bg-accent" : ""}
             >
               <LinkIcon className="h-4 w-4" />
             </Button>
@@ -562,9 +574,11 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
               placeholder="Enter link text (optional)"
               value={linkText}
               onChange={(e) => setLinkText(e.target.value)}
+              onKeyDown={(e) => handleKeyDownEnter(e, focusLinkInput)}
               className="h-10"
             />
             <Input
+              ref={linkInputRef}
               type="text"
               placeholder="Enter URL (e.g., example.com)"
               value={linkUrl}
@@ -572,6 +586,7 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
                 setLinkUrl(e.target.value);
                 setLinkError("");
               }}
+              onKeyDown={(e) => handleKeyDownEnter(e, setLink)}
               className={`h-10 ${linkError ? "border-red-500" : ""}`}
             />
             {linkError && (
@@ -580,12 +595,7 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
             <div className="flex justify-end space-x-2">
               <Button
                 variant="outline"
-                onClick={() => {
-                  setIsLinkPopoverOpen(false);
-                  setLinkError("");
-                  setLinkUrl("");
-                  setLinkText("");
-                }}
+                onClick={() => handleLinkPopoverOpen(false)}
               >
                 Cancel
               </Button>

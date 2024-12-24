@@ -19,32 +19,31 @@ export function DailyNote({
   const router = useRouter();
 
   useEffect(() => {
-    // console.log("refreshing");
     router.refresh();
   }, [router]);
 
   const formattedDate = format(parsedDate, "MMMM d, yyyy");
   const isToday =
     format(new Date(), "yyyy-MM-dd") === format(parsedDate, "yyyy-MM-dd");
+
   return (
     <div className="min-h-screen bg-background p-4 pb-8">
       <div className="mx-auto max-w-3xl">
         <div className="flex-between my-4 h-10">
           <p className="text-2xl font-bold">{formattedDate}</p>
-          {isToday && !note && (
-            <Link href="/notes/today">
-              <Button size="icon" variant="outline">
-                <PlusIcon className="size-4" />
-              </Button>
-            </Link>
-          )}
-          {isToday && note && (
-            <Link href="/notes/today">
-              <Button variant="outline" size="icon">
-                <Pencil className="size-4" />
-              </Button>
-            </Link>
-          )}
+          <Link href="/notes/today">
+            <Button size="icon" variant="outline">
+              {isToday ? (
+                note ? (
+                  <Pencil className="size-4" />
+                ) : (
+                  <PlusIcon className="size-4" />
+                )
+              ) : (
+                <p className="text-lg font-medium">T</p>
+              )}
+            </Button>
+          </Link>
         </div>
 
         {note ? (

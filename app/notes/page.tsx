@@ -1,14 +1,10 @@
 import { DailyNotes } from "@/components/daily-note";
-import connectToDatabase from "@/lib/db/mongodb";
+import { getDailyNotes } from "@/lib/daily-note";
 import { TNote } from "@/lib/types";
 import { ps } from "@/lib/utils";
-import { Note } from "@/models/note.model";
 
 export default async function NotesPage() {
-  await connectToDatabase();
-  const notes: TNote[] | null = await Note.find({})
-    .sort({ createdAt: -1 })
-    .limit(10);
+  const notes = await getDailyNotes();
 
-  return <DailyNotes notes={ps(notes)} />;
+  return <DailyNotes notes={ps(notes as TNote[])} />;
 }
