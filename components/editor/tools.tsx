@@ -64,10 +64,17 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
   );
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
 
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: "top",
-    modifiers: [{ name: "offset", options: { offset: [0, 8] } }],
-  });
+  const { styles, attributes, update } = usePopper(
+    referenceElement,
+    popperElement,
+    {
+      placement: "top-start",
+      modifiers: [
+        { name: "offset", options: { offset: [0, 8] } },
+        { name: "flip", options: { fallbackPlacements: ["bottom-start"] } },
+      ],
+    },
+  );
 
   const updateToolbarVisibility = useCallback(() => {
     if (!editor) return;
@@ -80,17 +87,22 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
       const start = editor.view.coordsAtPos(from);
       const end = editor.view.coordsAtPos(to);
 
-      const rect = {
-        left: start.left,
-        top: start.top,
-        right: end.right,
-        bottom: end.bottom,
-        width: end.right - start.left,
-        height: end.bottom - start.top,
-      };
+      // Create a more accurate reference element
+      const referenceEl = document.createElement("div");
+      referenceEl.style.position = "absolute";
+      referenceEl.style.left = `${start.left}px`;
+      referenceEl.style.top = `${start.top}px`;
+      referenceEl.style.width = `${end.right - start.left}px`;
+      referenceEl.style.height = `${end.bottom - start.top}px`;
+      document.body.appendChild(referenceEl);
 
-      setReferenceElement(rect as unknown as HTMLElement);
+      setReferenceElement(referenceEl);
       setShowToolbar(true);
+
+      // Clean up the temporary element after the popper has been positioned
+      setTimeout(() => {
+        document.body.removeChild(referenceEl);
+      }, 0);
 
       // Check if the selected text is a link
       const linkMark = editor.view.state.doc
