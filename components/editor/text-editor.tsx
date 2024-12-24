@@ -193,7 +193,7 @@ export default function EditorComponent({
       </header>
       <div className="h-[calc(100%-4rem)]">
         <ScrollArea className="relative h-[calc(100%-4rem)] rounded-lg border bg-card">
-          <div className="flex-end sticky top-0 p-2">
+          <div className="flex-end sticky top-0 z-40 p-2">
             <EditorBlockTools editor={editor as Editor} />
           </div>
           <EditorContent

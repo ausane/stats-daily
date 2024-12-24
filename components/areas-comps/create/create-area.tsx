@@ -140,7 +140,7 @@ export default function CreateArea({
       >
         <div className="flex-start sticky top-0 z-40 w-full flex-col border-b bg-background max-md:pl-14">
           <div className="flex-between w-full p-4">
-            <h2 className="text-xl opacity-80">Create Area</h2>
+            <p className="text-xl opacity-80">Create Area</p>
             <div>
               {isArea || (
                 <Button

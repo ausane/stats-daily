@@ -65,7 +65,7 @@ export default function AreaNote({ areaId, note }: AreaNoteProps) {
   return (
     <>
       <div className="flex-between sm:h-10">
-        <h2 className="font-bold">Note</h2>
+        <p className="font-bold">Note</p>
         {inputNote ? (
           <span className="flex gap-2">
             <IconButton

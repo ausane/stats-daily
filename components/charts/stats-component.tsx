@@ -99,7 +99,7 @@ export function NoStatsFound() {
     <div className="flex-center h-[calc(100dvh-8rem)] flex-col">
       <div className="flex items-center space-x-2">
         <InfoIcon size={24} aria-hidden="true" />
-        <h1 className="text-xl font-semibold">No Stats Found!</h1>
+        <p className="text-xl font-semibold">No Stats Found!</p>
       </div>
       <p className="mt-2 text-muted-foreground">
         Please wait at least a day to get started!

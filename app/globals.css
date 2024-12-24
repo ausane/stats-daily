@@ -68,6 +68,15 @@
   body {
     @apply bg-background text-foreground;
   }
+  h1 {
+    @apply mb-4 text-3xl font-bold;
+  }
+  h2 {
+    @apply mb-3 text-2xl font-bold;
+  }
+  input {
+    @apply bbn h-8 w-full rounded-md bg-transparent p-2;
+  }
 }
 
 .bbn {
@@ -100,16 +109,6 @@
 
 .status-button {
   @apply bbn size-4 rounded-full p-0 max-sm:size-5;
-}
-/* 
-h1 {
-  @apply mb-4 text-3xl font-bold;
-}
-h2 {
-  @apply mb-3 text-2xl font-bold;
-} */
-input {
-  @apply bbn h-8 w-full rounded-md bg-transparent p-2;
 }
 
 .main-content {

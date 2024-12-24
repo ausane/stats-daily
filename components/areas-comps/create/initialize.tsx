@@ -27,9 +27,9 @@ export default function InitializeSD({ userId }: { userId: string }) {
   return (
     <div className="flex-start box-border size-full flex-col overflow-x-hidden">
       <header className="flex-between h-18 sticky top-0 z-20 w-full border-b bg-background p-4 max-md:pl-20">
-        <h1 className="text-xl opacity-80 max-md:text-lg">
+        <p className="text-xl opacity-80 max-md:text-lg">
           Initialize StatsDaily
-        </h1>
+        </p>
         <Button
           type="submit"
           onClick={init}

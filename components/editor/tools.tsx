@@ -397,7 +397,7 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
 export function EditorBlockTools({ editor }: { editor: Editor }) {
   return (
     <Popover>
-      <PopoverTrigger className="flex-center size-10 rounded-md border hover:bg-accent">
+      <PopoverTrigger className="flex-center size-10 rounded-md border bg-background hover:bg-accent">
         <Plus className="size-4" />
       </PopoverTrigger>
       <PopoverContent side="bottom" className="w-auto p-2">
@@ -430,21 +430,6 @@ export function EditorBlockTools({ editor }: { editor: Editor }) {
                 }
               >
                 <span>H2</span>
-              </Button>
-            </TooltipComponent>
-
-            <TooltipComponent content="Heading Level 3">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() =>
-                  editor?.chain().focus().toggleHeading({ level: 3 }).run()
-                }
-                className={
-                  editor?.isActive("heading", { level: 3 }) ? "bg-accent" : ""
-                }
-              >
-                <span>H3</span>
               </Button>
             </TooltipComponent>
 

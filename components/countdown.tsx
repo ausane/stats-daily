@@ -88,12 +88,12 @@ export default function Countdown() {
         </div>
       ) : (
         <>
-          <h1 className="mb-8 flex flex-col text-center text-3xl font-bold md:text-5xl">
+          <p className="mb-8 flex flex-col text-center text-3xl font-bold md:text-5xl">
             <span>Countdown to</span>
             <span>
               {targetDate ? format(targetDate, "PPP") : "your target date"}
             </span>
-          </h1>
+          </p>
           <div className="grid grid-cols-1 gap-6 text-center max-sm:w-full max-sm:px-6 sm:grid-cols-2 md:grid-cols-4">
             {Object.entries(timeLeft).map(([unit, value]) => (
               <div

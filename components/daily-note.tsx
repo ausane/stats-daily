@@ -82,7 +82,7 @@ export function InValidDate() {
   return (
     <div className="flex h-[50vh] items-center justify-center">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-800">Invalid Date</h2>
+        <p className="text-2xl font-bold text-gray-800">Invalid Date</p>
         <p className="mt-2 text-gray-600">Please select a valid date</p>
         <Link href="/notes/today">
           <Button className="mt-4">
@@ -100,7 +100,14 @@ export function DailyNotes({ notes }: { notes: TNote[] }) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="mb-8 text-center text-3xl font-bold">Daily Notes</h1>
+      <div className="flex-between mb-8">
+        <p className="text-3xl font-bold">Daily Notes</p>
+        <Link href="/notes/today">
+          <Button size="icon" variant="outline">
+            <p className="text-lg font-medium">T</p>
+          </Button>
+        </Link>
+      </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {notes.map((note) => (
           <Card
@@ -111,7 +118,7 @@ export function DailyNotes({ notes }: { notes: TNote[] }) {
             }
           >
             <CardHeader className="border-b text-xl font-bold">
-              <CardTitle className="text-sm text-primary">
+              <CardTitle className="text-base text-primary">
                 {format(note.createdAt as Date, "MMMM d, yyyy")}
               </CardTitle>
             </CardHeader>
