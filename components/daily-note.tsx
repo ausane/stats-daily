@@ -82,8 +82,8 @@ export function InValidDate() {
   return (
     <div className="flex h-[50vh] items-center justify-center">
       <div className="text-center">
-        <p className="text-2xl font-bold text-gray-800">Invalid Date</p>
-        <p className="mt-2 text-gray-600">Please select a valid date</p>
+        <p className="text-2xl font-bold">Invalid Date</p>
+        <p className="mt-2 text-muted-foreground">Please select a valid date</p>
         <Link href="/notes/today">
           <Button className="mt-4">
             <PlusIcon className="mr-2 h-4 w-4" />
