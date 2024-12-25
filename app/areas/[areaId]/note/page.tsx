@@ -3,6 +3,18 @@ import AreaNote from "@/components/areas-comps/area/area-note";
 import { currentUser, fetchAreaById } from "@/lib/db/stats";
 import { TArea } from "@/lib/types";
 import { ps } from "@/lib/utils";
+import { Metadata } from "next";
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { areaId: string };
+}): Promise<Metadata> => {
+  const { areaId } = params;
+
+  const areaItem = await fetchAreaById(areaId);
+  return { title: `Note (${areaItem?.area})` };
+};
 
 export default async function AreaNotePage({
   params,

@@ -10,7 +10,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.METADATA_BASE_URL as string),
-  title: "StatsDaily",
+  title: {
+    default: "StatsDaily",
+    template: "%s — StatsDaily",
+  },
   description: `Stats Daily is a web application designed to help users track their daily tasks, set targets, and evaluate their work performance. By visualizing their progress and statistics, users can gain insights into their productivity and make necessary changes to improve.`,
   openGraph: {
     title: "StatsDaily",

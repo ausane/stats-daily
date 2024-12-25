@@ -4,6 +4,17 @@ import { ps } from "@/lib/utils";
 import { DailyNote, InValidDate } from "@/components/daily-note";
 import { getDailyNote } from "@/lib/daily-note";
 import { TNote } from "@/lib/types";
+import { Metadata } from "next";
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { date: string };
+}): Promise<Metadata> => {
+  const { date } = params;
+
+  return { title: `Note (${date})` };
+};
 
 export default async function DailyNotePage({
   params,
