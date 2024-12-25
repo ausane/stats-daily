@@ -12,7 +12,6 @@ import CharacterCount from "@tiptap/extension-character-count";
 import Underline from "@tiptap/extension-underline";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
-import { Editor, Extension, RawCommands } from "@tiptap/core";
 import debounce from "lodash/debounce";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "../ui/scroll-area";
@@ -20,43 +19,8 @@ import { useRouter } from "next/navigation";
 import Heading from "@tiptap/extension-heading";
 import { EditorBlockTools, EditorToolBar } from "./toolbar";
 import { format } from "date-fns";
-
-const FontSize = Extension.create({
-  name: "fontSize",
-  addOptions() {
-    return {
-      types: ["textStyle"],
-    };
-  },
-  addGlobalAttributes() {
-    return [
-      {
-        types: this.options.types,
-        attributes: {
-          fontSize: {
-            default: null,
-            parseHTML: (element) => element.style.fontSize,
-            renderHTML: (attributes) => {
-              if (!attributes.fontSize) return {};
-              return {
-                style: `font-size: ${attributes.fontSize}`,
-              };
-            },
-          },
-        },
-      },
-    ];
-  },
-  addCommands() {
-    return {
-      setFontSize:
-        (fontSize: string) =>
-        ({ chain }: { chain: any }) => {
-          return chain().setMark("textStyle", { fontSize }).run();
-        },
-    } as Partial<RawCommands>;
-  },
-});
+import { FontSize } from "./extensions";
+import { LinkPopover } from "./features";
 
 export default function EditorComponent({
   content,
@@ -190,7 +154,7 @@ export default function EditorComponent({
         <p className="text-2xl font-bold">
           {format(new Date(), "MMMM d, yyyy")}
         </p>
-        <EditorBlockTools editor={editor as Editor} />
+        <EditorBlockTools editor={editor} />
       </header>
       <div className="h-[calc(100%-4rem)]">
         <ScrollArea className="relative h-[calc(100%-4rem)] rounded-lg border bg-card">
@@ -198,7 +162,8 @@ export default function EditorComponent({
             editor={editor}
             className="size-full p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           />
-          <EditorToolBar editor={editor as Editor} />
+          <EditorToolBar editor={editor} />
+          <LinkPopover editor={editor} />
         </ScrollArea>
         <div className="mt-4 flex items-center justify-between">
           <div className="space-x-2">
@@ -213,9 +178,6 @@ export default function EditorComponent({
               }
             >
               {saving ? "Saving..." : "Save"}
-            </Button>
-            <Button variant="outline" onClick={() => router.back()}>
-              Cancel
             </Button>
           </div>
           <div className="text-sm text-muted-foreground">

@@ -27,7 +27,7 @@ import {
   ListOrderedButton,
   TextColorButton,
   UnderlineButton,
-} from "./toolbar-buttons";
+} from "./toolbar-items";
 
 export function EditorToolBar({ editor }: { editor: Editor }) {
   const [linkUrl, setLinkUrl] = useState("");
@@ -91,12 +91,17 @@ export function EditorToolBar({ editor }: { editor: Editor }) {
     if (!editor) return;
 
     const handleBlur = ({ event }: { event: FocusEvent }) => {
+      const relatedTarget = event.target as Node;
+
       if (
         popperElement &&
-        !popperElement.contains(event.relatedTarget as Node)
+        (popperElement.contains(relatedTarget) ||
+          editor.view.dom.contains(relatedTarget))
       ) {
-        setShowToolbar(false);
+        return;
       }
+
+      setShowToolbar(false);
     };
 
     editor.on("selectionUpdate", updateToolbarVisibility);
