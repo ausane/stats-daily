@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "../ui/scroll-area";
 import { useRouter } from "next/navigation";
 import Heading from "@tiptap/extension-heading";
-import { EditorBlockTools, EditorToolBar } from "./tools";
+import { EditorBlockTools, EditorToolBar } from "./toolbar";
 import { format } from "date-fns";
 
 const FontSize = Extension.create({
@@ -182,7 +182,7 @@ export default function EditorComponent({
     }
   };
 
-  if (!mounted) return null;
+  if (!mounted || !editor) return null;
 
   return (
     <div className="mx-auto box-border h-screen max-w-4xl bg-background p-4">
@@ -190,12 +190,10 @@ export default function EditorComponent({
         <p className="text-2xl font-bold">
           {format(new Date(), "MMMM d, yyyy")}
         </p>
+        <EditorBlockTools editor={editor as Editor} />
       </header>
       <div className="h-[calc(100%-4rem)]">
         <ScrollArea className="relative h-[calc(100%-4rem)] rounded-lg border bg-card">
-          <div className="flex-end sticky top-0 z-40 p-2">
-            <EditorBlockTools editor={editor as Editor} />
-          </div>
           <EditorContent
             editor={editor}
             className="size-full p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
