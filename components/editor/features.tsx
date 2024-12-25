@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Input from "../ui/input";
+import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Editor } from "@tiptap/core";
 import { ExternalLinkIcon, EditIcon, TrashIcon } from "lucide-react";

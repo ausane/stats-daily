@@ -2,7 +2,7 @@
 
 import CreateTasks from "./create-tasks";
 import { Button } from "@/components/ui/button";
-import Input from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState, useRef, useEffect } from "react";
 import { handleSubmit } from "@/lib/services/handle-submit";

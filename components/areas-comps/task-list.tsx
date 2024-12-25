@@ -17,7 +17,7 @@ import { createNewTask } from "@/lib/services/handle-update";
 import IconButton from "../ui/icon-button";
 import { ValidationAlertDialog } from "../dialogs";
 import { TooltipComponent } from "../ui/tooltip";
-import Input from "../ui/input";
+import { Input } from "../ui/input";
 import { handleKeyDownEnter, ntf, st } from "@/lib/utils";
 import {
   ArrowUp,
