@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Editor } from "@tiptap/core";
 import { ExternalLinkIcon, EditIcon, TrashIcon } from "lucide-react";
+import Link from "next/link";
 
 export const LinkPopover = ({ editor }: { editor: Editor }) => {
   const [link, setLink] = useState("");
@@ -12,9 +13,14 @@ export const LinkPopover = ({ editor }: { editor: Editor }) => {
 
   useEffect(() => {
     const updatePopover = () => {
-      const { from } = editor.state.selection;
-      const marks = editor.state.selection.$from.marks();
-      const linkMark = marks.find((mark) => mark.type.name === "link");
+      const { from, to } = editor.state.selection;
+      const nodeAt = editor.state.doc.nodeAt(from);
+      const linkMark = nodeAt?.marks.find((mark) => mark.type.name === "link");
+
+      if (from !== to) {
+        setShow(false);
+        return;
+      }
 
       if (linkMark) {
         setLink(linkMark.attrs.href);
@@ -42,7 +48,18 @@ export const LinkPopover = ({ editor }: { editor: Editor }) => {
     };
   }, [editor]);
 
-  if (!show) return null;
+  const updateLink = (newHref: string) => {
+    const { from } = editor.state.selection;
+    editor
+      .chain()
+      .focus()
+      .extendMarkRange("link")
+      .setLink({ href: newHref })
+      .setTextSelection(from)
+      .run();
+  };
+
+  if (!show || !editor) return null;
 
   return (
     <div
@@ -63,8 +80,10 @@ export const LinkPopover = ({ editor }: { editor: Editor }) => {
           <Button
             size="sm"
             onClick={() => {
-              editor.chain().focus().setLink({ href: link }).run();
-              setIsEditing(false);
+              if (link) {
+                updateLink(link);
+                setIsEditing(false);
+              }
             }}
           >
             Save
@@ -72,14 +91,14 @@ export const LinkPopover = ({ editor }: { editor: Editor }) => {
         </div>
       ) : (
         <div className="flex items-center gap-2">
-          <a
+          <Link
             href={link}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1 text-blue-500 hover:underline"
           >
-            {link} <ExternalLinkIcon className="h-4 w-4" />
-          </a>
+            {link}
+          </Link>
           <Button
             size="icon"
             variant="ghost"
@@ -91,7 +110,7 @@ export const LinkPopover = ({ editor }: { editor: Editor }) => {
             size="icon"
             variant="ghost"
             onClick={() => {
-              editor.chain().focus().unsetLink().run();
+              editor.chain().focus().extendMarkRange("link").unsetLink().run();
               setShow(false);
             }}
           >
