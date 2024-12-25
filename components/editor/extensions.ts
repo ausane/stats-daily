@@ -36,3 +36,27 @@ export const FontSize = Extension.create({
     } as Partial<RawCommands>;
   },
 });
+
+export const EnterBehavior = Extension.create({
+  name: "enterBehavior",
+
+  addKeyboardShortcuts() {
+    return {
+      Enter: ({ editor }) => {
+        const { selection } = editor.state;
+        const { $from } = selection;
+
+        // Check if the current node is a paragraph and is empty
+        if (
+          $from.parent.type.name === "paragraph" &&
+          $from.parent.textContent === ""
+        ) {
+          editor.commands.insertContent("<br>");
+          return true; // Prevent the default behavior
+        }
+
+        return false; // Allow default behavior if conditions aren't met
+      },
+    };
+  },
+});

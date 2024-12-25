@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 import Heading from "@tiptap/extension-heading";
 import { EditorBlockTools, EditorToolBar } from "./toolbar";
 import { format } from "date-fns";
-import { FontSize } from "./extensions";
+import { EnterBehavior, FontSize } from "./extensions";
 import { LinkPopover } from "./features";
 
 export default function EditorComponent({
@@ -74,6 +74,7 @@ export default function EditorComponent({
           class: "list-decimal ml-4",
         },
       }),
+      EnterBehavior,
     ],
     editorProps: {
       attributes: {
