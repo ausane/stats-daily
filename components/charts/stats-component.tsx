@@ -2,7 +2,7 @@
 
 import { HeaderProps, TStats, MainContentProps } from "@/lib/types";
 import { useEffect, useState } from "react";
-import { PageFooter, SDIcon } from "@/components/home-page";
+import { PageFooter } from "@/components/home-page";
 import { InfoIcon } from "lucide-react";
 import {
   Select,
@@ -14,7 +14,7 @@ import {
   SelectLabel,
 } from "@/components/ui/select";
 import { RadarChartComponent } from "./radar-chart";
-import Link from "next/link";
+import { TitleHeader } from "../daily-note";
 
 export function StatsComponent({ data }: { data: TStats[] }) {
   const [selectedValue, setSelectedValue] = useState<string>("1");
@@ -53,35 +53,32 @@ export function StatsComponent({ data }: { data: TStats[] }) {
 // Chart Collection Component Header
 export function ChartHeader({ selectedValue, setSelectedValue }: HeaderProps) {
   return (
-    <header className="flex-between sticky top-0 z-40 h-16 border-b bg-background px-4 lg:px-6">
-      <Link href="/" className="flex-center gap-2.5" prefetch={false}>
-        <SDIcon />
-        <span className="text-2xl font-bold text-foreground/90 max-sm:hidden">
-          StatsDaily
-        </span>
-      </Link>
-      <Select
-        value={selectedValue}
-        onValueChange={setSelectedValue}
-        name="select-timeline"
-      >
-        <SelectTrigger className="w-[140px]">
-          <SelectValue placeholder="Select Timeline" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Timelines</SelectLabel>
-            <SelectItem value="60">Last 2 months</SelectItem>
-            <SelectItem value="30">Last month</SelectItem>
-            <SelectItem value="21">Last 21 days</SelectItem>
-            <SelectItem value="15">Last 15 days</SelectItem>
-            <SelectItem value="7">Last 7 days</SelectItem>
-            <SelectItem value="3">Last 3 days</SelectItem>
-            <SelectItem value="1">Yesterday</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-    </header>
+    <TitleHeader
+      page="Stats"
+      actionItem={
+        <Select
+          value={selectedValue}
+          onValueChange={setSelectedValue}
+          name="select-timeline"
+        >
+          <SelectTrigger className="w-[140px]">
+            <SelectValue placeholder="Select Timeline" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Timelines</SelectLabel>
+              <SelectItem value="60">Last 2 months</SelectItem>
+              <SelectItem value="30">Last month</SelectItem>
+              <SelectItem value="21">Last 21 days</SelectItem>
+              <SelectItem value="15">Last 15 days</SelectItem>
+              <SelectItem value="7">Last 7 days</SelectItem>
+              <SelectItem value="3">Last 3 days</SelectItem>
+              <SelectItem value="1">Yesterday</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      }
+    />
   );
 }
 
