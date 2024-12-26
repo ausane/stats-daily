@@ -1,8 +1,8 @@
-import EditorComponent from "@/components/editor/text-editor";
+import EditorComponent from "@/components/text-editor/index";
 import { isValid } from "date-fns";
 import { ps } from "@/lib/utils";
 import { DailyNote, InValidDate } from "@/components/daily-note";
-import { getDailyNote } from "@/lib/daily-note";
+import { getDailyNote, getDailyNotes } from "@/lib/daily-note";
 import { TNote } from "@/lib/types";
 import { Metadata } from "next";
 
@@ -41,6 +41,13 @@ export default async function DailyNotePage({
   if (!isValid(parsedDate)) return <InValidDate />;
 
   const note = await getDailyNote(parsedDate);
+  const notes = await getDailyNotes();
 
-  return <DailyNote parsedDate={parsedDate} note={ps(note as TNote)} />;
+  return (
+    <DailyNote
+      parsedDate={parsedDate}
+      note={ps(note as TNote)}
+      notes={ps(notes as TNote[])}
+    />
+  );
 }

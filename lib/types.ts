@@ -206,6 +206,7 @@ export type RangeChartProps = {
 export type HeaderProps = {
   selectedValue: string;
   setSelectedValue: SetState<string>;
+  children: React.ReactNode;
 };
 
 // Stats Page Main Content Props Type
