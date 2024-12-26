@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { DailyNotes } from "@/components/daily-note";
 import { getDailyNotes } from "@/lib/daily-note";
 import { TNote } from "@/lib/types";

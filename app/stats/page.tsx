@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { StatsComponent } from "@/components/charts/stats-component";
 import { statsdaily } from "@/lib/daily-stats";
 import { TStats } from "@/lib/types";

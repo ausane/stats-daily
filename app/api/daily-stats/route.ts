@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { dailyStats } from "@/lib/daily-stats";
+import connectToDatabase from "@/lib/db/mongodb";
 
 export async function POST(request: Request) {
   // Verify the request is coming from Vercel Cron
@@ -9,6 +10,7 @@ export async function POST(request: Request) {
   }
 
   try {
+    await connectToDatabase();
     await dailyStats();
     return NextResponse.json(
       { message: "Daily stats job completed successfully" },

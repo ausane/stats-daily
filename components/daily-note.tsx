@@ -98,6 +98,13 @@ export function InValidDate() {
 export function DailyNotes({ notes }: { notes: TNote[] }) {
   const router = useRouter();
 
+  const readNote = (note: TNote) => {
+    const formattedDate = new Date(note.createdAt as Date)
+      ?.toISOString()
+      .split("T")[0];
+    router.push(`/notes/${formattedDate}`);
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex-between mb-8">
@@ -113,9 +120,7 @@ export function DailyNotes({ notes }: { notes: TNote[] }) {
           <Card
             key={note._id as string}
             className="cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg"
-            onClick={() =>
-              router.push(`/notes/${note.createdAt?.toString().split("T")[0]}`)
-            }
+            onClick={() => readNote(note)}
           >
             <CardHeader className="border-b text-xl font-bold">
               <CardTitle className="text-base text-primary">
