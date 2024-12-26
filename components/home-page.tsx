@@ -84,7 +84,7 @@ export default function HomePage() {
 
 export function SDIcon() {
   return (
-    <code className="bbn flex-center bold bbn h-10 w-10 rounded-md text-2xl font-bold text-foreground/90">
+    <code className="bbn flex-center h-10 w-10 rounded-lg text-2xl font-bold text-foreground/90">
       SD
     </code>
   );

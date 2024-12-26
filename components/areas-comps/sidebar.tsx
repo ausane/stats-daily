@@ -24,6 +24,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { SDIcon } from "../home-page";
 
 export default function Sidebar({
   data,
@@ -137,15 +138,13 @@ export function CreateAreaLink({
       <Link
         className="flex-between link-click-effect mx-2 h-10 rounded-lg pr-4"
         onClick={() => setSidebarState(false)}
-        href={`/areas/create`}
+        href="/areas/create"
       >
         <span className="flex-start gap-4">
-          <code className="bbn flex-center h-10 w-10 rounded-lg text-2xl">
-            SD
-          </code>
+          <SDIcon />
           <p>StatsDaily</p>
         </span>
-        <TooltipComponent content="New Area">
+        <TooltipComponent content="Create Area">
           <SquarePen
             size={20}
             aria-hidden="true"

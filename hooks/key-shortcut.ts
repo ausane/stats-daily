@@ -2,11 +2,11 @@ import { useEffect, useCallback } from "react";
 
 type ModifierKey = "ctrlKey" | "altKey" | "shiftKey" | "metaKey";
 
-interface ShortcutOptions {
+type ShortcutOptions = {
   key: string;
   modifiers?: ModifierKey[];
   action: () => void;
-}
+};
 
 const useKeyShortcut = ({ key, modifiers = [], action }: ShortcutOptions) => {
   const handleKeyPress = useCallback(
