@@ -1,4 +1,4 @@
-import EditorComponent from "@/components/editor/text-editor";
+import EditorComponent from "@/components/text-editor/index";
 import { isValid } from "date-fns";
 import { ps } from "@/lib/utils";
 import { DailyNote, InValidDate } from "@/components/daily-note";

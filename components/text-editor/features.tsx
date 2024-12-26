@@ -75,7 +75,7 @@ export const LinkPopover = ({ editor }: { editor: Editor }) => {
             value={link}
             onChange={(e) => setLink(e.target.value)}
             placeholder="Enter URL"
-            className="h-9 w-64"
+            className="h-9"
           />
           <Button
             size="sm"
