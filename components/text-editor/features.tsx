@@ -1,15 +1,34 @@
-import { useEffect, useState } from "react";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Editor } from "@tiptap/core";
-import { EditIcon, TrashIcon } from "lucide-react";
+import { CheckIcon, PencilIcon, TrashIcon } from "lucide-react";
+import { usePopper } from "react-popper";
 import Link from "next/link";
 
 export const LinkPopover = ({ editor }: { editor: Editor }) => {
   const [link, setLink] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
   const [show, setShow] = useState(false);
+  const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(
+    null,
+  );
+  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
+    null,
+  );
+
+  const linkInputRef = useRef<HTMLInputElement | null>(null);
+
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement: "bottom-start",
+    modifiers: [
+      { name: "flip", enabled: true },
+      { name: "preventOverflow", enabled: true },
+      { name: "offset", options: { offset: [0, 8] } },
+    ],
+  });
 
   useEffect(() => {
     const updatePopover = () => {
@@ -27,18 +46,10 @@ export const LinkPopover = ({ editor }: { editor: Editor }) => {
         setShow(true);
         const domResult = editor.view.domAtPos(from);
         const element = domResult.node.parentElement;
-
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          const editorRect = editor.view.dom.getBoundingClientRect();
-
-          setPosition({
-            top: rect.bottom - editorRect.top,
-            left: rect.left - editorRect.left,
-          });
-        }
+        setReferenceElement(element);
       } else {
         setShow(false);
+        setReferenceElement(null);
       }
     };
 
@@ -48,67 +59,69 @@ export const LinkPopover = ({ editor }: { editor: Editor }) => {
     };
   }, [editor]);
 
-  const updateLink = (newHref: string) => {
+  const updateLink = () => {
+    if (!link) return;
+
     const { from } = editor.state.selection;
+
     editor
       .chain()
       .focus()
       .extendMarkRange("link")
-      .setLink({ href: newHref })
+      .setLink({ href: link })
       .setTextSelection(from)
       .run();
+
+    setIsEditing(false);
   };
 
   if (!show || !editor) return null;
 
   return (
     <div
-      className="absolute z-50 rounded-lg border bg-card p-2 shadow-lg"
-      style={{
-        top: `${position.top + 25}px`,
-        left: `${position.left}px`,
-      }}
+      ref={setPopperElement}
+      style={styles.popper}
+      {...attributes.popper}
+      className="z-50 rounded-lg border bg-card p-2 shadow-lg"
     >
       {isEditing ? (
         <div className="flex gap-2">
           <Input
+            ref={linkInputRef}
             value={link}
             onChange={(e) => setLink(e.target.value)}
             placeholder="Enter URL"
-            className="h-9"
+            onKeyDown={(e) => e.key === "Enter" && updateLink()}
           />
-          <Button
-            size="sm"
-            onClick={() => {
-              if (link) {
-                updateLink(link);
-                setIsEditing(false);
-              }
-            }}
-          >
-            Save
+          <Button size="icon" className="size-8" onClick={updateLink}>
+            <CheckIcon className="h-4 w-4" />
           </Button>
         </div>
       ) : (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <Link
             href={link}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 text-blue-500 hover:underline"
+            className="mr-1 flex items-center border-r-2 pr-2 text-blue-500 hover:underline"
           >
             {link}
           </Link>
           <Button
             size="icon"
             variant="ghost"
-            onClick={() => setIsEditing(true)}
+            className="size-8"
+            onClick={() => {
+              setIsEditing(true);
+              setTimeout(() => linkInputRef.current?.focus(), 0);
+            }}
           >
-            <EditIcon className="h-4 w-4" />
+            <PencilIcon className="h-4 w-4" />
           </Button>
           <Button
             size="icon"
             variant="ghost"
+            className="size-8"
             onClick={() => {
               editor.chain().focus().extendMarkRange("link").unsetLink().run();
               setShow(false);
