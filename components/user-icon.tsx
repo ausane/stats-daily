@@ -16,7 +16,7 @@ export default function UserProfile({ user }: { user: TUser }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar>
+        <Avatar role="button" tabIndex={0} aria-label="View Profile">
           <AvatarImage src={user?.image} />
           <AvatarFallback>
             {user?.name?.charAt(0).toUpperCase() || "A"}
