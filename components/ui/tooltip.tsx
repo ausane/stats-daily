@@ -36,6 +36,7 @@ export type TooltipComponentProps = {
   content: string;
   open?: boolean;
   setOpen?: (open: boolean) => void;
+  className?: string;
 };
 
 // Tool Tip Provider Component
@@ -44,12 +45,13 @@ export function TooltipComponent({
   content,
   open,
   setOpen,
+  className,
 }: TooltipComponentProps) {
   return (
     <TooltipProvider>
       <Tooltip open={open} onOpenChange={setOpen}>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
-        <TooltipContent>{content}</TooltipContent>
+        <TooltipContent className={className}>{content}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
