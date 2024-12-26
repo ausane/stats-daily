@@ -27,31 +27,33 @@ export function StatsComponent({ data }: { data: TStats[] }) {
 
   if (!stats.length) {
     return (
-      <>
-        <ChartHeader
-          selectedValue={selectedValue}
-          setSelectedValue={setSelectedValue}
-        />
+      <ChartHeader
+        selectedValue={selectedValue}
+        setSelectedValue={setSelectedValue}
+      >
         <NoStatsFound />
         <PageFooter />
-      </>
+      </ChartHeader>
     );
   }
 
   return (
-    <>
-      <ChartHeader
-        selectedValue={selectedValue}
-        setSelectedValue={setSelectedValue}
-      />
+    <ChartHeader
+      selectedValue={selectedValue}
+      setSelectedValue={setSelectedValue}
+    >
       <ChartMainContent stats={stats} selectedValue={selectedValue} />
       <PageFooter />
-    </>
+    </ChartHeader>
   );
 }
 
 // Chart Collection Component Header
-export function ChartHeader({ selectedValue, setSelectedValue }: HeaderProps) {
+export function ChartHeader({
+  selectedValue,
+  setSelectedValue,
+  children,
+}: HeaderProps) {
   return (
     <TitleHeader
       page="Stats"
@@ -78,7 +80,9 @@ export function ChartHeader({ selectedValue, setSelectedValue }: HeaderProps) {
           </SelectContent>
         </Select>
       }
-    />
+    >
+      {children}
+    </TitleHeader>
   );
 }
 
