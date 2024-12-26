@@ -161,13 +161,13 @@ export function CreateAreaLink({
             <p>Stats</p>
           </Link>
           <Link
-            href={"/notes/today"}
+            href={"/notes"}
             className="flex-start link-click-effect mx-2 h-10 gap-4 rounded-lg pr-4"
           >
             <Button variant="ghost" className="bbn size-10 p-0">
               <Notebook size={24} />
             </Button>
-            <p>Note</p>
+            <p>Notes</p>
           </Link>
         </>
       )}

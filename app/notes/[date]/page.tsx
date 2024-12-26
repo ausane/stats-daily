@@ -1,39 +1,35 @@
-import { Note } from "@/models/note.model";
-import EditorPage from "@/components/text-editor";
-import connectToDatabase from "@/lib/db/mongodb";
-import { isValid, startOfDay, endOfDay } from "date-fns";
-import { currentUser } from "@/lib/db/stats";
+import EditorComponent from "@/components/editor/text-editor";
+import { isValid } from "date-fns";
 import { ps } from "@/lib/utils";
 import { DailyNote, InValidDate } from "@/components/daily-note";
+import { getDailyNote } from "@/lib/daily-note";
+import { TNote } from "@/lib/types";
+import { Metadata } from "next";
 
-export default async function NotePage({
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { date: string };
+}): Promise<Metadata> => {
+  const { date } = params;
+
+  return { title: `Note (${date})` };
+};
+
+export default async function DailyNotePage({
   params,
 }: {
   params: { date: string };
 }) {
-  await connectToDatabase();
-  const user = await currentUser();
-
-  // await Note.deleteMany({});
-
   const { date } = params;
 
   // Handle "today" route with proper user check
   if (date === "today") {
     const parsedDate = new Date();
-    const dayStart = startOfDay(parsedDate);
-    const dayEnd = endOfDay(parsedDate);
-
-    const todayNote = await Note.findOne({
-      userId: user._id.toString(),
-      createdAt: {
-        $gte: dayStart,
-        $lte: dayEnd,
-      },
-    });
+    const todayNote = await getDailyNote(parsedDate);
 
     return (
-      <EditorPage
+      <EditorComponent
         noteId={todayNote?._id?.toString() || null}
         content={todayNote?.content || ""}
       />
@@ -42,20 +38,9 @@ export default async function NotePage({
 
   // Parse and validate the date
   const parsedDate = new Date(date);
-
   if (!isValid(parsedDate)) return <InValidDate />;
 
-  // Query note for the specific day with user check
-  const dayStart = startOfDay(parsedDate);
-  const dayEnd = endOfDay(parsedDate);
+  const note = await getDailyNote(parsedDate);
 
-  const note = await Note.findOne({
-    userId: user._id,
-    createdAt: {
-      $gte: dayStart,
-      $lte: dayEnd,
-    },
-  });
-
-  return <DailyNote parsedDate={parsedDate} note={ps(note)} />;
+  return <DailyNote parsedDate={parsedDate} note={ps(note as TNote)} />;
 }

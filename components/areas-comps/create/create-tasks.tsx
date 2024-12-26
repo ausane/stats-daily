@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { Button } from "@/components/ui/button";
 import { X, CircleAlert } from "lucide-react";
-import Input from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import IconButton from "@/components/ui/icon-button";
 import { InputChangeEvent } from "@/lib/types";
 import { handleKeyDownEnter } from "@/lib/utils";

@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { deleteArea } from "@/lib/services/handle-delete";
 import { useAppDispatch } from "@/store/hooks";
 import { removeAreaById, setCurrentArea } from "@/features/area-slice";
-import Input from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import { updateAreaName } from "@/lib/services/handle-update";
 import { ConfirmDeletionDialog } from "@/components/dialogs";
 import {
@@ -189,9 +189,9 @@ export function TaskItemCompo(props: TaskItemCompoProps) {
             variant="ghost"
             className="flex-center z-10 w-full gap-1 border-0 outline-0"
           >
-            <h2 className="truncate text-xl opacity-80 max-md:text-lg">
+            <p className="truncate text-xl opacity-80 max-md:text-lg">
               {areaName}
-            </h2>
+            </p>
             <ChevronDown
               size={18}
               className="w-5 opacity-50"

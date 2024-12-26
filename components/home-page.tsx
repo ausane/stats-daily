@@ -21,11 +21,11 @@ export default function HomePage() {
           <div className="container relative z-10 px-4 sm:px-8 md:px-16">
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter text-foreground/90 sm:text-5xl xl:text-6xl/none">
+                <p className="text-3xl font-bold tracking-tighter text-foreground/90 sm:text-5xl xl:text-6xl/none">
                   Welcome to StatsDaily:
                   <br />
                   Your Task Tracking Companion
-                </h1>
+                </p>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
                   Experience the power of data-driven task management.
                   StatsDaily helps you stay organized, track your daily
@@ -41,11 +41,11 @@ export default function HomePage() {
         <section className="relative flex w-full flex-col gap-8 py-12 md:py-24">
           <div className="space-y-4 px-4 sm:px-8 md:px-16">
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tighter text-foreground/90 sm:text-5xl xl:text-6xl/none">
+              <p className="text-3xl font-bold tracking-tighter text-foreground/90 sm:text-5xl xl:text-6xl/none">
                 Intuitive Streamlined and
                 <br />
                 User-Focused Design
-              </h1>
+              </p>
               <p className="max-w-[600px] text-muted-foreground md:text-xl">
                 Effortlessly manage your tasks with our intuitive interface,
                 designed to keep you organized, monitor your progress, and help
@@ -64,9 +64,9 @@ export default function HomePage() {
                 <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm text-foreground/90">
                   Get Started with StatsDaily
                 </div>
-                <h2 className="text-3xl font-bold tracking-tighter text-foreground/90 sm:text-5xl">
+                <p className="text-3xl font-bold tracking-tighter text-foreground/90 sm:text-5xl">
                   Boost Your Daily Productivity
-                </h2>
+                </p>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                   Sign up today to take control of your tasks and manage your
                   time effectively.

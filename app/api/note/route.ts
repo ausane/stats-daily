@@ -2,7 +2,6 @@ import connectToDatabase from "@/lib/db/mongodb";
 import { currentUser } from "@/lib/db/stats";
 import { Note } from "@/models/note.model";
 import { endOfDay, startOfDay } from "date-fns";
-import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -67,8 +66,6 @@ export async function POST(request: Request) {
         });
       }
     }
-
-    revalidatePath(`/notes/${note.createdAt.toISOString().split("T")[0]}`);
 
     return NextResponse.json(
       { message: "Note saved successfully!", noteId: note._id },

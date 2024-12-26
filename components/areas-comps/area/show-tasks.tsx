@@ -24,7 +24,7 @@ export default async function ShowTasks({ areaId }: { areaId: string }) {
   } else {
     return (
       <div className="main-content flex-center">
-        <h2 className="text-lg font-bold">404 | Page Not Found</h2>
+        <h2>404 | Page Not Found</h2>
       </div>
     );
   }

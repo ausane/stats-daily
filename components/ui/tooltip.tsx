@@ -32,7 +32,7 @@ export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };
 
 // Tool Tip Provider Component Props
 export type TooltipComponentProps = {
-  children: React.ReactNode;
+  children: JSX.Element;
   content: string;
   open?: boolean;
   setOpen?: (open: boolean) => void;

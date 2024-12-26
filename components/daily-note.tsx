@@ -19,32 +19,31 @@ export function DailyNote({
   const router = useRouter();
 
   useEffect(() => {
-    // console.log("refreshing");
     router.refresh();
   }, [router]);
 
   const formattedDate = format(parsedDate, "MMMM d, yyyy");
   const isToday =
     format(new Date(), "yyyy-MM-dd") === format(parsedDate, "yyyy-MM-dd");
+
   return (
     <div className="min-h-screen bg-background p-4 pb-8">
       <div className="mx-auto max-w-3xl">
         <div className="flex-between my-4 h-10">
           <p className="text-2xl font-bold">{formattedDate}</p>
-          {isToday && !note && (
-            <Link href="/notes/today">
-              <Button size="icon" variant="outline">
-                <PlusIcon className="size-4" />
-              </Button>
-            </Link>
-          )}
-          {isToday && note && (
-            <Link href="/notes/today">
-              <Button variant="outline" size="icon">
-                <Pencil className="size-4" />
-              </Button>
-            </Link>
-          )}
+          <Link href="/notes/today">
+            <Button size="icon" variant="outline">
+              {isToday ? (
+                note ? (
+                  <Pencil className="size-4" />
+                ) : (
+                  <PlusIcon className="size-4" />
+                )
+              ) : (
+                <p className="text-lg font-medium">T</p>
+              )}
+            </Button>
+          </Link>
         </div>
 
         {note ? (
@@ -83,8 +82,8 @@ export function InValidDate() {
   return (
     <div className="flex h-[50vh] items-center justify-center">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-800">Invalid Date</h2>
-        <p className="mt-2 text-gray-600">Please select a valid date</p>
+        <p className="text-2xl font-bold">Invalid Date</p>
+        <p className="mt-2 text-muted-foreground">Please select a valid date</p>
         <Link href="/notes/today">
           <Button className="mt-4">
             <PlusIcon className="mr-2 h-4 w-4" />
@@ -99,20 +98,32 @@ export function InValidDate() {
 export function DailyNotes({ notes }: { notes: TNote[] }) {
   const router = useRouter();
 
+  const readNote = (note: TNote) => {
+    const formattedDate = new Date(note.createdAt as Date)
+      ?.toISOString()
+      .split("T")[0];
+    router.push(`/notes/${formattedDate}`);
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="mb-8 text-center text-3xl font-bold">Daily Notes</h1>
+      <div className="flex-between mb-8">
+        <p className="text-3xl font-bold">Daily Notes</p>
+        <Link href="/notes/today">
+          <Button size="icon" variant="outline">
+            <p className="text-lg font-medium">T</p>
+          </Button>
+        </Link>
+      </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {notes.map((note) => (
           <Card
             key={note._id as string}
             className="cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-lg"
-            onClick={() =>
-              router.push(`/notes/${note.createdAt?.toString().split("T")[0]}`)
-            }
+            onClick={() => readNote(note)}
           >
             <CardHeader className="border-b text-xl font-bold">
-              <CardTitle className="text-sm text-primary">
+              <CardTitle className="text-base text-primary">
                 {format(note.createdAt as Date, "MMMM d, yyyy")}
               </CardTitle>
             </CardHeader>

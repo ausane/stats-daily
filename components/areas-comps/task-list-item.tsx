@@ -11,7 +11,7 @@ import { Slider } from "../ui/slider";
 import { updateTask } from "@/lib/services/handle-update";
 import IconButton from "../ui/icon-button";
 import { deleteTask } from "@/lib/services/handle-delete";
-import Input from "../ui/input";
+import { Input } from "../ui/input";
 import { handleKeyDownEnter, ntf } from "@/lib/utils";
 import { Check, Pencil, Trash, X, Ellipsis } from "lucide-react";
 import {

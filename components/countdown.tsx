@@ -71,14 +71,14 @@ export default function Countdown() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-900 py-6 font-mono text-green-500">
-      {/* <div className="pointer-events-none absolute inset-0 grid grid-cols-12 grid-rows-12 opacity-5">
+      {/* <div className="pointer-events-none fixed inset-0 grid min-h-screen grid-cols-12 grid-rows-12 opacity-5">
         {[...Array(144)].map((_, i) => (
           <div key={i} className="border border-green-500"></div>
         ))}
       </div> */}
 
       {completedMessage ? (
-        <div className="text-center font-bold text-green-500">
+        <div className="text-center font-bold">
           <p className="block text-xl sm:text-2xl">
             {format(targetDate as Date, "PPP")}
           </p>
@@ -88,12 +88,12 @@ export default function Countdown() {
         </div>
       ) : (
         <>
-          <h1 className="mb-8 flex flex-col text-center text-3xl font-bold md:text-5xl">
+          <p className="mb-8 flex flex-col text-center text-3xl font-bold md:text-5xl">
             <span>Countdown to</span>
             <span>
               {targetDate ? format(targetDate, "PPP") : "your target date"}
             </span>
-          </h1>
+          </p>
           <div className="grid grid-cols-1 gap-6 text-center max-sm:w-full max-sm:px-6 sm:grid-cols-2 md:grid-cols-4">
             {Object.entries(timeLeft).map(([unit, value]) => (
               <div
@@ -103,9 +103,7 @@ export default function Countdown() {
                 <span className="block text-4xl font-bold tabular-nums">
                   {value.toString().padStart(2, "0")}
                 </span>
-                <span className="mt-2 block text-lg capitalize text-green-300">
-                  {unit}
-                </span>
+                <span className="mt-2 block text-lg capitalize">{unit}</span>
               </div>
             ))}
           </div>
