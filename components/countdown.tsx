@@ -122,7 +122,7 @@ const CyberCountdown = () => {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-black p-4 font-mono text-green-500">
-      <div className="relative w-full max-w-4xl p-8">
+      <div className="relative w-full max-w-4xl p-4 sm:p-8">
         <div className="absolute inset-0 border border-green-500/30">
           <div className="absolute -left-2 -top-2 h-4 w-4 border-l border-t border-green-500"></div>
           <div className="absolute -right-2 -top-2 h-4 w-4 border-r border-t border-green-500"></div>
@@ -146,7 +146,7 @@ const CyberCountdown = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
               <TimeBox
                 value={timeLeft.days}
                 unit="days"
