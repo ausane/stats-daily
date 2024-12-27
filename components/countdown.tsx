@@ -159,7 +159,7 @@ const CyberCountdown = () => {
 
             <div className="mt-8 w-full">
               <ScrollArea className="border border-green-500/30 bg-black/50 p-4">
-                <div className="grid grid-cols-[repeat(54,_1fr)] gap-1">
+                <div className="grid grid-flow-col grid-rows-7 gap-1">
                   {daysInYear.map((day) => (
                     <TooltipComponent
                       key={day.toISOString()}
