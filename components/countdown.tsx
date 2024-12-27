@@ -158,7 +158,7 @@ const CyberCountdown = () => {
             </div>
 
             <div className="mt-8 w-full">
-              <ScrollArea className="rounded border border-green-500/30 bg-black/50 p-4">
+              <ScrollArea className="border border-green-500/30 bg-black/50 p-4">
                 <div className="grid grid-cols-[repeat(54,_1fr)] gap-1">
                   {daysInYear.map((day) => (
                     <TooltipComponent
@@ -211,7 +211,7 @@ const DatePicker = ({
           <CalendarIcon className="h-4 w-4 text-green-500" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="rounded-none border border-green-500/30 bg-black p-0">
+      <PopoverContent className="rounded-none border border-green-500/30 bg-black/95 p-0 font-mono">
         <Calendar
           mode="single"
           selected={date as Date}
@@ -222,12 +222,29 @@ const DatePicker = ({
           initialFocus
           disabled={(date) => isBefore(date, new Date())}
           classNames={{
-            day_selected: "bg-green-500 text-black",
-            day_today: "bg-green-500/30 text-green-500",
-            day: "h-9 w-9 rounded-none hover:bg-green-500/20",
+            months: "space-y-4 font-mono",
+            month: "space-y-4",
+            caption: "flex justify-center pt-1 relative items-center gap-1",
+            caption_label: "text-sm font-medium text-green-500",
+            nav: "flex items-center gap-1",
             nav_button:
-              "h-7 w-7 rounded-none flex items-center justify-center hover:bg-green-500/20",
-            cell: "text-center text-sm p-0 relative [&:has([aria-selected])]:bg-green-500/10",
+              "h-7 w-7 bg-black hover:bg-green-500/20 text-green-500 flex items-center justify-center border border-green-500/30 rounded-none transition-colors",
+            table: "w-full border-collapse",
+            head_row: "flex",
+            head_cell:
+              "text-green-500/50 w-9 font-normal text-[0.8rem] uppercase tracking-wider",
+            row: "flex w-full mt-2",
+            cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-green-500/10",
+            day: "h-9 w-9 p-0 font-normal rounded-none transition-colors text-green-500 hover:bg-green-500/30 hover:text-green-400 focus:bg-green-500/50 focus:text-green-400 aria-selected:opacity-100",
+            day_range_end: "day-range-end",
+            day_selected:
+              "[&:not([disabled])]:bg-green-500 [&:not([disabled])]:text-black hover:bg-green-600 hover:!text-black focus:bg-green-600 focus:!text-black",
+            day_today: "bg-green-500/20 text-green-400 font-bold",
+            day_outside: "text-green-500/50 opacity-50",
+            day_disabled:
+              "text-green-500/50 opacity-50 hover:bg-transparent cursor-not-allowed",
+            day_range_middle: "aria-selected:bg-green-500/20",
+            day_hidden: "invisible",
           }}
         />
       </PopoverContent>
