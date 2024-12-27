@@ -45,7 +45,7 @@ const TimeBox = ({
           {unit}
         </div>
       </div>
-      <div className="absolute inset-0 border border-green-500/30">
+      <div className="absolute inset-0">
         <div
           className="absolute left-0 top-0 h-full bg-green-500/20 transition-all duration-1000"
           style={{ width: `${percentage}%` }}
