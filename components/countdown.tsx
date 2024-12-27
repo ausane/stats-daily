@@ -141,7 +141,7 @@ const CyberCountdown = () => {
               <div className="text-sm uppercase tracking-widest opacity-50">
                 TARGET DATE
               </div>
-              <div className="mt-2 text-2xl font-bold tracking-wider">
+              <div className="mt-2 text-2xl font-bold uppercase tracking-wider">
                 {targetDate ? format(targetDate, "PPP") : "AWAITING INPUT"}
               </div>
             </div>
@@ -223,7 +223,7 @@ const DatePicker = ({
           disabled={(date) => isBefore(date, new Date())}
           classNames={{
             months: "space-y-4 font-mono",
-            month: "space-y-4",
+            month: "space-y-4 uppercase tracking-wider",
             caption: "flex justify-center pt-1 relative items-center gap-1",
             caption_label: "text-sm font-medium text-green-500",
             nav: "flex items-center gap-1",
