@@ -9,8 +9,9 @@ import {
   endOfYear,
   isSameDay,
   getDaysInMonth,
+  getDay,
 } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -55,7 +56,7 @@ const TimeBox = ({
   );
 };
 
-const CyberCountdown = () => {
+const Countdown = () => {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -65,6 +66,15 @@ const CyberCountdown = () => {
   const [targetDate, setTargetDate] = useState<Date | null>(null);
   const [completedMessage, setCompletedMessage] = useState(false);
   const [daysInCurrentMonth, setDaysInCurrentMonth] = useState(30);
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const currentYear = new Date().getFullYear();
@@ -116,8 +126,8 @@ const CyberCountdown = () => {
   };
 
   const daysInYear = eachDayOfInterval({
-    start: startOfYear(new Date()),
-    end: endOfYear(new Date()),
+    start: startOfYear(currentDate),
+    end: endOfYear(currentDate),
   });
 
   return (
@@ -160,18 +170,26 @@ const CyberCountdown = () => {
             <div className="mt-8 w-full">
               <ScrollArea className="border border-green-500/30 bg-black/50 p-4">
                 <div className="grid grid-flow-col grid-rows-7 gap-1">
+                  {Array.from({ length: getDay(daysInYear[0]) }).map(
+                    (_, index) => (
+                      <div
+                        key={`empty-${index}`}
+                        className="h-3 w-3 bg-transparent"
+                      />
+                    ),
+                  )}
                   {daysInYear.map((day) => (
                     <TooltipComponent
                       key={day.toISOString()}
                       content={format(day, "PPP")}
-                      className="rounded-none bg-green-800/20 text-green-500"
+                      className="rounded-none border-green-500/30 bg-green-800/20 uppercase tracking-wider text-green-500"
                     >
                       <div
                         className={cn(
                           "h-3 w-3",
                           isSameDay(day, targetDate as Date)
                             ? "animate-pulse bg-green-500"
-                            : isBefore(day, new Date())
+                            : isBefore(day, currentDate)
                               ? "bg-green-500/20 hover:bg-green-500/30"
                               : "bg-green-500/10 hover:bg-green-500/30",
                         )}
@@ -252,4 +270,4 @@ const DatePicker = ({
   );
 };
 
-export default CyberCountdown;
+export default Countdown;
